@@ -91,9 +91,7 @@ class DatabaseService
 
             // Unfortunately not included by default
             // https://www.sqlite.org/lang_mathfunc.html#ceil
-            $pdo->sqliteCreateFunction('ceil', function ($value) {
-                return ceil($value);
-            });
+            $pdo->sqliteCreateFunction('ceil', fn($value) => ceil($value));
 
             self::$DbConnectionRaw = $pdo;
         }

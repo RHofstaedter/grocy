@@ -57,9 +57,7 @@ class ChoresService extends BaseService
                     $nextExecutionUserId = $assignedUsers[array_rand($assignedUsers)]->id;
                 }
             } elseif ($chore->assignment_type == self::CHORE_ASSIGNMENT_TYPE_IN_ALPHABETICAL_ORDER) {
-                usort($assignedUsers, function ($a, $b) {
-                    return strcmp($a->display_name, $b->display_name);
-                });
+                usort($assignedUsers, fn($a, $b) => strcmp($a->display_name, $b->display_name));
 
                 $nextRoundMatches = false;
                 foreach ($assignedUsers as $user) {

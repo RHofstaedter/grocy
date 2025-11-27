@@ -12,7 +12,7 @@ class LocalizationService
     {
         $this->Culture = $culture;
 
-        $this->loadLocalizations($culture);
+        $this->loadLocalizations();
     }
 
     protected $Po;

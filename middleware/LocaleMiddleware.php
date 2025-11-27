@@ -33,7 +33,7 @@ class LocaleMiddleware extends BaseMiddleware
         $prefLocales = array_reduce(
             explode(',', $langs),
             function ($res, $el) {
-                list($l, $q) = array_merge(explode(';q=', $el), [1]);
+                [$l, $q] = array_merge(explode(';q=', $el), [1]);
                 $res[$l] = (float)$q;
                 return $res;
             },

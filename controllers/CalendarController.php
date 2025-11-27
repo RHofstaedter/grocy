@@ -7,10 +7,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class CalendarController extends BaseController
 {
-	public function Overview(Request $request, Response $response, array $args)
-	{
-		return $this->renderPage($response, 'calendar', [
-			'fullcalendarEventSources' => $this->getCalendarService()->GetEvents()
-		]);
-	}
+    public function overview(Request $request, Response $response, array $args)
+    {
+        return $this->renderPage($response, 'calendar', [
+            'fullcalendarEventSources' => $this->getCalendarService()->getEvents()
+        ]);
+    }
 }

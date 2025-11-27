@@ -6,11 +6,10 @@ use Grocy\Services\RecipesService;
 
 $recipesService = RecipesService::getInstance();
 
-for ($i = 1; $i <= 87; $i++)
-{
-	$recipesService->CopyRecipe(1);
-	$recipesService->CopyRecipe(2);
-	$recipesService->CopyRecipe(3);
-	$recipesService->CopyRecipe(4);
-	$recipesService->CopyRecipe(5);
+for ($i = 1; $i <= 87; $i++) {
+	$recipesService->copyRecipe(1);
+	$recipesService->copyRecipe(2);
+	$recipesService->copyRecipe(3);
+	$recipesService->copyRecipe(4);
+	$recipesService->copyRecipe(5);
 }

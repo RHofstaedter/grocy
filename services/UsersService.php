@@ -3,163 +3,163 @@
 namespace Grocy\Services;
 
 use LessQL\Result;
+use Exception;
 
 class UsersService extends BaseService
 {
-	public function CreateUser(string $username, ?string $firstName, ?string $lastName, string $password, string $pictureFileName = null)
-	{
-		$newUserRow = $this->getDatabase()->users()->createRow([
-			'username' => $username,
-			'first_name' => $firstName,
-			'last_name' => $lastName,
-			'password' => password_hash($password, PASSWORD_DEFAULT),
-			'picture_file_name' => $pictureFileName
-		]);
-		$newUserRow = $newUserRow->save();
-		$permList = [];
+    private static $userSettingsCache = [];
 
-		foreach ($this->getDatabase()->permission_hierarchy()->where('name', GROCY_DEFAULT_PERMISSIONS)->fetchAll() as $perm)
-		{
-			$permList[] = [
-				'user_id' => $newUserRow->id,
-				'permission_id' => $perm->id
-			];
-		}
+    public function createUser(
+        string $username,
+        ?string $firstName,
+        ?string $lastName,
+        string $password,
+        ?string $pictureFileName = null
+    ) {
+        $newUserRow = $this->getDatabase()->users()->createRow([
+            'username' => $username,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'password' => password_hash($password, PASSWORD_DEFAULT),
+            'picture_file_name' => $pictureFileName
+        ]);
+        $newUserRow = $newUserRow->save();
+        $permList = [];
+        $permissions = $this->getDatabase()
+            ->permission_hierarchy()
+            ->where('name', GROCY_DEFAULT_PERMISSIONS)
+            ->fetchAll();
 
-		$this->getDatabase()->user_permissions()->insert($permList);
+        foreach ($permissions as $perm) {
+            $permList[] = [
+                'user_id' => $newUserRow->id,
+                'permission_id' => $perm->id
+            ];
+        }
 
-		return $newUserRow;
-	}
+        $this->getDatabase()->user_permissions()->insert($permList);
 
-	public function DeleteUser($userId)
-	{
-		$row = $this->getDatabase()->users($userId);
-		$row->delete();
-	}
+        return $newUserRow;
+    }
 
-	public function EditUser(int $userId, string $username, string $firstName, string $lastName, ?string $password, string $pictureFileName = null)
-	{
-		if (!$this->UserExists($userId))
-		{
-			throw new \Exception('User does not exist');
-		}
+    public function deleteUser($userId)
+    {
+        $row = $this->getDatabase()->users($userId);
+        $row->delete();
+    }
 
-		$user = $this->getDatabase()->users($userId);
+    public function editUser(
+        int $userId,
+        string $username,
+        string $firstName,
+        string $lastName,
+        ?string $password,
+        ?string $pictureFileName = null
+    ) {
+        if (!$this->userExists($userId)) {
+            throw new Exception('User does not exist');
+        }
 
-		if ($password == null || empty($password))
-		{
-			$user->update([
-				'username' => $username,
-				'first_name' => $firstName,
-				'last_name' => $lastName,
-				'picture_file_name' => $pictureFileName
-			]);
-		}
-		else
-		{
-			$user->update([
-				'username' => $username,
-				'first_name' => $firstName,
-				'last_name' => $lastName,
-				'password' => password_hash($password, PASSWORD_DEFAULT),
-				'picture_file_name' => $pictureFileName
-			]);
-		}
-	}
+        $user = $this->getDatabase()->users($userId);
 
-	private static $UserSettingsCache = [];
-	public function GetUserSetting($userId, $settingKey)
-	{
-		if (!array_key_exists($userId, self::$UserSettingsCache))
-		{
-			self::$UserSettingsCache[$userId] = [];
-		}
+        if ($password == null || empty($password)) {
+            $user->update([
+                'username' => $username,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'picture_file_name' => $pictureFileName
+            ]);
+        } else {
+            $user->update([
+                'username' => $username,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'password' => password_hash($password, PASSWORD_DEFAULT),
+                'picture_file_name' => $pictureFileName
+            ]);
+        }
+    }
 
-		if (array_key_exists($settingKey, self::$UserSettingsCache[$userId]))
-		{
-			return self::$UserSettingsCache[$userId][$settingKey];
-		}
+    public function getUserSetting($userId, $settingKey)
+    {
+        if (!array_key_exists($userId, self::$userSettingsCache)) {
+            self::$userSettingsCache[$userId] = [];
+        }
 
-		$value = null;
-		$settingRow = $this->getDatabase()->user_settings()->where('user_id = :1 AND key = :2', $userId, $settingKey)->fetch();
-		if ($settingRow !== null)
-		{
-			$value = $settingRow->value;
-		}
-		else
-		{
-			// Use the configured default values for a missing setting, otherwise return NULL
-			global $GROCY_DEFAULT_USER_SETTINGS;
-			if (array_key_exists($settingKey, $GROCY_DEFAULT_USER_SETTINGS))
-			{
-				$value = $GROCY_DEFAULT_USER_SETTINGS[$settingKey];
-			}
-		}
+        if (array_key_exists($settingKey, self::$userSettingsCache[$userId])) {
+            return self::$userSettingsCache[$userId][$settingKey];
+        }
 
-		self::$UserSettingsCache[$userId][$settingKey] = $value;
-		return $value;
-	}
+        $value = null;
+        $settingRow = $this->getDatabase()->user_settings()->where('user_id = :1 AND key = :2', $userId, $settingKey)->fetch();
+        if ($settingRow !== null) {
+            $value = $settingRow->value;
+        } else {
+            // Use the configured default values for a missing setting, otherwise return NULL
+            global $GROCY_DEFAULT_USER_SETTINGS;
+            if (array_key_exists($settingKey, $GROCY_DEFAULT_USER_SETTINGS)) {
+                $value = $GROCY_DEFAULT_USER_SETTINGS[$settingKey];
+            }
+        }
 
-	public function GetUserSettings($userId)
-	{
-		$settings = [];
-		$settingRows = $this->getDatabase()->user_settings()->where('user_id = :1', $userId)->fetchAll();
-		foreach ($settingRows as $settingRow)
-		{
-			$settings[$settingRow->key] = $settingRow->value;
-		}
+        self::$userSettingsCache[$userId][$settingKey] = $value;
+        return $value;
+    }
 
-		// Use the configured default values for all missing settings
-		global $GROCY_DEFAULT_USER_SETTINGS;
-		return array_merge($GROCY_DEFAULT_USER_SETTINGS, $settings);
-	}
+    public function getUserSettings($userId)
+    {
+        $settings = [];
+        $settingRows = $this->getDatabase()->user_settings()->where('user_id = :1', $userId)->fetchAll();
+        foreach ($settingRows as $settingRow) {
+            $settings[$settingRow->key] = $settingRow->value;
+        }
 
-	public function GetUsersAsDto(): Result
-	{
-		return $this->getDatabase()->users_dto();
-	}
+        // Use the configured default values for all missing settings
+        global $GROCY_DEFAULT_USER_SETTINGS;
+        return array_merge($GROCY_DEFAULT_USER_SETTINGS, $settings);
+    }
 
-	public function SetUserSetting($userId, $settingKey, $settingValue)
-	{
-		if (!array_key_exists($userId, self::$UserSettingsCache))
-		{
-			self::$UserSettingsCache[$userId] = [];
-		}
-		self::$UserSettingsCache[$userId][$settingKey] = $settingValue;
+    public function getUsersAsDto(): Result
+    {
+        return $this->getDatabase()->users_dto();
+    }
 
-		$settingRow = $this->getDatabase()->user_settings()->where('user_id = :1 AND key = :2', $userId, $settingKey)->fetch();
-		if ($settingRow !== null)
-		{
-			$settingRow->update([
-				'value' => $settingValue,
-				'row_updated_timestamp' => date('Y-m-d H:i:s')
-			]);
-		}
-		else
-		{
-			$settingRow = $this->getDatabase()->user_settings()->createRow([
-				'user_id' => $userId,
-				'key' => $settingKey,
-				'value' => $settingValue
-			]);
-			$settingRow->save();
-		}
-	}
+    public function setUserSetting($userId, $settingKey, $settingValue)
+    {
+        if (!array_key_exists($userId, self::$userSettingsCache)) {
+            self::$userSettingsCache[$userId] = [];
+        }
+        self::$userSettingsCache[$userId][$settingKey] = $settingValue;
 
-	public function DeleteUserSetting($userId, $settingKey)
-	{
-		if (!array_key_exists($userId, self::$UserSettingsCache))
-		{
-			self::$UserSettingsCache[$userId] = [];
-		}
-		unset(self::$UserSettingsCache[$userId][$settingKey]);
+        $settingRow = $this->getDatabase()->user_settings()->where('user_id = :1 AND key = :2', $userId, $settingKey)->fetch();
+        if ($settingRow !== null) {
+            $settingRow->update([
+                'value' => $settingValue,
+                'row_updated_timestamp' => date('Y-m-d H:i:s')
+            ]);
+        } else {
+            $settingRow = $this->getDatabase()->user_settings()->createRow([
+                'user_id' => $userId,
+                'key' => $settingKey,
+                'value' => $settingValue
+            ]);
+            $settingRow->save();
+        }
+    }
 
-		$this->getDatabase()->user_settings()->where('user_id = :1 AND key = :2', $userId, $settingKey)->delete();
-	}
+    public function deleteUserSetting($userId, $settingKey)
+    {
+        if (!array_key_exists($userId, self::$userSettingsCache)) {
+            self::$userSettingsCache[$userId] = [];
+        }
+        unset(self::$userSettingsCache[$userId][$settingKey]);
 
-	private function UserExists($userId)
-	{
-		$userRow = $this->getDatabase()->users()->where('id = :1', $userId)->fetch();
-		return $userRow !== null;
-	}
+        $this->getDatabase()->user_settings()->where('user_id = :1 AND key = :2', $userId, $settingKey)->delete();
+    }
+
+    private function userExists($userId)
+    {
+        $userRow = $this->getDatabase()->users()->where('id = :1', $userId)->fetch();
+        return $userRow !== null;
+    }
 }

@@ -37,5 +37,11 @@
 		"vendor-dir": "packages",
 		"platform-check": false,
 		"optimize-autoloader": true
+	},
+	"require-dev": {
+		"phpcsstandards/php_codesniffer": "^4.0",
+		"phpmd/phpmd": "^2.15",
+		"rector/rector": "^2.2",
+		"psalm/phar": "^6.13"
 	}
 }

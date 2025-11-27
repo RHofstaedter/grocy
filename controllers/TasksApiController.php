@@ -8,47 +8,40 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class TasksApiController extends BaseApiController
 {
-	public function Current(Request $request, Response $response, array $args)
-	{
-		return $this->FilteredApiResponse($response, $this->getTasksService()->GetCurrent(), $request->getQueryParams());
-	}
+    public function current(Request $request, Response $response, array $args)
+    {
+        return $this->filteredApiResponse($response, $this->getTasksService()->getCurrent(), $request->getQueryParams());
+    }
 
-	public function MarkTaskAsCompleted(Request $request, Response $response, array $args)
-	{
-		User::checkPermission($request, User::PERMISSION_TASKS_MARK_COMPLETED);
+    public function markTaskAsCompleted(Request $request, Response $response, array $args)
+    {
+        User::checkPermission($request, User::PERMISSION_TASKS_MARK_COMPLETED);
 
-		$requestBody = $this->GetParsedAndFilteredRequestBody($request);
+        $requestBody = $this->getParsedAndFilteredRequestBody($request);
 
-		try
-		{
-			$doneTime = date('Y-m-d H:i:s');
+        try {
+            $doneTime = date('Y-m-d H:i:s');
 
-			if (array_key_exists('done_time', $requestBody) && IsIsoDateTime($requestBody['done_time']))
-			{
-				$doneTime = $requestBody['done_time'];
-			}
+            if (array_key_exists('done_time', $requestBody) && IsIsoDateTime($requestBody['done_time'])) {
+                $doneTime = $requestBody['done_time'];
+            }
 
-			$this->getTasksService()->MarkTaskAsCompleted($args['taskId'], $doneTime);
-			return $this->EmptyApiResponse($response);
-		}
-		catch (\Exception $ex)
-		{
-			return $this->GenericErrorResponse($response, $ex->getMessage());
-		}
-	}
+            $this->getTasksService()->markTaskAsCompleted($args['taskId'], $doneTime);
+            return $this->emptyApiResponse($response);
+        } catch (\Exception $ex) {
+            return $this->genericErrorResponse($response, $ex->getMessage());
+        }
+    }
 
-	public function UndoTask(Request $request, Response $response, array $args)
-	{
-		User::checkPermission($request, User::PERMISSION_TASKS_UNDO_EXECUTION);
+    public function undoTask(Request $request, Response $response, array $args)
+    {
+        User::checkPermission($request, User::PERMISSION_TASKS_UNDO_EXECUTION);
 
-		try
-		{
-			$this->getTasksService()->UndoTask($args['taskId']);
-			return $this->EmptyApiResponse($response);
-		}
-		catch (\Exception $ex)
-		{
-			return $this->GenericErrorResponse($response, $ex->getMessage());
-		}
-	}
+        try {
+            $this->getTasksService()->undoTask($args['taskId']);
+            return $this->emptyApiResponse($response);
+        } catch (\Exception $ex) {
+            return $this->genericErrorResponse($response, $ex->getMessage());
+        }
+    }
 }

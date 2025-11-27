@@ -15,8 +15,7 @@ WHERE IFNULL(s1.open, 0) = 1
 		AND IFNULL(s2.open, 0) = 0
 	)';
 
-$rows = $db->ExecuteDbQuery($sql)->fetchAll(\PDO::FETCH_OBJ);
-foreach ($rows as $row)
-{
-	$db->ExecuteDbStatement('UPDATE stock SET stock_id = \'' . uniqid() . '\' WHERE id = ' . $row->id);
+$rows = $db->executeDbQuery($sql)->fetchAll(\PDO::FETCH_OBJ);
+foreach ($rows as $row) {
+    $db->executeDbStatement('UPDATE stock SET stock_id = \'' . uniqid() . '\' WHERE id = ' . $row->id);
 }

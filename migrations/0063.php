@@ -3,9 +3,9 @@
 // This is executed inside DatabaseMigrationService class/context
 
 $localizationService = $this->getLocalizationService();
-$db = $this->getDatabaseService()->GetDbConnection();
+$db = $this->getDatabaseService()->getDbConnection();
 
 $defaultShoppingList = $db->shopping_lists()->where('id = 1')->fetch();
 $defaultShoppingList->update([
-	'name' => $localizationService->__t('Shopping list')
+    'name' => $localizationService->__t('Shopping list')
 ]);

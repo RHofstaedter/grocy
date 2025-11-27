@@ -51,7 +51,7 @@ class PrerequisiteChecker
         $loadedExtensions = get_loaded_extensions();
         foreach (REQUIRED_PHP_EXTENSIONS as $extension) {
             if (!in_array($extension, $loadedExtensions)) {
-                throw new ERequirementNotMet("PHP module '{$extension}' not installed, but required.");
+                throw new ERequirementNotMet(sprintf("PHP module '%s' not installed, but required.", $extension));
             }
         }
     }

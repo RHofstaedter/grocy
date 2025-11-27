@@ -37,7 +37,7 @@ class OpenApiController extends BaseApiController
 
         $newApiKey = $this->getApiKeyService()->createApiKey(ApiKeyService::API_KEY_TYPE_DEFAULT, $description);
         $newApiKeyId = $this->getApiKeyService()->getApiKeyId($newApiKey);
-        return $response->withRedirect($this->AppContainer->get('UrlManager')->ConstructUrl("/manageapikeys?key=$newApiKeyId"));
+        return $response->withRedirect($this->AppContainer->get('UrlManager')->ConstructUrl('/manageapikeys?key=' . $newApiKeyId));
     }
 
     public function documentationSpec(Request $request, Response $response, array $args)
@@ -54,6 +54,7 @@ class OpenApiController extends BaseApiController
         foreach ($this->getUserfieldsService()->getEntities() as $userEntity) {
             array_push($spec->components->schemas->ExposedEntity_IncludingUserEntities->enum, $userEntity);
         }
+
         sort($spec->components->schemas->ExposedEntity_IncludingUserEntities->enum);
 
         $spec->components->schemas->ExposedEntity_NotIncludingNotEditable = clone $spec->components->schemas->StringEnumTemplate;
@@ -62,6 +63,7 @@ class OpenApiController extends BaseApiController
                 array_push($spec->components->schemas->ExposedEntity_NotIncludingNotEditable->enum, $value);
             }
         }
+
         sort($spec->components->schemas->ExposedEntity_NotIncludingNotEditable->enum);
 
         $spec->components->schemas->ExposedEntity_IncludingUserEntities_NotIncludingNotEditable = clone $spec->components->schemas->StringEnumTemplate;
@@ -70,6 +72,7 @@ class OpenApiController extends BaseApiController
                 array_push($spec->components->schemas->ExposedEntity_IncludingUserEntities_NotIncludingNotEditable->enum, $value);
             }
         }
+
         array_push($spec->components->schemas->ExposedEntity_IncludingUserEntities_NotIncludingNotEditable->enum, 'stock'); // TODO: Don't hardcode this here - stock entries are normally not editable, but the corresponding Userfields are
         sort($spec->components->schemas->ExposedEntity_IncludingUserEntities_NotIncludingNotEditable->enum);
 
@@ -79,6 +82,7 @@ class OpenApiController extends BaseApiController
                 array_push($spec->components->schemas->ExposedEntity_NotIncludingNotDeletable->enum, $value);
             }
         }
+
         sort($spec->components->schemas->ExposedEntity_NotIncludingNotDeletable->enum);
 
         $spec->components->schemas->ExposedEntity_NotIncludingNotListable = clone $spec->components->schemas->StringEnumTemplate;
@@ -87,6 +91,7 @@ class OpenApiController extends BaseApiController
                 array_push($spec->components->schemas->ExposedEntity_NotIncludingNotListable->enum, $value);
             }
         }
+
         sort($spec->components->schemas->ExposedEntity_NotIncludingNotListable->enum);
 
         return $this->apiResponse($response, $spec);

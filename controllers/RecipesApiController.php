@@ -33,8 +33,8 @@ class RecipesApiController extends BaseApiController
         try {
             $this->getRecipesService()->consumeRecipe($args['recipeId']);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -52,8 +52,8 @@ class RecipesApiController extends BaseApiController
             } else {
                 return $this->apiResponse($response, $recipeResolved);
             }
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -63,8 +63,8 @@ class RecipesApiController extends BaseApiController
             return $this->apiResponse($response, [
                 'created_object_id' => $this->getRecipesService()->copyRecipe($args['recipeId'])
             ]);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -84,8 +84,8 @@ class RecipesApiController extends BaseApiController
             }
 
             return $this->apiResponse($response, $webhookData);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 }

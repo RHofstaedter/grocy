@@ -28,8 +28,8 @@ class TasksApiController extends BaseApiController
 
             $this->getTasksService()->markTaskAsCompleted($args['taskId'], $doneTime);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -40,8 +40,8 @@ class TasksApiController extends BaseApiController
         try {
             $this->getTasksService()->undoTask($args['taskId']);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 }

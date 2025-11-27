@@ -29,6 +29,7 @@ class BaseController
     }
 
     protected $AppContainer;
+
     protected $View;
 
     protected function getApiKeyService()
@@ -133,6 +134,7 @@ class BaseController
         if (GROCY_LOCALE == 'he_IL') {
             $dir = 'rtl';
         }
+
         $this->View->set('dir', $dir);
 
         $this->View->set('U', fn($relativePath, $isResource = false) => $container->get('UrlManager')->ConstructUrl($relativePath, $isResource));
@@ -141,6 +143,7 @@ class BaseController
         if (isset($_GET['embedded'])) {
             $embedded = true;
         }
+
         $this->View->set('embedded', $embedded);
 
         $constants = get_defined_constants();
@@ -149,6 +152,7 @@ class BaseController
                 unset($constants[$constant]);
             }
         }
+
         $this->View->set('featureFlags', $constants);
 
         if (GROCY_AUTHENTICATED) {
@@ -161,6 +165,7 @@ class BaseController
             } else {
                 $defaultMinAmount = '0.' . str_repeat('0', $decimalPlacesAmounts - 1) . '1';
             }
+
             $this->View->set('DEFAULT_MIN_AMOUNT', $defaultMinAmount);
         }
 

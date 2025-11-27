@@ -28,8 +28,8 @@ require_once __DIR__ . '/../helpers/PrerequisiteChecker.php';
 
 try {
     (new PrerequisiteChecker())->checkRequirements();
-} catch (ERequirementNotMet $ex) {
-    exit('Unable to run Grocy: ' . $ex->getMessage());
+} catch (ERequirementNotMet $eRequirementNotMet) {
+    exit('Unable to run Grocy: ' . $eRequirementNotMet->getMessage());
 }
 
 require_once __DIR__ . '/../app.php';

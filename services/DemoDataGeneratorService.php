@@ -10,6 +10,7 @@ class DemoDataGeneratorService extends BaseService
     }
 
     protected $LocalizationService;
+
     private $LastSupermarketId = 1;
 
     public function populateDemoData($skip = false)
@@ -325,14 +326,16 @@ class DemoDataGeneratorService extends BaseService
                     if ($chore->period_type == 'weekly') {
                         $hours *= 7 * 24;
                     }
+
                     $hours *= $i;
 
-                    $executionId = $choresService->trackChore($chore->id, date('Y-m-d', strtotime("-$hours hours")), array_rand([1, 2, 3, 4]) + 1, ($i % 10 == 0 || $i == 2));
+                    $executionId = $choresService->trackChore($chore->id, date('Y-m-d', strtotime(sprintf('-%s hours', $hours))), array_rand([1, 2, 3, 4]) + 1, ($i % 10 == 0 || $i == 2));
                     if ($i % 8 == 0) {
                         $choresService->undoChoreExecution($executionId);
                     }
                 }
             }
+
             $choresService->trackChore(1, date('Y-m-d'), array_rand([1, 2, 3, 4]) + 1);
             $choresService->trackChore(4, date('Y-m-d'), array_rand([1, 2, 3, 4]) + 1);
             $this->getDatabaseService()->executeDbStatement("UPDATE chores SET rescheduled_date = DATE(DATE('now', 'localtime'), '+10 days') WHERE id = 6");
@@ -368,18 +371,18 @@ class DemoDataGeneratorService extends BaseService
             @mkdir($productPicturesFolder);
             @mkdir($equipmentManualsFolder);
             @mkdir($recipePicturesFolder);
-            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/cookies.jpg', "$productPicturesFolder/cookies.jpg");
-            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/cucumber.jpg', "$productPicturesFolder/cucumber.jpg");
-            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/gummybears.jpg', "$productPicturesFolder/gummybears.jpg");
-            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/paprika.jpg', "$productPicturesFolder/paprika.jpg");
-            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/tomato.jpg', "$productPicturesFolder/tomato.jpg");
-            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/loremipsum.pdf', "$equipmentManualsFolder/loremipsum.pdf");
-            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/pizza.jpg', "$recipePicturesFolder/pizza.jpg");
-            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/sandwiches.jpg', "$recipePicturesFolder/sandwiches.jpg");
-            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/pancakes.jpg', "$recipePicturesFolder/pancakes.jpg");
-            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/spaghetti.jpg', "$recipePicturesFolder/spaghetti.jpg");
-            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/chocolate_sauce.jpg', "$recipePicturesFolder/chocolate_sauce.jpg");
-            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/pancakes_chocolate_sauce.jpg', "$recipePicturesFolder/pancakes_chocolate_sauce.jpg");
+            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/cookies.jpg', $productPicturesFolder . '/cookies.jpg');
+            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/cucumber.jpg', $productPicturesFolder . '/cucumber.jpg');
+            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/gummybears.jpg', $productPicturesFolder . '/gummybears.jpg');
+            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/paprika.jpg', $productPicturesFolder . '/paprika.jpg');
+            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/tomato.jpg', $productPicturesFolder . '/tomato.jpg');
+            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/loremipsum.pdf', $equipmentManualsFolder . '/loremipsum.pdf');
+            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/pizza.jpg', $recipePicturesFolder . '/pizza.jpg');
+            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/sandwiches.jpg', $recipePicturesFolder . '/sandwiches.jpg');
+            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/pancakes.jpg', $recipePicturesFolder . '/pancakes.jpg');
+            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/spaghetti.jpg', $recipePicturesFolder . '/spaghetti.jpg');
+            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/chocolate_sauce.jpg', $recipePicturesFolder . '/chocolate_sauce.jpg');
+            $this->downloadFileIfNotAlreadyExists('https://releases.grocy.info/demoresources/pancakes_chocolate_sauce.jpg', $recipePicturesFolder . '/pancakes_chocolate_sauce.jpg');
         }
     }
 

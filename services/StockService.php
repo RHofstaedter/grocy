@@ -10,13 +10,21 @@ use Exception;
 class StockService extends BaseService
 {
     public const TRANSACTION_TYPE_CONSUME = 'consume';
+
     public const TRANSACTION_TYPE_INVENTORY_CORRECTION = 'inventory-correction';
+
     public const TRANSACTION_TYPE_PRODUCT_OPENED = 'product-opened';
+
     public const TRANSACTION_TYPE_PURCHASE = 'purchase';
+
     public const TRANSACTION_TYPE_SELF_PRODUCTION = 'self-production';
+
     public const TRANSACTION_TYPE_STOCK_EDIT_NEW = 'stock-edit-new';
+
     public const TRANSACTION_TYPE_STOCK_EDIT_OLD = 'stock-edit-old';
+
     public const TRANSACTION_TYPE_TRANSFER_FROM = 'transfer_from';
+
     public const TRANSACTION_TYPE_TRANSFER_TO = 'transfer_to';
 
     public function addMissingProductsToShoppingList($listId = 1)
@@ -132,7 +140,7 @@ class StockService extends BaseService
 
 
         if ($amount <= 0) {
-            throw new Exception('Amount can\'t be <= 0');
+            throw new Exception("Amount can't be <= 0");
         }
 
         $productDetails = (object)$this->getProductDetails($productId);
@@ -298,7 +306,7 @@ class StockService extends BaseService
 
             return $transactionId;
         } else {
-            throw new Exception("Transaction type $transactionType is not valid (StockService.addProduct)");
+            throw new Exception(sprintf('Transaction type %s is not valid (StockService.addProduct)', $transactionType));
         }
     }
 
@@ -375,7 +383,7 @@ class StockService extends BaseService
         }
 
         if ($amount <= 0) {
-            throw new Exception('Amount can\'t be <= 0');
+            throw new Exception("Amount can't be <= 0");
         }
 
         if ($locationId !== null && !$this->locationExists($locationId)) {
@@ -391,6 +399,7 @@ class StockService extends BaseService
             if ($consumeExactAmount) {
                 $amount = $productDetails->stock_amount + $productDetails->product->tare_weight - $amount;
             }
+
             if ($amount < $productDetails->product->tare_weight) {
                 throw new Exception('The amount cannot be lower than the defined tare weight');
             }
@@ -527,7 +536,7 @@ class StockService extends BaseService
 
             return $transactionId;
         } else {
-            throw new Exception("Transaction type $transactionType is not valid (StockService.consumeProduct)");
+            throw new Exception(sprintf('Transaction type %s is not valid (StockService.consumeProduct)', $transactionType));
         }
     }
 
@@ -740,9 +749,9 @@ class StockService extends BaseService
     public function getDueProducts(int $days = 5, bool $excludeOverdue = false)
     {
         if ($excludeOverdue) {
-            return $this->getCurrentStock("WHERE best_before_date <= date('now', '$days days') AND best_before_date >= date()");
+            return $this->getCurrentStock(sprintf("WHERE best_before_date <= date('now', '%d days') AND best_before_date >= date()", $days));
         } else {
-            return $this->getCurrentStock("WHERE best_before_date <= date('now', '$days days')");
+            return $this->getCurrentStock(sprintf("WHERE best_before_date <= date('now', '%d days')", $days));
         }
     }
 
@@ -834,12 +843,13 @@ class StockService extends BaseService
             if ($gc->getType() != Grocycode::PRODUCT) {
                 throw new Exception('Invalid Grocycode');
             }
+
             return $gc->getId();
         }
 
         $potentialProduct = $this->getDatabase()->product_barcodes()->where('barcode = :1 COLLATE NOCASE', $barcode)->fetch();
         if ($potentialProduct === null) {
-            throw new Exception("No product with barcode $barcode found");
+            throw new Exception(sprintf('No product with barcode %s found', $barcode));
         }
 
         return $potentialProduct->product_id;
@@ -986,7 +996,7 @@ class StockService extends BaseService
         $product = $this->getDatabase()->products($productId);
 
         if ($product->disable_open == 1) {
-            throw new Exception('Product can\'t be opened');
+            throw new Exception("Product can't be opened");
         }
 
         $productDetails = (object)$this->getProductDetails($productId);
@@ -1616,10 +1626,11 @@ class StockService extends BaseService
             $this->getDatabaseService()->executeDbStatement('UPDATE meal_plan SET product_id = ' . $productIdToKeep . ', product_amount = product_amount * ' . $factor . ' WHERE product_id = ' . $productIdToRemove);
             $this->getDatabaseService()->executeDbStatement('UPDATE shopping_list SET product_id = ' . $productIdToKeep . ', amount = amount * ' . $factor . ' WHERE product_id = ' . $productIdToRemove);
             $this->getDatabaseService()->executeDbStatement('DELETE FROM products WHERE id = ' . $productIdToRemove);
-        } catch (\Exception $ex) {
+        } catch (\Exception $exception) {
             $this->getDatabaseService()->getDbConnectionRaw()->rollback();
-            throw $ex;
+            throw $exception;
         }
+
         $this->getDatabaseService()->getDbConnectionRaw()->commit();
     }
 
@@ -1638,13 +1649,13 @@ class StockService extends BaseService
                 foreach ($stockIds as $stockId) {
                     if ($stockId != $splittedStockEntry->stock_id_to_keep) {
                         $this->getDatabaseService()
-                            ->executeDbStatement('UPDATE stock SET stock_id = \'' .
+                            ->executeDbStatement("UPDATE stock SET stock_id = '" .
                                 $splittedStockEntry->stock_id_to_keep .
-                                '\' WHERE stock_id = \'' . $stockId . '\'');
+                                "' WHERE stock_id = '" . $stockId . "'");
                         $this->getDatabaseService()
-                            ->executeDbStatement('UPDATE stock_log SET stock_id = \'' .
+                            ->executeDbStatement("UPDATE stock_log SET stock_id = '" .
                                 $splittedStockEntry->stock_id_to_keep .
-                                '\' WHERE stock_id = \'' . $stockId . '\'');
+                                "' WHERE stock_id = '" . $stockId . "'");
                     }
                 }
 
@@ -1663,6 +1674,7 @@ class StockService extends BaseService
                 $this->getDatabaseService()->getDbConnectionRaw()->rollback();
                 throw $ex;
             }
+
             $this->getDatabaseService()->getDbConnectionRaw()->commit();
         }
     }
@@ -1675,8 +1687,8 @@ class StockService extends BaseService
         }
 
         // User plugins take precedence
-        $standardPluginPath = __DIR__ . "/../plugins/$pluginName.php";
-        $userPluginPath = GROCY_DATAPATH . "/plugins/$pluginName.php";
+        $standardPluginPath = __DIR__ . sprintf('/../plugins/%s.php', $pluginName);
+        $userPluginPath = GROCY_DATAPATH . sprintf('/plugins/%s.php', $pluginName);
         if (file_exists($userPluginPath)) {
             require_once $userPluginPath;
             return new $pluginName(
@@ -1692,7 +1704,7 @@ class StockService extends BaseService
                 $this->getUsersService()->getUserSettings(GROCY_USER_ID)
             );
         } else {
-            throw new Exception("Plugin $pluginName was not found");
+            throw new Exception(sprintf('Plugin %s was not found', $pluginName));
         }
     }
 

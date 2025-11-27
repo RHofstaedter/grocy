@@ -19,11 +19,14 @@ return RectorConfig::configure()
     ->withPreparedSets(
         deadCode: true,
         //codeQuality: true,
-        //codingStyle: true,
-        //naming: true,
-        //privatization: true,
-        //typeDeclarations: true,
-        //rectorPreset: true,
+        codingStyle: true,
+        // privatization: true,
+        // naming: true,
+        // instanceOf: true,
+        // earlyReturn: true,
+        // strictBooleans: true,
+        // carbon: true,
+        // rectorPreset: true
     );
     //->withTypeCoverageLevel(0)
     //->withDeadCodeLevel(0)

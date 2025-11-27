@@ -43,7 +43,7 @@ abstract class BaseBarcodeLookupPlugin
 
         foreach ($minimunNeededProperties as $prop) {
             if (!array_key_exists($prop, $pluginOutput)) {
-                throw new Exception("Plugin output does not provide needed property $prop");
+                throw new Exception('Plugin output does not provide needed property ' . $prop);
             }
         }
 
@@ -52,17 +52,17 @@ abstract class BaseBarcodeLookupPlugin
         // Check if referenced entity ids are valid
         $locationId = $pluginOutput['location_id'];
         if (findObjectInArrayByPropertyValue($this->Locations, 'id', $locationId) === null) {
-            throw new Exception("Provided location_id ($locationId) is not a valid location id");
+            throw new Exception(sprintf('Provided location_id (%s) is not a valid location id', $locationId));
         }
 
         $quIdPurchase = $pluginOutput['qu_id_purchase'];
         if (findObjectInArrayByPropertyValue($this->QuantityUnits, 'id', $quIdPurchase) === null) {
-            throw new Exception("Provided qu_id_purchase ($quIdPurchase) is not a valid quantity unit id");
+            throw new Exception(sprintf('Provided qu_id_purchase (%s) is not a valid quantity unit id', $quIdPurchase));
         }
 
         $quIdStock = $pluginOutput['qu_id_stock'];
         if (findObjectInArrayByPropertyValue($this->QuantityUnits, 'id', $quIdStock) === null) {
-            throw new Exception("Provided qu_id_stock ($quIdStock) is not a valid quantity unit id");
+            throw new Exception(sprintf('Provided qu_id_stock (%s) is not a valid quantity unit id', $quIdStock));
         }
 
         $quFactor = $pluginOutput['__qu_factor_purchase_to_stock'];

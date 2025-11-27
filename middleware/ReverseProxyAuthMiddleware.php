@@ -9,7 +9,7 @@ use Exception;
 
 class ReverseProxyAuthMiddleware extends AuthMiddleware
 {
-    public function authenticate(Request $request)
+    protected function authenticate(Request $request)
     {
         define('GROCY_EXTERNALLY_MANAGED_AUTHENTICATION', true);
 
@@ -39,6 +39,7 @@ class ReverseProxyAuthMiddleware extends AuthMiddleware
                 // Invalid configuration of Proxy
                 throw new Exception('ReverseProxyAuthMiddleware: ' . GROCY_REVERSE_PROXY_AUTH_HEADER . ' header is missing or invalid');
             }
+
             $username = $username[0];
         }
 

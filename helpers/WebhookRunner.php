@@ -23,12 +23,13 @@ class WebhookRunner
         } else {
             $reqArgs = ['form_params' => $args];
         }
+
         try {
             file_put_contents('php://stderr', 'Running Webhook: ' . $url . "\n" . print_r($reqArgs, true));
 
             $this->client->request('POST', $url, $reqArgs);
-        } catch (RequestException $e) {
-            file_put_contents('php://stderr', 'Webhook failed: ' . $url . "\n" . $e->getMessage());
+        } catch (RequestException $requestException) {
+            file_put_contents('php://stderr', 'Webhook failed: ' . $url . "\n" . $requestException->getMessage());
         }
     }
 

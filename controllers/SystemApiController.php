@@ -25,8 +25,8 @@ class SystemApiController extends BaseApiController
             }
 
             return $this->apiResponse($response, $returnArray);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -56,8 +56,8 @@ class SystemApiController extends BaseApiController
             }
 
             return $this->apiResponse($response, $this->getApplicationService()->getSystemTime($offset));
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 

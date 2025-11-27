@@ -9,7 +9,9 @@ use Exception;
 class DatabaseService
 {
     private static $DbConnection;
+
     private static $DbConnectionRaw;
+
     private static $instance;
 
     public function executeDbQuery(string $sql)

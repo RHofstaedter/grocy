@@ -7,15 +7,25 @@ use Exception;
 class ChoresService extends BaseService
 {
     public const CHORE_ASSIGNMENT_TYPE_IN_ALPHABETICAL_ORDER = 'in-alphabetical-order';
+
     public const CHORE_ASSIGNMENT_TYPE_NO_ASSIGNMENT = 'no-assignment';
+
     public const CHORE_ASSIGNMENT_TYPE_RANDOM = 'random';
+
     public const CHORE_ASSIGNMENT_TYPE_WHO_LEAST_DID_FIRST = 'who-least-did-first';
+
     public const CHORE_PERIOD_TYPE_HOURLY = 'hourly';
+
     public const CHORE_PERIOD_TYPE_DAILY = 'daily';
+
     public const CHORE_PERIOD_TYPE_MANUALLY = 'manually';
+
     public const CHORE_PERIOD_TYPE_MONTHLY = 'monthly';
+
     public const CHORE_PERIOD_TYPE_WEEKLY = 'weekly';
+
     public const CHORE_PERIOD_TYPE_YEARLY = 'yearly';
+
     public const CHORE_PERIOD_TYPE_ADAPTIVE = 'adaptive';
 
     public function calculateNextExecutionAssignment($choreId)
@@ -180,7 +190,7 @@ class ChoresService extends BaseService
 
         if ($skipped) {
             if ($chore->period_type == self::CHORE_PERIOD_TYPE_MANUALLY) {
-                throw new Exception('Chores without a schedule can\'t be skipped');
+                throw new Exception("Chores without a schedule can't be skipped");
             }
         }
 
@@ -197,6 +207,7 @@ class ChoresService extends BaseService
             'scheduled_execution_time' => $scheduledExecutionTime
         ]);
         $logRow->save();
+
         $lastInsertId = $this->getDatabase()->lastInsertId();
 
         if ($chore->consume_product_on_execution == 1 && !empty($chore->product_id)) {
@@ -261,10 +272,11 @@ class ChoresService extends BaseService
                 ->executeDbStatement('UPDATE chores_log SET chore_id = ' . $choreIdToKeep . ' WHERE chore_id = ' . $choreIdToRemove);
             $this->getDatabaseService()
                 ->executeDbStatement('DELETE FROM chores WHERE id = ' . $choreIdToRemove);
-        } catch (\Exception $ex) {
+        } catch (\Exception $exception) {
             $this->getDatabaseService()->getDbConnectionRaw()->rollback();
-            throw $ex;
+            throw $exception;
         }
+
         $this->getDatabaseService()->getDbConnectionRaw()->commit();
     }
 

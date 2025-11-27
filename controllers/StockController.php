@@ -54,7 +54,7 @@ class StockController extends BaseController
     {
         if (isset($request->getQueryParams()['months']) && filter_var($request->getQueryParams()['months'], FILTER_VALIDATE_INT) !== false) {
             $months = $request->getQueryParams()['months'];
-            $where = "row_created_timestamp > DATE(DATE('now', 'localtime'), '-$months months')";
+            $where = sprintf("row_created_timestamp > DATE(DATE('now', 'localtime'), '-%s months')", $months);
         } else {
             // Default 6 months
             $where = "row_created_timestamp > DATE(DATE('now', 'localtime'), '-6 months')";
@@ -62,7 +62,7 @@ class StockController extends BaseController
 
         if (isset($request->getQueryParams()['product']) && filter_var($request->getQueryParams()['product'], FILTER_VALIDATE_INT) !== false) {
             $productId = $request->getQueryParams()['product'];
-            $where .= " AND product_id = $productId";
+            $where .= ' AND product_id = ' . $productId;
         }
 
         $usersService = $this->getUsersService();
@@ -258,6 +258,7 @@ class StockController extends BaseController
         if (isset($request->getQueryParams()['only_in_stock'])) {
             $products = $products->where('id IN (SELECT product_id from stock_current WHERE amount_aggregated > 0)');
         }
+
         if (isset($request->getQueryParams()['only_out_of_stock'])) {
             $products = $products->where('id NOT IN (SELECT product_id from stock_current WHERE amount_aggregated > 0)');
         }
@@ -544,9 +545,11 @@ class StockController extends BaseController
         if (isset($request->getQueryParams()['product_id'])) {
             $entries = $entries->where('product_id', $request->getQueryParams()['product_id']);
         }
+
         if (isset($request->getQueryParams()['user_id'])) {
             $entries = $entries->where('user_id', $request->getQueryParams()['user_id']);
         }
+
         if (isset($request->getQueryParams()['transaction_type'])) {
             $entries = $entries->where('transaction_type', $request->getQueryParams()['transaction_type']);
         }

@@ -61,6 +61,7 @@ class CalendarApiController extends BaseApiController
                 if ($minDate == null || $compareDate < $minDate) {
                     $minDate = $compareDate;
                 }
+
                 if ($maxDate == null || $compareDate > $maxDate) {
                     $maxDate = $compareDate;
                 }
@@ -77,8 +78,8 @@ class CalendarApiController extends BaseApiController
             $response->write((new CalendarFactory())->createCalendar($vCalendar));
             $response = $response->withHeader('Content-Type', 'text/calendar; charset=utf-8');
             return $response->withHeader('Content-Disposition', 'attachment; filename="Grocy.ics"');
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -91,8 +92,8 @@ class CalendarApiController extends BaseApiController
             return $this->apiResponse($response, [
                 'url' => $this->AppContainer->get('UrlManager')->ConstructUrl('/api/calendar/ical?secret=' . $secret)
             ]);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 }

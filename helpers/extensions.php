@@ -28,16 +28,19 @@ function findAllObjectsInArrayByPropertyValue($array, $propertyName, $propertyVa
                 if ($object->{$propertyName} == $propertyValue) {
                     $returnArray[] = $object;
                 }
+
                 break;
             case '>':
                 if ($object->{$propertyName} > $propertyValue) {
                     $returnArray[] = $object;
                 }
+
                 break;
             case '<':
                 if ($object->{$propertyName} < $propertyValue) {
                     $returnArray[] = $object;
                 }
+
                 break;
         }
     }
@@ -54,16 +57,19 @@ function findAllItemsInArrayByValue($array, $value, $operator = '==')
                 if ($item == $value) {
                     $returnArray[] = $item;
                 }
+
                 break;
             case '>':
                 if ($item > $value) {
                     $returnArray[] = $item;
                 }
+
                 break;
             case '<':
                 if ($item < $value) {
                     $returnArray[] = $item;
                 }
+
                 break;
         }
     }
@@ -213,7 +219,7 @@ function require_frontend_packages(array $packages)
 
 function emptyFolder($folderPath)
 {
-    foreach (glob("{$folderPath}/*") as $item) {
+    foreach (glob($folderPath . '/*') as $item) {
         if (is_dir($item)) {
             emptyFolder($item);
             rmdir($item);

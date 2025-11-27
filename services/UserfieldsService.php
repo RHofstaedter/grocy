@@ -7,18 +7,31 @@ use Exception;
 class UserfieldsService extends BaseService
 {
     public const USERFIELD_TYPE_CHECKBOX = 'checkbox';
+
     public const USERFIELD_TYPE_DATE = 'date';
+
     public const USERFIELD_TYPE_DATETIME = 'datetime';
+
     public const USERFIELD_TYPE_NUMBER_INT = 'number-integral';
+
     public const USERFIELD_TYPE_NUMBER_DECIMAL = 'number-decimal';
+
     public const USERFIELD_TYPE_NUMBER_CURRENCY = 'number-currency';
+
     public const USERFIELD_TYPE_FILE = 'file';
+
     public const USERFIELD_TYPE_IMAGE = 'image';
+
     public const USERFIELD_TYPE_LINK = 'link';
+
     public const USERFIELD_TYPE_LINK_WITH_TITLE = 'link-with-title';
+
     public const USERFIELD_TYPE_PRESET_CHECKLIST = 'preset-checklist';
+
     public const USERFIELD_TYPE_PRESET_LIST = 'preset-list';
+
     public const USERFIELD_TYPE_SINGLE_LINE_TEXT = 'text-single-line';
+
     public const USERFIELD_TYPE_SINGLE_MULTILINE_TEXT = 'text-multi-line';
 
     protected $openApiSpec;
@@ -104,7 +117,7 @@ class UserfieldsService extends BaseService
             $fieldRow = $this->getDatabase()->userfields()->where('entity = :1 AND name = :2', $entity, $key)->fetch();
 
             if ($fieldRow === null) {
-                throw new Exception("Field $key is not a valid userfield of the given entity");
+                throw new Exception(sprintf('Field %s is not a valid userfield of the given entity', $key));
             }
 
             $fieldId = $fieldRow->id;

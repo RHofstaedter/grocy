@@ -32,8 +32,8 @@ class ChoresApiController extends BaseApiController
             }
 
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -41,8 +41,8 @@ class ChoresApiController extends BaseApiController
     {
         try {
             return $this->apiResponse($response, $this->getChoresService()->getChoreDetails($args['choreId']));
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -79,8 +79,8 @@ class ChoresApiController extends BaseApiController
 
             $choreExecutionId = $this->getChoresService()->trackChore($args['choreId'], $trackedTime, $doneBy, $skipped);
             return $this->apiResponse($response, $this->getDatabase()->chores_log($choreExecutionId));
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -91,8 +91,8 @@ class ChoresApiController extends BaseApiController
 
             $this->apiResponse($response, $this->getChoresService()->undoChoreExecution($args['executionId']));
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -112,8 +112,8 @@ class ChoresApiController extends BaseApiController
             }
 
             return $this->apiResponse($response, $webhookData);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -128,8 +128,8 @@ class ChoresApiController extends BaseApiController
 
             $this->apiResponse($response, $this->getChoresService()->mergeChores($args['choreIdToKeep'], $args['choreIdToRemove']));
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 }

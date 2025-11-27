@@ -7,9 +7,12 @@ use Exception;
 
 class RecipesService extends BaseService
 {
-    public const RECIPE_TYPE_MEALPLAN_DAY = 'mealplan-day'; // A recipe per meal plan day => name = YYYY-MM-DD
-    public const RECIPE_TYPE_MEALPLAN_WEEK = 'mealplan-week'; // A recipe per meal plan week => name = YYYY-WW (week number)
-    public const RECIPE_TYPE_MEALPLAN_SHADOW = 'mealplan-shadow'; // A recipe per meal plan recipe (for separated stock fulfillment checking) => name = YYYY-MM-DD#<meal_plan.id>
+    public const RECIPE_TYPE_MEALPLAN_DAY = 'mealplan-day';
+     // A recipe per meal plan day => name = YYYY-MM-DD
+    public const RECIPE_TYPE_MEALPLAN_WEEK = 'mealplan-week';
+     // A recipe per meal plan week => name = YYYY-WW (week number)
+    public const RECIPE_TYPE_MEALPLAN_SHADOW = 'mealplan-shadow';
+     // A recipe per meal plan recipe (for separated stock fulfillment checking) => name = YYYY-MM-DD#<meal_plan.id>
     public const RECIPE_TYPE_NORMAL = 'normal'; // Normal / manually created recipes
 
     public function addNotFulfilledProductsToShoppingList($recipeId, $excludedProductIds = null)
@@ -87,10 +90,11 @@ class RecipesService extends BaseService
                     $this->getStockService()->consumeProduct($recipePosition->product_id, $amount, false, StockService::TRANSACTION_TYPE_CONSUME, 'default', $recipeId, null, $transactionId, true, true);
                 }
             }
-        } catch (\Exception $ex) {
+        } catch (\Exception $exception) {
             $this->getDatabaseService()->getDbConnectionRaw()->rollback();
-            throw $ex;
+            throw $exception;
         }
+
         $this->getDatabaseService()->getDbConnectionRaw()->commit();
 
         $recipe = $this->getDatabase()->recipes()->where('id = :1', $recipeId)->fetch();

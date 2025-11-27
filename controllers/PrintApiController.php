@@ -24,10 +24,11 @@ class PrintApiController extends BaseApiController
             if (isset($params['printHeader'])) {
                 $printHeader = ($params['printHeader'] === 'true');
             }
+
             $items = $this->getStockService()->getShoppinglistInPrintableStrings($listId);
             return $this->apiResponse($response, $this->getPrintService()->printShoppingList($printHeader, $items));
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 }

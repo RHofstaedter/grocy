@@ -27,8 +27,8 @@ class StockApiController extends BaseApiController
 
             $this->getStockService()->addMissingProductsToShoppingList($listId);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -47,8 +47,8 @@ class StockApiController extends BaseApiController
 
             $this->getStockService()->addOverdueProductsToShoppingList($listId);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -67,8 +67,8 @@ class StockApiController extends BaseApiController
 
             $this->getStockService()->addExpiredProductsToShoppingList($listId);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -131,8 +131,8 @@ class StockApiController extends BaseApiController
 
             $args['transactionId'] = $transactionId;
             return $this->StockTransactions($request, $response, $args);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -141,8 +141,8 @@ class StockApiController extends BaseApiController
         try {
             $args['productId'] = $this->getStockService()->getProductIdFromBarcode($args['barcode']);
             return $this->addProduct($request, $response, $args);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -185,8 +185,8 @@ class StockApiController extends BaseApiController
 
             $this->getStockService()->addProductToShoppingList($productId, $amount, $quId, $note, $listId);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -209,8 +209,8 @@ class StockApiController extends BaseApiController
 
             $this->getStockService()->clearShoppingList($listId, $doneOnly);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -268,8 +268,8 @@ class StockApiController extends BaseApiController
             $transactionId = $this->getStockService()->consumeProduct($args['productId'], $requestBody['amount'], $spoiled, $transactionType, $specificStockEntryId, $recipeId, $locationId, $transactionId, $allowSubproductSubstitution, $consumeExact);
             $args['transactionId'] = $transactionId;
             return $this->StockTransactions($request, $response, $args);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -288,8 +288,8 @@ class StockApiController extends BaseApiController
             }
 
             return $this->consumeProduct($request, $response, $args);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -361,8 +361,8 @@ class StockApiController extends BaseApiController
             $transactionId = $this->getStockService()->editStockEntry($args['entryId'], $requestBody['amount'], $bestBeforeDate, $locationId, $shoppingLocationId, $price, $requestBody['open'], $requestBody['purchased_date'], $note);
             $args['transactionId'] = $transactionId;
             return $this->StockTransactions($request, $response, $args);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -377,8 +377,8 @@ class StockApiController extends BaseApiController
             }
 
             return $this->apiResponse($response, $this->getStockService()->externalBarcodeLookup($args['barcode'], $addFoundProduct));
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -435,8 +435,8 @@ class StockApiController extends BaseApiController
             $transactionId = $this->getStockService()->inventoryProduct($args['productId'], $requestBody['new_amount'], $bestBeforeDate, $locationId, $price, $shoppingLocationId, $purchasedDate, $stockLabelType, $note);
             $args['transactionId'] = $transactionId;
             return $this->StockTransactions($request, $response, $args);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -445,8 +445,8 @@ class StockApiController extends BaseApiController
         try {
             $args['productId'] = $this->getStockService()->getProductIdFromBarcode($args['barcode']);
             return $this->inventoryProduct($request, $response, $args);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -479,8 +479,8 @@ class StockApiController extends BaseApiController
             $transactionId = $this->getStockService()->openProduct($args['productId'], $requestBody['amount'], $specificStockEntryId, $transactionId, $allowSubproductSubstitution);
             $args['transactionId'] = $transactionId;
             return $this->StockTransactions($request, $response, $args);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -499,8 +499,8 @@ class StockApiController extends BaseApiController
             }
 
             return $this->openProduct($request, $response, $args);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -508,8 +508,8 @@ class StockApiController extends BaseApiController
     {
         try {
             return $this->apiResponse($response, $this->getStockService()->getProductDetails($args['productId']));
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -518,8 +518,8 @@ class StockApiController extends BaseApiController
         try {
             $productId = $this->getStockService()->getProductIdFromBarcode($args['barcode']);
             return $this->apiResponse($response, $this->getStockService()->getProductDetails($productId));
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -527,8 +527,8 @@ class StockApiController extends BaseApiController
     {
         try {
             return $this->apiResponse($response, $this->getStockService()->getProductPriceHistory($args['productId']));
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -573,8 +573,8 @@ class StockApiController extends BaseApiController
             }
 
             return $this->apiResponse($response, $webhookData);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -600,8 +600,8 @@ class StockApiController extends BaseApiController
             }
 
             return $this->apiResponse($response, $webhookData);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -634,8 +634,8 @@ class StockApiController extends BaseApiController
 
             $this->getStockService()->removeProductFromShoppingList($productId, $amount, $listId);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -649,8 +649,8 @@ class StockApiController extends BaseApiController
             }
 
             return $this->apiResponse($response, $stockLogRow);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -668,8 +668,8 @@ class StockApiController extends BaseApiController
             }
 
             return $this->apiResponse($response, $transactionRows);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -705,8 +705,8 @@ class StockApiController extends BaseApiController
             $transactionId = $this->getStockService()->transferProduct($args['productId'], $requestBody['amount'], $requestBody['location_id_from'], $requestBody['location_id_to'], $specificStockEntryId);
             $args['transactionId'] = $transactionId;
             return $this->StockTransactions($request, $response, $args);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -725,8 +725,8 @@ class StockApiController extends BaseApiController
             }
 
             return $this->transferProduct($request, $response, $args);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -737,8 +737,8 @@ class StockApiController extends BaseApiController
         try {
             $this->apiResponse($response, $this->getStockService()->undoBooking($args['bookingId']));
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -749,8 +749,8 @@ class StockApiController extends BaseApiController
         try {
             $this->apiResponse($response, $this->getStockService()->undoTransaction($args['transactionId']));
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -765,8 +765,8 @@ class StockApiController extends BaseApiController
 
             $this->apiResponse($response, $this->getStockService()->mergeProducts($args['productIdToKeep'], $args['productIdToRemove']));
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 }

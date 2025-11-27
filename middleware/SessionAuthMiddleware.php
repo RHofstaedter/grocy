@@ -15,7 +15,7 @@ class SessionAuthMiddleware extends AuthMiddleware
         parent::__construct($container, $responseFactory);
     }
 
-    public function authenticate(Request $request)
+    protected function authenticate(Request $request)
     {
         $sessionService = SessionService::getInstance();
 

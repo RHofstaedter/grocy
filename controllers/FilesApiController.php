@@ -27,8 +27,8 @@ class FilesApiController extends BaseApiController
             $this->getFilesService()->deleteFile($args['group'], $fileName);
 
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -50,8 +50,8 @@ class FilesApiController extends BaseApiController
             } else {
                 throw new HttpNotFoundException($request, 'File not found');
             }
-        } catch (\Exception $ex) {
-            throw new HttpNotFoundException($request, $ex->getMessage(), $ex);
+        } catch (\Exception $exception) {
+            throw new HttpNotFoundException($request, $exception->getMessage(), $exception);
         }
     }
 
@@ -74,8 +74,8 @@ class FilesApiController extends BaseApiController
             } else {
                 throw new HttpNotFoundException($request, 'File not found');
             }
-        } catch (\Exception $ex) {
-            throw new HttpNotFoundException($request, $ex->getMessage(), $ex);
+        } catch (\Exception $exception) {
+            throw new HttpNotFoundException($request, $exception->getMessage(), $exception);
         }
     }
 
@@ -90,24 +90,24 @@ class FilesApiController extends BaseApiController
 
             $fileHandle = fopen($this->getFilesService()->getFilePath($args['group'], $fileName), 'xb');
             if ($fileHandle === false) {
-                throw new Exception("Error while creating file $fileName");
+                throw new Exception('Error while creating file ' . $fileName);
             }
 
             // Save the file to disk in chunks of 1 MB
             $requestBody = $request->getBody();
             while ($data = $requestBody->read(1048576)) {
                 if (fwrite($fileHandle, $data) === false) {
-                    throw new Exception("Error while writing file $fileName");
+                    throw new Exception('Error while writing file ' . $fileName);
                 }
             }
 
             if (fclose($fileHandle) === false) {
-                throw new Exception("Error while closing file $fileName");
+                throw new Exception('Error while closing file ' . $fileName);
             }
 
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 

@@ -41,6 +41,7 @@ class PrintService extends BaseService
         } else {
             $connector = new FilePrintConnector(GROCY_TPRINTER_CONNECTOR);
         }
+
         return new Printer($connector);
     }
 

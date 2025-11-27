@@ -39,8 +39,8 @@ class UsersApiController extends BaseApiController
 
             $this->getUsersService()->createUser($requestBody['username'], $requestBody['first_name'], $requestBody['last_name'], $requestBody['password'], $requestBody['picture_file_name']);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -50,8 +50,8 @@ class UsersApiController extends BaseApiController
         try {
             $this->getUsersService()->deleteUser($args['userId']);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -68,8 +68,8 @@ class UsersApiController extends BaseApiController
         try {
             $this->getUsersService()->editUser($args['userId'], $requestBody['username'], $requestBody['first_name'], $requestBody['last_name'], $requestBody['password'], $requestBody['picture_file_name']);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -78,8 +78,8 @@ class UsersApiController extends BaseApiController
         try {
             $value = $this->getUsersService()->getUserSetting(GROCY_USER_ID, $args['settingKey']);
             return $this->apiResponse($response, ['value' => $value]);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -87,8 +87,8 @@ class UsersApiController extends BaseApiController
     {
         try {
             return $this->apiResponse($response, $this->getUsersService()->getUserSettings(GROCY_USER_ID));
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -97,8 +97,8 @@ class UsersApiController extends BaseApiController
         User::checkPermission($request, User::PERMISSION_USERS_READ);
         try {
             return $this->filteredApiResponse($response, $this->getUsersService()->getUsersAsDto(), $request->getQueryParams());
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -106,8 +106,8 @@ class UsersApiController extends BaseApiController
     {
         try {
             return $this->apiResponse($response, $this->getUsersService()->getUsersAsDto()->where('id', GROCY_USER_ID));
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -153,6 +153,7 @@ class UsersApiController extends BaseApiController
                     ];
                 }
             }
+
             $db->insert('user_permissions', $perms, 'batch');
 
             return $this->emptyApiResponse($response);
@@ -170,8 +171,8 @@ class UsersApiController extends BaseApiController
 
             $value = $this->getUsersService()->setUserSetting(GROCY_USER_ID, $args['settingKey'], $requestBody['value']);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -180,8 +181,8 @@ class UsersApiController extends BaseApiController
         try {
             $value = $this->getUsersService()->deleteUserSetting(GROCY_USER_ID, $args['settingKey']);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 }

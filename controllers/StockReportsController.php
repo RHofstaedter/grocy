@@ -14,7 +14,7 @@ class StockReportsController extends BaseController
 		if (isset($request->getQueryParams()['start_date']) && isset($request->getQueryParams()['end_date']) && isIsoDate($request->getQueryParams()['start_date']) && isIsoDate($request->getQueryParams()['end_date'])) {
 			$startDate = $request->getQueryParams()['start_date'];
 			$endDate = $request->getQueryParams()['end_date'];
-			$where .= " AND pph.purchased_date BETWEEN '$startDate' AND '$endDate'";
+			$where .= sprintf(" AND pph.purchased_date BETWEEN '%s' AND '%s'", $startDate, $endDate);
 		} else {
 			// Default to this month
 			$where .= " AND pph.purchased_date >= DATE(DATE('now', 'localtime'), 'start of month')";
@@ -46,7 +46,7 @@ class StockReportsController extends BaseController
 				ON pph.product_id = p.id
 			LEFT JOIN product_groups pg
 				ON p.product_group_id = pg.id
-			WHERE $where
+			WHERE {$where}
 			GROUP BY p.id, p.name, pg.id, pg.name
 			ORDER BY p.name COLLATE NOCASE
 			";
@@ -61,7 +61,7 @@ class StockReportsController extends BaseController
 				ON pph.product_id = p.id
 			LEFT JOIN product_groups pg
 				ON p.product_group_id = pg.id
-			WHERE $where
+			WHERE {$where}
 			GROUP BY pg.id, pg.name
 			ORDER BY pg.name COLLATE NOCASE
 			";
@@ -76,7 +76,7 @@ class StockReportsController extends BaseController
 				ON pph.product_id = p.id
 			LEFT JOIN shopping_locations sl
 				ON pph.shopping_location_id = sl.id
-			WHERE $where
+			WHERE {$where}
 			GROUP BY sl.id, sl.name
 			ORDER BY sl.NAME COLLATE NOCASE
 			";

@@ -14,8 +14,8 @@ class BatteriesApiController extends BaseApiController
     {
         try {
             return $this->apiResponse($response, $this->getBatteriesService()->getBatteryDetails($args['batteryId']));
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -42,8 +42,8 @@ class BatteriesApiController extends BaseApiController
 
             $chargeCycleId = $this->getBatteriesService()->trackChargeCycle($args['batteryId'], $trackedTime);
             return $this->apiResponse($response, $this->getDatabase()->battery_charge_cycles($chargeCycleId));
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -54,8 +54,8 @@ class BatteriesApiController extends BaseApiController
         try {
             $this->apiResponse($response, $this->getBatteriesService()->undoChargeCycle($args['chargeCycleId']));
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -75,8 +75,8 @@ class BatteriesApiController extends BaseApiController
             }
 
             return $this->apiResponse($response, $webhookData);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 }

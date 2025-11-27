@@ -24,6 +24,7 @@ class UsersService extends BaseService
             'picture_file_name' => $pictureFileName
         ]);
         $newUserRow = $newUserRow->save();
+
         $permList = [];
         $permissions = $this->getDatabase()
             ->permission_hierarchy()
@@ -129,6 +130,7 @@ class UsersService extends BaseService
         if (!array_key_exists($userId, self::$userSettingsCache)) {
             self::$userSettingsCache[$userId] = [];
         }
+
         self::$userSettingsCache[$userId][$settingKey] = $settingValue;
 
         $settingRow = $this->getDatabase()->user_settings()->where('user_id = :1 AND key = :2', $userId, $settingKey)->fetch();
@@ -152,6 +154,7 @@ class UsersService extends BaseService
         if (!array_key_exists($userId, self::$userSettingsCache)) {
             self::$userSettingsCache[$userId] = [];
         }
+
         unset(self::$userSettingsCache[$userId][$settingKey]);
 
         $this->getDatabase()->user_settings()->where('user_id = :1 AND key = :2', $userId, $settingKey)->delete();

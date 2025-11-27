@@ -33,6 +33,7 @@ trait GrocycodeTrait
                 ->withHeader('Cache-Control', 'no-cache')
                 ->withHeader('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT');
         }
+
         $response->getBody()->write($png);
         return $response;
     }

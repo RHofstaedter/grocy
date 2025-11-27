@@ -152,10 +152,12 @@ class GenericEntityApiController extends BaseApiController
         if ($args['entity'] == 'stock') {
             $referencingId = $object->stock_id;
         }
+
         $userfields = $this->getUserfieldsService()->getValues($args['entity'], $referencingId);
         if (count($userfields) === 0) {
             $userfields = null;
         }
+
         $object['userfields'] = $userfields;
 
         return $this->apiResponse($response, $object);
@@ -201,8 +203,8 @@ class GenericEntityApiController extends BaseApiController
     {
         try {
             return $this->apiResponse($response, $this->getUserfieldsService()->getValues($args['entity'], $args['objectId']));
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 
@@ -219,8 +221,8 @@ class GenericEntityApiController extends BaseApiController
 
             $this->getUserfieldsService()->setValues($args['entity'], $args['objectId'], $requestBody);
             return $this->emptyApiResponse($response);
-        } catch (\Exception $ex) {
-            return $this->genericErrorResponse($response, $ex->getMessage());
+        } catch (\Exception $exception) {
+            return $this->genericErrorResponse($response, $exception->getMessage());
         }
     }
 

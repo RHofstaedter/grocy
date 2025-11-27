@@ -19,6 +19,7 @@ class DatabaseMigrationService extends BaseService
         foreach (new \FilesystemIterator(__DIR__ . '/../migrations') as $file) {
             $migrationFiles[$file->getBasename()] = $file;
         }
+
         ksort($migrationFiles);
 
         $migrationCounter = 0;

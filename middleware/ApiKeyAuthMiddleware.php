@@ -19,7 +19,7 @@ class ApiKeyAuthMiddleware extends AuthMiddleware
 
     protected $ApiKeyHeaderName;
 
-    public function authenticate(Request $request)
+    protected function authenticate(Request $request)
     {
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();

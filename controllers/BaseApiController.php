@@ -10,7 +10,9 @@ use Exception;
 class BaseApiController extends BaseController
 {
     public const PATTERN_FIELD = '[A-Za-z_][A-Za-z0-9_]+';
+
     public const PATTERN_OPERATOR = '!?((>=)|(<=)|=|~|<|>|(§))';
+
     public const PATTERN_VALUE = '[A-Za-z\p{L}\p{M}0-9*_.$#^| -\\\]+';
 
     protected $openApiSpec;

@@ -30,6 +30,6 @@ class UrlManager
             $_SERVER['HTTPS'] = 'on';
         }
 
-        return (isset($_SERVER['HTTPS']) ? 'https' : 'http') . "://$_SERVER[HTTP_HOST]";
+        return (isset($_SERVER['HTTPS']) ? 'https' : 'http') . ('://' . $_SERVER[HTTP_HOST]);
     }
 }

@@ -16,12 +16,19 @@ class LocalizationService
     }
 
     protected $Po;
+
     protected $PoQu;
+
     protected $Pot;
+
     protected $PotMain;
+
     protected $Translator;
+
     protected $TranslatorQu;
+
     protected $Culture;
+
     private static $instanceMap = [];
 
     public function checkAndAddMissingTranslationToPot($text)
@@ -131,38 +138,38 @@ class LocalizationService
             $this->Pot = $this->Pot->mergeWith(Translations::fromPoFile(__DIR__ . '/../localization/demo_data.pot'));
         }
 
-        $this->Po = Translations::fromPoFile(__DIR__ . "/../localization/$culture/strings.po");
+        $this->Po = Translations::fromPoFile(__DIR__ . sprintf('/../localization/%s/strings.po', $culture));
 
-        if (file_exists(__DIR__ . "/../localization/$culture/chore_assignment_types.po")) {
-            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . "/../localization/$culture/chore_assignment_types.po"));
+        if (file_exists(__DIR__ . sprintf('/../localization/%s/chore_assignment_types.po', $culture))) {
+            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . sprintf('/../localization/%s/chore_assignment_types.po', $culture)));
         }
 
-        if (file_exists(__DIR__ . "/../localization/$culture/component_translations.po")) {
-            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . "/../localization/$culture/component_translations.po"));
+        if (file_exists(__DIR__ . sprintf('/../localization/%s/component_translations.po', $culture))) {
+            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . sprintf('/../localization/%s/component_translations.po', $culture)));
         }
 
-        if (file_exists(__DIR__ . "/../localization/$culture/stock_transaction_types.po")) {
-            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . "/../localization/$culture/stock_transaction_types.po"));
+        if (file_exists(__DIR__ . sprintf('/../localization/%s/stock_transaction_types.po', $culture))) {
+            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . sprintf('/../localization/%s/stock_transaction_types.po', $culture)));
         }
 
-        if (file_exists(__DIR__ . "/../localization/$culture/chore_period_types.po")) {
-            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . "/../localization/$culture/chore_period_types.po"));
+        if (file_exists(__DIR__ . sprintf('/../localization/%s/chore_period_types.po', $culture))) {
+            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . sprintf('/../localization/%s/chore_period_types.po', $culture)));
         }
 
-        if (file_exists(__DIR__ . "/../localization/$culture/userfield_types.po")) {
-            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . "/../localization/$culture/userfield_types.po"));
+        if (file_exists(__DIR__ . sprintf('/../localization/%s/userfield_types.po', $culture))) {
+            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . sprintf('/../localization/%s/userfield_types.po', $culture)));
         }
 
-        if (file_exists(__DIR__ . "/../localization/$culture/permissions.po")) {
-            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . "/../localization/$culture/permissions.po"));
+        if (file_exists(__DIR__ . sprintf('/../localization/%s/permissions.po', $culture))) {
+            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . sprintf('/../localization/%s/permissions.po', $culture)));
         }
 
-        if (file_exists(__DIR__ . "/../localization/$culture/locales.po")) {
-            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . "/../localization/$culture/locales.po"));
+        if (file_exists(__DIR__ . sprintf('/../localization/%s/locales.po', $culture))) {
+            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . sprintf('/../localization/%s/locales.po', $culture)));
         }
 
-        if (GROCY_MODE !== 'production' && file_exists(__DIR__ . "/../localization/$culture/demo_data.po")) {
-            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . "/../localization/$culture/demo_data.po"));
+        if (GROCY_MODE !== 'production' && file_exists(__DIR__ . sprintf('/../localization/%s/demo_data.po', $culture))) {
+            $this->Po = $this->Po->mergeWith(Translations::fromPoFile(__DIR__ . sprintf('/../localization/%s/demo_data.po', $culture)));
         }
 
         $this->Translator = new Translator();

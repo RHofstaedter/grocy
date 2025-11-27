@@ -50,7 +50,7 @@ class BatteriesController extends BaseController
     {
         if (isset($request->getQueryParams()['months']) && filter_var($request->getQueryParams()['months'], FILTER_VALIDATE_INT) !== false) {
             $months = $request->getQueryParams()['months'];
-            $where = "tracked_time > DATE(DATE('now', 'localtime'), '-$months months')";
+            $where = sprintf("tracked_time > DATE(DATE('now', 'localtime'), '-%s months')", $months);
         } else {
             // Default 2 years
             $where = "tracked_time > DATE(DATE('now', 'localtime'), '-24 months')";
@@ -58,7 +58,7 @@ class BatteriesController extends BaseController
 
         if (isset($request->getQueryParams()['battery']) && filter_var($request->getQueryParams()['battery'], FILTER_VALIDATE_INT) !== false) {
             $batteryId = $request->getQueryParams()['battery'];
-            $where .= " AND battery_id = $batteryId";
+            $where .= ' AND battery_id = ' . $batteryId;
         }
 
         return $this->renderPage($response, 'batteriesjournal', [

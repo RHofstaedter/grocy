@@ -10,7 +10,7 @@ use Exception;
 
 class LdapAuthMiddleware extends AuthMiddleware
 {
-    public function authenticate(Request $request)
+    protected function authenticate(Request $request)
     {
         define('GROCY_EXTERNALLY_MANAGED_AUTHENTICATION', true);
 

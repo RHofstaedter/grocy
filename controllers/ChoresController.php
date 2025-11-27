@@ -61,7 +61,7 @@ class ChoresController extends BaseController
     {
         if (isset($request->getQueryParams()['months']) && filter_var($request->getQueryParams()['months'], FILTER_VALIDATE_INT) !== false) {
             $months = $request->getQueryParams()['months'];
-            $where = "tracked_time > DATE(DATE('now', 'localtime'), '-$months months')";
+            $where = sprintf("tracked_time > DATE(DATE('now', 'localtime'), '-%s months')", $months);
         } else {
             // Default 1 year
             $where = "tracked_time > DATE(DATE('now', 'localtime'), '-12 months')";
@@ -69,7 +69,7 @@ class ChoresController extends BaseController
 
         if (isset($request->getQueryParams()['chore']) && filter_var($request->getQueryParams()['chore'], FILTER_VALIDATE_INT) !== false) {
             $choreId = $request->getQueryParams()['chore'];
-            $where .= " AND chore_id = $choreId";
+            $where .= ' AND chore_id = ' . $choreId;
         }
 
         return $this->renderPage($response, 'choresjournal', [

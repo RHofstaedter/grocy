@@ -20,9 +20,13 @@ use Exception;
 class Grocycode implements \Stringable
 {
     public const PRODUCT = 'p';
+
     public const BATTERY = 'b';
+
     public const CHORE = 'c';
+
     public const RECIPE = 'r';
+
     public const MAGIC = 'grcy';
 
     public function __construct(...$args)
@@ -35,6 +39,7 @@ class Grocycode implements \Stringable
             if ($argc == 2) {
                 $args[] = [];
             }
+
             $this->setFromData($args[0], $args[1], $args[2]);
             return;
         }
@@ -43,8 +48,11 @@ class Grocycode implements \Stringable
     }
 
     public static $Items = [self::PRODUCT, self::BATTERY, self::CHORE, self::RECIPE];
+
     private $type;
+
     private $id;
+
     private $extra_data = [];
 
     public static function validate(string $code)
@@ -99,6 +107,7 @@ class Grocycode implements \Stringable
         if (!is_array($extra_data)) {
             throw new Exception('Extra data must be array of string');
         }
+
         if (!in_array($type, self::$Items)) {
             throw new Exception('Unknown Grocycode type');
         }

@@ -23,7 +23,7 @@ class RecipesController extends BaseController
             $days = $request->getQueryParams()['days'];
         }
 
-        $mealPlanWhereTimespan = "day BETWEEN DATE('$start', '-$days days') AND DATE('$start', '+$days days')";
+        $mealPlanWhereTimespan = sprintf("day BETWEEN DATE('%s', '-%s days') AND DATE('%s', '+%s days')", $start, $days, $start, $days);
 
         $recipes = $this->getDatabase()->recipes()->where('type', RecipesService::RECIPE_TYPE_NORMAL)->fetchAll();
         $events = [];
@@ -52,7 +52,7 @@ class RecipesController extends BaseController
             ];
         }
 
-        $weekRecipe = $this->getDatabase()->recipes()->where("type = 'mealplan-week' AND name = LTRIM(STRFTIME('%Y-%W', DATE('$start')), '0')")->fetch();
+        $weekRecipe = $this->getDatabase()->recipes()->where(sprintf("type = 'mealplan-week' AND name = LTRIM(STRFTIME('%%Y-%%W', DATE('%s')), '0')", $start))->fetch();
         $weekRecipeId = 0;
         if ($weekRecipe != null) {
             $weekRecipeId = $weekRecipe->id;
@@ -61,13 +61,13 @@ class RecipesController extends BaseController
         return $this->renderPage($response, 'mealplan', [
             'fullcalendarEventSources' => $events,
             'recipes' => $recipes,
-            'internalRecipes' => $this->getDatabase()->recipes()->where("id IN (SELECT recipe_id FROM meal_plan_internal_recipe_relation WHERE $mealPlanWhereTimespan) OR id = $weekRecipeId")->fetchAll(),
-            'recipesResolved' => $this->getRecipesService()->getRecipesResolved("recipe_id IN (SELECT recipe_id FROM meal_plan_internal_recipe_relation WHERE $mealPlanWhereTimespan) OR recipe_id = $weekRecipeId"),
+            'internalRecipes' => $this->getDatabase()->recipes()->where(sprintf('id IN (SELECT recipe_id FROM meal_plan_internal_recipe_relation WHERE %s) OR id = %s', $mealPlanWhereTimespan, $weekRecipeId))->fetchAll(),
+            'recipesResolved' => $this->getRecipesService()->getRecipesResolved(sprintf('recipe_id IN (SELECT recipe_id FROM meal_plan_internal_recipe_relation WHERE %s) OR recipe_id = %s', $mealPlanWhereTimespan, $weekRecipeId)),
             'products' => $this->getDatabase()->products()->orderBy('name', 'COLLATE NOCASE'),
             'quantityUnits' => $this->getDatabase()->quantity_units()->orderBy('name', 'COLLATE NOCASE'),
             'quantityUnitConversionsResolved' => $this->getDatabase()->cache__quantity_unit_conversions_resolved(),
             'mealplanSections' => $this->getDatabase()->meal_plan_sections()->orderBy('sort_number'),
-            'usedMealplanSections' => $this->getDatabase()->meal_plan_sections()->where("id IN (SELECT section_id FROM meal_plan WHERE $mealPlanWhereTimespan)")->orderBy('sort_number'),
+            'usedMealplanSections' => $this->getDatabase()->meal_plan_sections()->where(sprintf('id IN (SELECT section_id FROM meal_plan WHERE %s)', $mealPlanWhereTimespan))->orderBy('sort_number'),
             'weekRecipe' => $weekRecipe
         ]);
     }

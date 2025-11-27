@@ -22,7 +22,7 @@ class DatabaseMigrationService extends BaseService
         ksort($migrationFiles);
 
         $migrationCounter = 0;
-        foreach ($migrationFiles as $migrationKey => $migrationFile) {
+        foreach ($migrationFiles as $migrationFile) {
             if ($migrationFile->getExtension() === 'php') {
                 $migrationNumber = ltrim($migrationFile->getBasename('.php'), '0');
                 $this->executePhpMigrationWhenNeeded(

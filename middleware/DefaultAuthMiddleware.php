@@ -20,8 +20,7 @@ class DefaultAuthMiddleware extends AuthMiddleware
 
         // Then by session cookie
         $auth = new SessionAuthMiddleware($this->AppContainer, $this->ResponseFactory);
-        $user = $auth->authenticate($request);
-        return $user;
+        return $auth->authenticate($request);
     }
 
     public static function processLogin(array $postParams)

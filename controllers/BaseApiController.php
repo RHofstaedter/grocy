@@ -13,9 +13,9 @@ class BaseApiController extends BaseController
     public const PATTERN_OPERATOR = '!?((>=)|(<=)|=|~|<|>|(§))';
     public const PATTERN_VALUE = '[A-Za-z\p{L}\p{M}0-9*_.$#^| -\\\]+';
 
-    protected $openApiSpec = null;
+    protected $openApiSpec;
 
-    private static $htmlPurifierInstance = null;
+    private static $htmlPurifierInstance;
 
     protected function apiResponse(Response $response, $data, $cache = false)
     {
@@ -165,7 +165,7 @@ class BaseApiController extends BaseController
         }
 
         $requestBody = $request->getParsedBody();
-        foreach ($requestBody as $key => &$value) {
+        foreach ($requestBody as &$value) {
             // HTMLPurifier removes boolean values (true/false) and arrays, so explicitly keep them
             // Maybe also possible through HTMLPurifier config (http://htmlpurifier.org/live/configdoc/plain.html)
             if (!is_bool($value) && !is_array($value)) {

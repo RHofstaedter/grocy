@@ -21,7 +21,7 @@ class UserfieldsService extends BaseService
     public const USERFIELD_TYPE_SINGLE_LINE_TEXT = 'text-single-line';
     public const USERFIELD_TYPE_SINGLE_MULTILINE_TEXT = 'text-multi-line';
 
-    protected $openApiSpec = null;
+    protected $openApiSpec;
 
     public function getAllFields()
     {

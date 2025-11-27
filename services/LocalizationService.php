@@ -128,9 +128,7 @@ class LocalizationService
             $this->Pot = $this->Pot->mergeWith(Translations::fromPoFile(__DIR__ . '/../localization/permissions.pot'));
             $this->Pot = $this->Pot->mergeWith(Translations::fromPoFile(__DIR__ . '/../localization/locales.pot'));
 
-            if (GROCY_MODE !== 'production') {
-                $this->Pot = $this->Pot->mergeWith(Translations::fromPoFile(__DIR__ . '/../localization/demo_data.pot'));
-            }
+            $this->Pot = $this->Pot->mergeWith(Translations::fromPoFile(__DIR__ . '/../localization/demo_data.pot'));
         }
 
         $this->Po = Translations::fromPoFile(__DIR__ . "/../localization/$culture/strings.po");

@@ -52,7 +52,6 @@ class ApplicationService extends BaseService
     {
         $pdo = new \PDO('sqlite::memory:');
         $sqliteVersion = $pdo->query('SELECT sqlite_version()')->fetch()[0];
-        $pdo = null;
 
         return [
             'grocy_version' => $this->getInstalledVersion(),

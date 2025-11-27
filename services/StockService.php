@@ -1244,11 +1244,6 @@ class StockService extends BaseService
         if ($productDetails->product->enable_tare_weight_handling == 1) {
             // Hard fail for now, as we not yet support transferring tare weight enabled products
             throw new Exception('Transferring tare weight enabled products is not yet possible');
-            if ($amount < $productDetails->product->tare_weight) {
-                throw new Exception('The amount cannot be lower than the defined tare weight');
-            }
-
-            $amount = abs($amount - $productDetails->stock_amount - $productDetails->product->tare_weight);
         }
 
         $productStockAmountAtFromLocation = $this->getDatabase()->stock()->where('product_id = :1 AND location_id = :2', $productId, $locationIdFrom)->sum('amount');

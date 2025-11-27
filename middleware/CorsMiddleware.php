@@ -23,8 +23,7 @@ class CorsMiddleware
 
         $response = $response->withHeader('Access-Control-Allow-Origin', '*');
         $response = $response->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        $response = $response->withHeader('Access-Control-Allow-Headers', '*');
 
-        return $response;
+        return $response->withHeader('Access-Control-Allow-Headers', '*');
     }
 }

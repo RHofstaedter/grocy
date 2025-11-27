@@ -59,7 +59,7 @@ class ChoresApiController extends BaseApiController
             User::checkPermission($request, User::PERMISSION_CHORE_TRACK_EXECUTION);
 
             $trackedTime = date('Y-m-d H:i:s');
-            if (array_key_exists('tracked_time', $requestBody) && (IsIsoDateTime($requestBody['tracked_time']) || IsIsoDate($requestBody['tracked_time']))) {
+            if (array_key_exists('tracked_time', $requestBody) && (isIsoDateTime($requestBody['tracked_time']) || isIsoDate($requestBody['tracked_time']))) {
                 $trackedTime = $requestBody['tracked_time'];
             }
 

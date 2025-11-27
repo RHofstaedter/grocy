@@ -118,9 +118,9 @@
 @foreach($usedMealplanSections as $mealplanSection)
 <div class="row">
     <div class="col">
-        <div class="calendar" data-section-id="{{ $mealplanSection->id }}" data-section-name="{{ $mealplanSection->name }}<br><span class='small text-muted'>{{ $mealplanSection->time_info }}</span>" data-primary-section="{{ BoolToString($loop->first) }}" {{--
+        <div class="calendar" data-section-id="{{ $mealplanSection->id }}" data-section-name="{{ $mealplanSection->name }}<br><span class='small text-muted'>{{ $mealplanSection->time_info }}</span>" data-primary-section="{{ boolToString($loop->first) }}" {{--
 			$loop->last doesn't work however, is always null...
-			--}} data-last-section="{{ BoolToString(array_values(array_slice($usedMealplanSections->fetchAll(), -1))[0]->id == $mealplanSection->id) }}">
+			--}} data-last-section="{{ boolToString(array_values(array_slice($usedMealplanSections->fetchAll(), -1))[0]->id == $mealplanSection->id) }}">
         </div>
     </div>
 </div>

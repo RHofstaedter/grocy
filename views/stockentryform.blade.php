@@ -23,7 +23,7 @@
 		<form id="stockentry-form"
 			novalidate>
 			@php
-			$product = FindObjectInArrayByPropertyValue($products, 'id', $stockEntry->product_id);
+			$product = findObjectInArrayByPropertyValue($products, 'id', $stockEntry->product_id);
 			@endphp
 
 			@include('components.numberpicker', array(

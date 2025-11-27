@@ -5,7 +5,7 @@ use GuzzleHttp\Client;
 
 /*
     To use this plugin, configure it in data/config.php like this:
-    Setting('STOCK_BARCODE_LOOKUP_PLUGIN', 'OpenFoodFactsBarcodeLookupPlugin');
+    setting('STOCK_BARCODE_LOOKUP_PLUGIN', 'OpenFoodFactsBarcodeLookupPlugin');
 */
 
 class OpenFoodFactsBarcodeLookupPlugin extends BaseBarcodeLookupPlugin

@@ -76,7 +76,7 @@
         Grocy.CalendarFirstDayOfWeek = '{{ GROCY_CALENDAR_FIRST_DAY_OF_WEEK }}';
         Grocy.CalendarShowWeekNumbers = {
             {
-                BoolToString(GROCY_CALENDAR_SHOW_WEEK_OF_YEAR)
+                boolToString(GROCY_CALENDAR_SHOW_WEEK_OF_YEAR)
             }
         };
         Grocy.LocalizationStrings = {
@@ -97,7 +97,7 @@
                 }
                 , "json": {
                     {
-                        BoolToString(GROCY_LABEL_PRINTER_HOOK_JSON)
+                        boolToString(GROCY_LABEL_PRINTER_HOOK_JSON)
                     }
                 }
             }

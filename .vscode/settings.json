@@ -12,5 +12,29 @@
 	"html.format.wrapAttributes": "force",
 	"html.format.wrapLineLength": 0,
 	"php-cs-fixer.formatHtml": true,
-	"php-cs-fixer.autoFixBySemicolon": true
+	"php-cs-fixer.autoFixBySemicolon": true,
+	"phpstan.singleFileMode": false,
+	"phpstan.binPath": "/home/raphael/workspace/grocy/packages/bin/phpstan",
+	"phpstan.binCommand": [],
+	"phpstan.configFile": "phpstan.neon,phpstan.neon.dist,phpstan.dist.neon",
+	"phpstan.paths": {},
+	"phpstan.dockerContainerName": "",
+	"phpstan.rootDir": "",
+	"phpstan.options": [],
+	"phpstan.enableStatusBar": true,
+	"phpstan.memoryLimit": "1G",
+	"phpstan.enabled": true,
+	"phpstan.projectTimeout": 300000,
+	"phpstan.timeout": 300000,
+	"phpstan.suppressTimeoutMessage": false,
+	"phpstan.showProgress": false,
+	"phpstan.showTypeOnHover": false,
+	"phpstan.enableLanguageServer": true,
+	"phpstan.ignoreErrors": [
+		"Xdebug: .*"
+	],
+	"phpstan.suppressWorkspaceMessage": false,
+	"phpstan.pro": false,
+	"phpstan.tmpDir": "",
+	"phpstan.checkValidity": false
 }

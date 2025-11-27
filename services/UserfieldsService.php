@@ -60,7 +60,7 @@ class UserfieldsService extends BaseService
 
     public function getFieldTypes()
     {
-        return GetClassConstants('\Grocy\Services\UserfieldsService');
+        return getClassConstants('\Grocy\Services\UserfieldsService');
     }
 
     public function getFields($entity)
@@ -83,7 +83,7 @@ class UserfieldsService extends BaseService
 
         $userfieldKeyValuePairs = [];
         foreach ($userfields as $userfield) {
-            $value = FindObjectInArrayByPropertyValue($userfieldValues, 'name', $userfield->name);
+            $value = findObjectInArrayByPropertyValue($userfieldValues, 'name', $userfield->name);
             if ($value) {
                 $userfieldKeyValuePairs[$userfield->name] = $value->value;
             } else {

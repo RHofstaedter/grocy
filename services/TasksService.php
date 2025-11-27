@@ -15,13 +15,13 @@ class TasksService extends BaseService
         $tasks = $this->getDatabase()->tasks_current();
         foreach ($tasks as $task) {
             if (!empty($task->assigned_to_user_id)) {
-                $task->assigned_to_user = FindObjectInArrayByPropertyValue($users, 'id', $task->assigned_to_user_id);
+                $task->assigned_to_user = findObjectInArrayByPropertyValue($users, 'id', $task->assigned_to_user_id);
             } else {
                 $task->assigned_to_user = null;
             }
 
             if (!empty($task->category_id)) {
-                $task->category = FindObjectInArrayByPropertyValue($categories, 'id', $task->category_id);
+                $task->category = findObjectInArrayByPropertyValue($categories, 'id', $task->category_id);
             } else {
                 $task->category = null;
             }

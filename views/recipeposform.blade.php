@@ -92,7 +92,7 @@
 
             <div class="form-group @if(!GROCY_FEATURE_FLAG_STOCK) d-none @endif">
                 <div class="custom-control custom-checkbox">
-                    <input @if($mode=='edit' && ($recipePos->not_check_stock_fulfillment == 1 || FindObjectInArrayByPropertyValue($products, 'id', $recipePos->product_id)->not_check_stock_fulfillment_for_recipes == 1)) checked @endif class="form-check-input custom-control-input" type="checkbox" id="not_check_stock_fulfillment" name="not_check_stock_fulfillment" value="1">
+                    <input @if($mode=='edit' && ($recipePos->not_check_stock_fulfillment == 1 || findObjectInArrayByPropertyValue($products, 'id', $recipePos->product_id)->not_check_stock_fulfillment_for_recipes == 1)) checked @endif class="form-check-input custom-control-input" type="checkbox" id="not_check_stock_fulfillment" name="not_check_stock_fulfillment" value="1">
                     <label class="form-check-label custom-control-label" for="not_check_stock_fulfillment">{{ $__t('Disable stock fulfillment checking for this ingredient') }}</label>
                 </div>
             </div>

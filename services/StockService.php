@@ -416,7 +416,7 @@ class StockService extends BaseService
             }
 
             if ($specificStockEntryId !== 'default') {
-                $potentialStockEntries = FindAllObjectsInArrayByPropertyValue(
+                $potentialStockEntries = findAllObjectsInArrayByPropertyValue(
                     $potentialStockEntries,
                     'stock_id',
                     $specificStockEntryId
@@ -582,7 +582,7 @@ class StockService extends BaseService
             'location_id' => $locationId,
             'shopping_location_id' => $shoppingLocationId,
             'opened_date' => $openedDate,
-            'open' => BoolToInt($open),
+            'open' => boolToInt($open),
             'purchased_date' => $purchasedDate,
             'note' => $note
         ]);
@@ -757,7 +757,7 @@ class StockService extends BaseService
 
         $relevantProducts = $this->getDatabase()->products()->where('id IN (SELECT id FROM stock_missing_products)');
         foreach ($relevantProducts as $product) {
-            FindObjectInArrayByPropertyValue($missingProductsResponse, 'id', $product->id)->product = $product;
+            findObjectInArrayByPropertyValue($missingProductsResponse, 'id', $product->id)->product = $product;
         }
 
         return $missingProductsResponse;
@@ -769,7 +769,7 @@ class StockService extends BaseService
             throw new Exception('Product does not exist or is inactive');
         }
 
-        $stockCurrentRow = FindObjectInArrayByPropertyValue($this->getCurrentStock(), 'product_id', $productId);
+        $stockCurrentRow = findObjectInArrayByPropertyValue($this->getCurrentStock(), 'product_id', $productId);
         if ($stockCurrentRow == null) {
             $stockCurrentRow = new \stdClass();
             $stockCurrentRow->amount = 0;
@@ -859,7 +859,7 @@ class StockService extends BaseService
             $returnData[] = [
                 'date' => $row->purchased_date,
                 'price' => $row->price,
-                'shopping_location' => FindObjectInArrayByPropertyValue($shoppingLocations, 'id', $row->shopping_location_id)
+                'shopping_location' => findObjectInArrayByPropertyValue($shoppingLocations, 'id', $row->shopping_location_id)
             ];
         }
 
@@ -893,7 +893,7 @@ class StockService extends BaseService
     public function getProductStockEntriesForLocation($productId, $locationId, $excludeOpened = false, $allowSubproductSubstitution = false)
     {
         $stockEntries = $this->getProductStockEntries($productId, $excludeOpened, $allowSubproductSubstitution);
-        return FindAllObjectsInArrayByPropertyValue($stockEntries, 'location_id', $locationId);
+        return findAllObjectsInArrayByPropertyValue($stockEntries, 'location_id', $locationId);
     }
 
     public function getProductStockLocations(int $productId, $allowSubproductSubstitution = false)
@@ -1002,7 +1002,7 @@ class StockService extends BaseService
         }
 
         if ($specificStockEntryId !== 'default') {
-            $potentialStockEntries = FindAllObjectsInArrayByPropertyValue($potentialStockEntries, 'stock_id', $specificStockEntryId);
+            $potentialStockEntries = findAllObjectsInArrayByPropertyValue($potentialStockEntries, 'stock_id', $specificStockEntryId);
         }
 
         if ($transactionId === null) {
@@ -1259,7 +1259,7 @@ class StockService extends BaseService
         }
 
         if ($specificStockEntryId !== 'default') {
-            $potentialStockEntriesAtFromLocation = FindAllObjectsInArrayByPropertyValue($potentialStockEntriesAtFromLocation, 'stock_id', $specificStockEntryId);
+            $potentialStockEntriesAtFromLocation = findAllObjectsInArrayByPropertyValue($potentialStockEntriesAtFromLocation, 'stock_id', $specificStockEntryId);
         }
 
         if ($transactionId === null) {

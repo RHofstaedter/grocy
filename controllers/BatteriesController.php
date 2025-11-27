@@ -77,7 +77,7 @@ class BatteriesController extends BaseController
         $batteries = $this->getDatabase()->batteries()->where('active = 1');
         $currentBatteries = $this->getBatteriesService()->getCurrent();
         foreach ($currentBatteries as $currentBattery) {
-            if (FindObjectInArrayByPropertyValue($batteries, 'id', $currentBattery->battery_id)->charge_interval_days > 0) {
+            if (findObjectInArrayByPropertyValue($batteries, 'id', $currentBattery->battery_id)->charge_interval_days > 0) {
                 if ($currentBattery->next_estimated_charge_time < date('Y-m-d H:i:s')) {
                     $currentBattery->due_type = 'overdue';
                 } elseif ($currentBattery->next_estimated_charge_time <= date('Y-m-d 23:59:59')) {

@@ -25,7 +25,7 @@ class CalendarService extends BaseService
             foreach ($this->getStockService()->getCurrentStock() as $currentStockEntry) {
                 if ($currentStockEntry->amount > 0) {
                     $stockEvents[] = [
-                        'title' => $titlePrefix . FindObjectInArrayByPropertyValue($products, 'id', $currentStockEntry->product_id)->name,
+                        'title' => $titlePrefix . findObjectInArrayByPropertyValue($products, 'id', $currentStockEntry->product_id)->name,
                         'start' => $currentStockEntry->best_before_date,
                         'date_format' => 'date',
                         'link' => $this->UrlManager->ConstructUrl('/stockoverview'),
@@ -57,11 +57,11 @@ class CalendarService extends BaseService
             $titlePrefix = $this->getLocalizationService()->__t('Chore due') . ': ';
 
             foreach ($this->getChoresService()->getCurrent() as $currentChoreEntry) {
-                $chore = FindObjectInArrayByPropertyValue($chores, 'id', $currentChoreEntry->chore_id);
+                $chore = findObjectInArrayByPropertyValue($chores, 'id', $currentChoreEntry->chore_id);
 
                 $assignedToText = '';
                 if (!empty($currentChoreEntry->next_execution_assigned_to_user_id)) {
-                    $assignedToText = ' (' . $this->getLocalizationService()->__t('assigned to %s', FindObjectInArrayByPropertyValue($users, 'id', $currentChoreEntry->next_execution_assigned_to_user_id)->display_name) . ')';
+                    $assignedToText = ' (' . $this->getLocalizationService()->__t('assigned to %s', findObjectInArrayByPropertyValue($users, 'id', $currentChoreEntry->next_execution_assigned_to_user_id)->display_name) . ')';
                 }
 
                 $choreEvents[] = [
@@ -82,7 +82,7 @@ class CalendarService extends BaseService
 
             foreach ($this->getBatteriesService()->getCurrent() as $currentBatteryEntry) {
                 $batteryEvents[] = [
-                    'title' => $titlePrefix . FindObjectInArrayByPropertyValue($batteries, 'id', $currentBatteryEntry->battery_id)->name,
+                    'title' => $titlePrefix . findObjectInArrayByPropertyValue($batteries, 'id', $currentBatteryEntry->battery_id)->name,
                     'start' => $currentBatteryEntry->next_estimated_charge_time,
                     'date_format' => 'datetime',
                     'link' => $this->UrlManager->ConstructUrl('/batteriesoverview'),
@@ -103,7 +103,7 @@ class CalendarService extends BaseService
             foreach ($mealPlanDayRecipes as $mealPlanDayRecipe) {
                 $start = $mealPlanDayRecipe->day;
                 $dateFormat = 'date';
-                $section = FindObjectInArrayByPropertyValue($mealPlanSections, 'id', $mealPlanDayRecipe->section_id);
+                $section = findObjectInArrayByPropertyValue($mealPlanSections, 'id', $mealPlanDayRecipe->section_id);
                 if (!empty($section->time_info)) {
                     $start = $mealPlanDayRecipe->day . ' ' . $section->time_info . ':00';
                     $dateFormat = 'datetime';
@@ -115,7 +115,7 @@ class CalendarService extends BaseService
                 }
 
                 $mealPlanRecipeEvents[] = [
-                    'title' => $titlePrefix . $titlePrefix2 . FindObjectInArrayByPropertyValue($recipes, 'id', $mealPlanDayRecipe->recipe_id)->name,
+                    'title' => $titlePrefix . $titlePrefix2 . findObjectInArrayByPropertyValue($recipes, 'id', $mealPlanDayRecipe->recipe_id)->name,
                     'start' => $start,
                     'date_format' => $dateFormat,
                     'description' => $this->UrlManager->ConstructUrl('/mealplan' . '?week=' . $mealPlanDayRecipe->day),
@@ -129,7 +129,7 @@ class CalendarService extends BaseService
             foreach ($mealPlanDayNotes as $mealPlanDayNote) {
                 $start = $mealPlanDayNote->day;
                 $dateFormat = 'date';
-                $section = FindObjectInArrayByPropertyValue($mealPlanSections, 'id', $mealPlanDayNote->section_id);
+                $section = findObjectInArrayByPropertyValue($mealPlanSections, 'id', $mealPlanDayNote->section_id);
                 if (!empty($section->time_info)) {
                     $start = $mealPlanDayNote->day . ' ' . $section->time_info . ':00';
                     $dateFormat = 'datetime';
@@ -156,7 +156,7 @@ class CalendarService extends BaseService
             foreach ($mealPlanDayProducts as $mealPlanDayProduct) {
                 $start = $mealPlanDayProduct->day;
                 $dateFormat = 'date';
-                $section = FindObjectInArrayByPropertyValue($mealPlanSections, 'id', $mealPlanDayProduct->section_id);
+                $section = findObjectInArrayByPropertyValue($mealPlanSections, 'id', $mealPlanDayProduct->section_id);
                 if (!empty($section->time_info)) {
                     $start = $mealPlanDayProduct->day . ' ' . $section->time_info . ':00';
                     $dateFormat = 'datetime';
@@ -168,7 +168,7 @@ class CalendarService extends BaseService
                 }
 
                 $mealPlanProductEvents[] = [
-                    'title' => $titlePrefix . $titlePrefix2 . FindObjectInArrayByPropertyValue($products, 'id', $mealPlanDayProduct->product_id)->name,
+                    'title' => $titlePrefix . $titlePrefix2 . findObjectInArrayByPropertyValue($products, 'id', $mealPlanDayProduct->product_id)->name,
                     'start' => $start,
                     'date_format' => $dateFormat,
                     'link' => $this->UrlManager->ConstructUrl('/mealplan' . '?start=' . $start),

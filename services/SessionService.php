@@ -70,6 +70,6 @@ class SessionService extends BaseService
 
     private function generateSessionKey()
     {
-        return RandomString(50);
+        return randomString(50);
     }
 }

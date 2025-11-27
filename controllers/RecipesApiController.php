@@ -45,7 +45,7 @@ class RecipesApiController extends BaseApiController
                 return $this->filteredApiResponse($response, $this->getRecipesService()->getRecipesResolved(), $request->getQueryParams());
             }
 
-            $recipeResolved = FindObjectInArrayByPropertyValue($this->getRecipesService()->getRecipesResolved(), 'recipe_id', $args['recipeId']);
+            $recipeResolved = findObjectInArrayByPropertyValue($this->getRecipesService()->getRecipesResolved(), 'recipe_id', $args['recipeId']);
 
             if (!$recipeResolved) {
                 throw new Exception('Recipe does not exist');

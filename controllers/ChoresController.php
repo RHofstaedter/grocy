@@ -17,20 +17,20 @@ class ChoresController extends BaseController
 
         if ($args['choreId'] == 'new') {
             return $this->renderPage($response, 'choreform', [
-                'periodTypes' => GetClassConstants('\Grocy\Services\ChoresService', 'CHORE_PERIOD_TYPE_'),
+                'periodTypes' => getClassConstants('\Grocy\Services\ChoresService', 'CHORE_PERIOD_TYPE_'),
                 'mode' => 'create',
                 'userfields' => $this->getUserfieldsService()->getFields('chores'),
-                'assignmentTypes' => GetClassConstants('\Grocy\Services\ChoresService', 'CHORE_ASSIGNMENT_TYPE_'),
+                'assignmentTypes' => getClassConstants('\Grocy\Services\ChoresService', 'CHORE_ASSIGNMENT_TYPE_'),
                 'users' => $users,
                 'products' => $this->getDatabase()->products()->orderBy('name', 'COLLATE NOCASE')
             ]);
         } else {
             return $this->renderPage($response, 'choreform', [
                 'chore' => $this->getDatabase()->chores($args['choreId']),
-                'periodTypes' => GetClassConstants('\Grocy\Services\ChoresService', 'CHORE_PERIOD_TYPE_'),
+                'periodTypes' => getClassConstants('\Grocy\Services\ChoresService', 'CHORE_PERIOD_TYPE_'),
                 'mode' => 'edit',
                 'userfields' => $this->getUserfieldsService()->getFields('chores'),
-                'assignmentTypes' => GetClassConstants('\Grocy\Services\ChoresService', 'CHORE_ASSIGNMENT_TYPE_'),
+                'assignmentTypes' => getClassConstants('\Grocy\Services\ChoresService', 'CHORE_ASSIGNMENT_TYPE_'),
                 'users' => $users,
                 'products' => $this->getDatabase()->products()->orderBy('name', 'COLLATE NOCASE')
             ]);

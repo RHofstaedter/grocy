@@ -93,6 +93,6 @@ class ApiKeyService extends BaseService
 
     private function generateApiKey()
     {
-        return RandomString(50);
+        return randomString(50);
     }
 }

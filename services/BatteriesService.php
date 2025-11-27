@@ -45,7 +45,7 @@ class BatteriesService extends BaseService
         $currentBatteries = $this->getDatabase()
             ->batteries_current();
         foreach ($currentBatteries as $currentBattery) {
-            $currentBattery->battery = FindObjectInArrayByPropertyValue($batteries, 'id', $currentBattery->battery_id);
+            $currentBattery->battery = findObjectInArrayByPropertyValue($batteries, 'id', $currentBattery->battery_id);
         }
 
         return $currentBatteries;

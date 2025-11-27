@@ -80,16 +80,16 @@
 				<tr>
 					<td class="fit-content border-right"></td>
 					<td>
-						{{ FindObjectInArrayByPropertyValue($quantityUnits, 'id', $quConversion->from_qu_id)->name }}
+						{{ findObjectInArrayByPropertyValue($quantityUnits, 'id', $quConversion->from_qu_id)->name }}
 					</td>
 					<td>
-						{{ FindObjectInArrayByPropertyValue($quantityUnits, 'id', $quConversion->to_qu_id)->name }}
+						{{ findObjectInArrayByPropertyValue($quantityUnits, 'id', $quConversion->to_qu_id)->name }}
 					</td>
 					<td>
 						<span class="locale-number locale-number-quantity-amount">{{ $quConversion->factor }}</span>
 					</td>
 					<td class="font-italic">
-						{!! $__t('This means 1 %1$s is the same as %2$s %3$s', FindObjectInArrayByPropertyValue($quantityUnits, 'id', $quConversion->from_qu_id)->name, '<span class="locale-number locale-number-quantity-amount">' . $quConversion->factor . '</span>', $__n($quConversion->factor, FindObjectInArrayByPropertyValue($quantityUnits, 'id', $quConversion->to_qu_id)->name, FindObjectInArrayByPropertyValue($quantityUnits, 'id', $quConversion->to_qu_id)->name_plural, true)) !!}
+						{!! $__t('This means 1 %1$s is the same as %2$s %3$s', findObjectInArrayByPropertyValue($quantityUnits, 'id', $quConversion->from_qu_id)->name, '<span class="locale-number locale-number-quantity-amount">' . $quConversion->factor . '</span>', $__n($quConversion->factor, findObjectInArrayByPropertyValue($quantityUnits, 'id', $quConversion->to_qu_id)->name, findObjectInArrayByPropertyValue($quantityUnits, 'id', $quConversion->to_qu_id)->name_plural, true)) !!}
 					</td>
 				</tr>
 				@endforeach

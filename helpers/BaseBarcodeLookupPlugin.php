@@ -33,7 +33,7 @@ abstract class BaseBarcodeLookupPlugin
             throw new Exception('Plugin output must be an associative array');
         }
 
-        if (!IsAssociativeArray($pluginOutput)) {
+        if (!isAssociativeArray($pluginOutput)) {
             // $pluginOutput is at least an indexed array here
             throw new Exception('Plugin output must be an associative array');
         }
@@ -58,17 +58,17 @@ abstract class BaseBarcodeLookupPlugin
 
         // Check if referenced entity ids are valid
         $locationId = $pluginOutput['location_id'];
-        if (FindObjectInArrayByPropertyValue($this->Locations, 'id', $locationId) === null) {
+        if (findObjectInArrayByPropertyValue($this->Locations, 'id', $locationId) === null) {
             throw new Exception("Provided location_id ($locationId) is not a valid location id");
         }
 
         $quIdPurchase = $pluginOutput['qu_id_purchase'];
-        if (FindObjectInArrayByPropertyValue($this->QuantityUnits, 'id', $quIdPurchase) === null) {
+        if (findObjectInArrayByPropertyValue($this->QuantityUnits, 'id', $quIdPurchase) === null) {
             throw new Exception("Provided qu_id_purchase ($quIdPurchase) is not a valid quantity unit id");
         }
 
         $quIdStock = $pluginOutput['qu_id_stock'];
-        if (FindObjectInArrayByPropertyValue($this->QuantityUnits, 'id', $quIdStock) === null) {
+        if (findObjectInArrayByPropertyValue($this->QuantityUnits, 'id', $quIdStock) === null) {
             throw new Exception("Provided qu_id_stock ($quIdStock) is not a valid quantity unit id");
         }
 

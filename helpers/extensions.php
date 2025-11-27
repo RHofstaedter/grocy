@@ -8,7 +8,7 @@ $GROCY_REQUIRED_FRONTEND_PACKAGES = [];
 
 $GROCY_DEFAULT_USER_SETTINGS = [];
 
-function FindObjectInArrayByPropertyValue($array, $propertyName, $propertyValue)
+function findObjectInArrayByPropertyValue($array, $propertyName, $propertyValue)
 {
     foreach ($array as $object) {
         if ($object->{$propertyName} == $propertyValue) {
@@ -19,7 +19,7 @@ function FindObjectInArrayByPropertyValue($array, $propertyName, $propertyValue)
     return null;
 }
 
-function FindAllObjectsInArrayByPropertyValue($array, $propertyName, $propertyValue, $operator = '==')
+function findAllObjectsInArrayByPropertyValue($array, $propertyName, $propertyValue, $operator = '==')
 {
     $returnArray = [];
     foreach ($array as $object) {
@@ -45,7 +45,7 @@ function FindAllObjectsInArrayByPropertyValue($array, $propertyName, $propertyVa
     return $returnArray;
 }
 
-function FindAllItemsInArrayByValue($array, $value, $operator = '==')
+function findAllItemsInArrayByValue($array, $value, $operator = '==')
 {
     $returnArray = [];
     foreach ($array as $item) {
@@ -71,7 +71,7 @@ function FindAllItemsInArrayByValue($array, $value, $operator = '==')
     return $returnArray;
 }
 
-function SumArrayValue($array, $propertyName)
+function sumArrayValue($array, $propertyName)
 {
     $sum = 0;
     foreach ($array as $object) {
@@ -81,7 +81,7 @@ function SumArrayValue($array, $propertyName)
     return $sum;
 }
 
-function GetClassConstants($className, $prefix = null)
+function getClassConstants($className, $prefix = null)
 {
     $r = new ReflectionClass($className);
     $constants = $r->getConstants();
@@ -94,7 +94,7 @@ function GetClassConstants($className, $prefix = null)
     }
 }
 
-function RandomString($length, $allowedChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+function randomString($length, $allowedChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
 {
     $randomString = '';
     for ($i = 0; $i < $length; $i++) {
@@ -104,35 +104,35 @@ function RandomString($length, $allowedChars = '0123456789abcdefghijklmnopqrstuv
     return $randomString;
 }
 
-function IsAssociativeArray(array $array)
+function isAssociativeArray(array $array)
 {
     $keys = array_keys($array);
     return array_keys($keys) !== $keys;
 }
 
-function IsIsoDate($dateString)
+function isIsoDate($dateString)
 {
     $d = DateTime::createFromFormat('Y-m-d', $dateString);
     return $d && $d->format('Y-m-d') === $dateString;
 }
 
-function IsIsoDateTime($dateTimeString)
+function isIsoDateTime($dateTimeString)
 {
     $d = DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString);
     return $d && $d->format('Y-m-d H:i:s') === $dateTimeString;
 }
 
-function BoolToString(bool $bool): string
+function boolToString(bool $bool): string
 {
     return $bool ? 'true' : 'false';
 }
 
-function BoolToInt(bool $bool): int
+function boolToInt(bool $bool): int
 {
     return $bool ? 1 : 0;
 }
 
-function ExternalSettingValue(string $value)
+function externalSettingValue(string $value)
 {
     $tvalue = rtrim($value, "\r\n");
     $lvalue = strtolower($tvalue);
@@ -146,24 +146,24 @@ function ExternalSettingValue(string $value)
     return $tvalue;
 }
 
-function Setting(string $name, $value)
+function setting(string $name, $value)
 {
     if (!defined('GROCY_' . $name)) {
         // The content of a $name.txt file in /data/settingoverrides can overwrite the given setting (for embedded mode)
         $settingOverrideFile = GROCY_DATAPATH . '/settingoverrides/' . $name . '.txt';
 
         if (file_exists($settingOverrideFile)) {
-            define('GROCY_' . $name, ExternalSettingValue(file_get_contents($settingOverrideFile)));
+            define('GROCY_' . $name, externalSettingValue(file_get_contents($settingOverrideFile)));
         } elseif (getenv('GROCY_' . $name) !== false) {
             // An environment variable with the same name and prefix GROCY_ overwrites the given setting
-            define('GROCY_' . $name, ExternalSettingValue(getenv('GROCY_' . $name)));
+            define('GROCY_' . $name, externalSettingValue(getenv('GROCY_' . $name)));
         } else {
             define('GROCY_' . $name, $value);
         }
     }
 }
 
-function DefaultUserSetting(string $name, $value)
+function defaultUserSetting(string $name, $value)
 {
     global $GROCY_DEFAULT_USER_SETTINGS;
 
@@ -172,7 +172,7 @@ function DefaultUserSetting(string $name, $value)
     }
 }
 
-function GetUserDisplayName($user)
+function getUserDisplayName($user)
 {
     $displayName = '';
 
@@ -189,7 +189,7 @@ function GetUserDisplayName($user)
     return $displayName;
 }
 
-function IsValidFileName($fileName)
+function isValidFileName($fileName)
 {
     if (preg_match('=^[^/?*;:{}\\\\]+\.[^/?*;:{}\\\\]+$=', $fileName)) {
         return true;
@@ -198,7 +198,7 @@ function IsValidFileName($fileName)
     return false;
 }
 
-function IsJsonString($text)
+function isJsonString($text)
 {
     json_decode($text);
     return (json_last_error() == JSON_ERROR_NONE);
@@ -227,11 +227,11 @@ function require_frontend_packages(array $packages)
     $GROCY_REQUIRED_FRONTEND_PACKAGES = array_unique(array_merge($GROCY_REQUIRED_FRONTEND_PACKAGES, $packages));
 }
 
-function EmptyFolder($folderPath)
+function emptyFolder($folderPath)
 {
     foreach (glob("{$folderPath}/*") as $item) {
         if (is_dir($item)) {
-            EmptyFolder($item);
+            emptyFolder($item);
             rmdir($item);
         } else {
             unlink($item);

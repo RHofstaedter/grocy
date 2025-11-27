@@ -140,12 +140,12 @@
                                 <a class="btn btn-sm btn-info recipe-pos-edit-button" type="button" href="#" data-recipe-pos-id="{{ $recipePosition->id }}" data-product-id="{{ $recipePosition->product_id }}">
                                     <i class="fa-solid fa-edit"></i>
                                 </a>
-                                <a class="btn btn-sm btn-danger recipe-pos-delete-button" href="#" data-recipe-pos-id="{{ $recipePosition->id }}" data-recipe-pos-name="{{ FindObjectInArrayByPropertyValue($products, 'id', $recipePosition->product_id)->name }}">
+                                <a class="btn btn-sm btn-danger recipe-pos-delete-button" href="#" data-recipe-pos-id="{{ $recipePosition->id }}" data-recipe-pos-name="{{ findObjectInArrayByPropertyValue($products, 'id', $recipePosition->product_id)->name }}">
                                     <i class="fa-solid fa-trash"></i>
                                 </a>
                             </td>
                             <td>
-                                {{ FindObjectInArrayByPropertyValue($products, 'id', $recipePosition->product_id)->name }}
+                                {{ findObjectInArrayByPropertyValue($products, 'id', $recipePosition->product_id)->name }}
                             </td>
                             <td>
                                 @php
@@ -158,10 +158,10 @@
                                 $recipePosition->amount = 0;
                                 }
 
-                                $product = FindObjectInArrayByPropertyValue($products, 'id', $recipePosition->product_id);
-                                $productQuConversions = FindAllObjectsInArrayByPropertyValue($quantityUnitConversionsResolved, 'product_id', $product->id);
-                                $productQuConversions = FindAllObjectsInArrayByPropertyValue($productQuConversions, 'from_qu_id', $product->qu_id_stock);
-                                $productQuConversion = FindObjectInArrayByPropertyValue($productQuConversions, 'to_qu_id', $recipePosition->qu_id);
+                                $product = findObjectInArrayByPropertyValue($products, 'id', $recipePosition->product_id);
+                                $productQuConversions = findAllObjectsInArrayByPropertyValue($quantityUnitConversionsResolved, 'product_id', $product->id);
+                                $productQuConversions = findAllObjectsInArrayByPropertyValue($productQuConversions, 'from_qu_id', $product->qu_id_stock);
+                                $productQuConversion = findObjectInArrayByPropertyValue($productQuConversions, 'to_qu_id', $recipePosition->qu_id);
                                 if ($productQuConversion && $recipePosition->only_check_single_unit_in_stock == 0)
                                 {
                                 $recipePosition->amount = $recipePosition->amount * $productQuConversion->factor;
@@ -172,7 +172,7 @@
                                 @else
                                 <span class="locale-number locale-number-quantity-amount">@if($recipePosition->amount == round($recipePosition->amount)){{ round($recipePosition->amount) }}@else{{ $recipePosition->amount }}@endif</span>
                                 @endif
-                                {{ $__n($recipePosition->amount, FindObjectInArrayByPropertyValue($quantityunits, 'id', $recipePosition->qu_id)->name, FindObjectInArrayByPropertyValue($quantityunits, 'id', $recipePosition->qu_id)->name_plural, true) }}
+                                {{ $__n($recipePosition->amount, findObjectInArrayByPropertyValue($quantityunits, 'id', $recipePosition->qu_id)->name, findObjectInArrayByPropertyValue($quantityunits, 'id', $recipePosition->qu_id)->name_plural, true) }}
 
                                 @if(!empty($recipePosition->variable_amount))
                                 <div class="small text-muted font-italic">{{ $__t('Variable amount') }}</div>
@@ -226,12 +226,12 @@
                                 <a class="btn btn-sm btn-info recipe-include-edit-button" href="#" data-recipe-include-id="{{ $recipeNesting->id }}" data-recipe-included-recipe-id="{{ $recipeNesting->includes_recipe_id }}" data-recipe-included-recipe-servings="{{ $recipeNesting->servings }}">
                                     <i class="fa-solid fa-edit"></i>
                                 </a>
-                                <a class="btn btn-sm btn-danger recipe-include-delete-button" href="#" data-recipe-include-id="{{ $recipeNesting->id }}" data-recipe-include-name="{{ FindObjectInArrayByPropertyValue($recipes, 'id', $recipeNesting->includes_recipe_id)->name }}">
+                                <a class="btn btn-sm btn-danger recipe-include-delete-button" href="#" data-recipe-include-id="{{ $recipeNesting->id }}" data-recipe-include-name="{{ findObjectInArrayByPropertyValue($recipes, 'id', $recipeNesting->includes_recipe_id)->name }}">
                                     <i class="fa-solid fa-trash"></i>
                                 </a>
                             </td>
                             <td>
-                                {{ FindObjectInArrayByPropertyValue($recipes, 'id', $recipeNesting->includes_recipe_id)->name }}
+                                {{ findObjectInArrayByPropertyValue($recipes, 'id', $recipeNesting->includes_recipe_id)->name }}
                             </td>
                             <td>
                                 {{ $recipeNesting->servings }}

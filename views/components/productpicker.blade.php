@@ -24,7 +24,7 @@
 @php if(empty($validationMessage)) { $validationMessage = 'You have to select a product'; } @endphp
 @php if(empty($additionalGroupCssClasses)) { $additionalGroupCssClasses = ''; } @endphp
 
-<div class="form-group {{ $additionalGroupCssClasses }}" data-next-input-selector="{{ $nextInputSelector }}" data-disallow-add-product-workflows="{{ BoolToString($disallowaddProductWorkflows) }}" data-disallow-all-product-workflows="{{ BoolToString($disallowAllProductWorkflows) }}" data-prefill-by-name="{{ $prefillByName }}" data-prefill-by-id="{{ $prefillById }}">
+<div class="form-group {{ $additionalGroupCssClasses }}" data-next-input-selector="{{ $nextInputSelector }}" data-disallow-add-product-workflows="{{ boolToString($disallowaddProductWorkflows) }}" data-disallow-all-product-workflows="{{ boolToString($disallowAllProductWorkflows) }}" data-prefill-by-name="{{ $prefillByName }}" data-prefill-by-id="{{ $prefillById }}">
     <label class="w-100" for="product_id">
         {{ $__t($label) }}
         @if(!$disallowAllProductWorkflows)
@@ -41,7 +41,7 @@
         @foreach($products as $product)
         @php $bc = null;
         if(isset($barcodes)) {
-        $bc = FindObjectInArrayByPropertyValue($barcodes, 'product_id', $product->id);
+        $bc = findObjectInArrayByPropertyValue($barcodes, 'product_id', $product->id);
         }
         @endphp
         <option data-additional-searchdata="@if(isset($bc)){{ strtolower($bc->barcodes) }}@endif," value="{{ $product->id }}">{{ $product->name }}</option>

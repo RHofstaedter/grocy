@@ -129,12 +129,12 @@ class ChoresService extends BaseService
 
         $lastDoneByUser = null;
         if ($lastChoreLogRow !== null && !empty($lastChoreLogRow)) {
-            $lastDoneByUser = FindObjectInArrayByPropertyValue($users, 'id', $lastChoreLogRow->done_by_user_id);
+            $lastDoneByUser = findObjectInArrayByPropertyValue($users, 'id', $lastChoreLogRow->done_by_user_id);
         }
 
         $nextExecutionAssignedUser = null;
         if (!empty($chore->next_execution_assigned_to_user_id)) {
-            $nextExecutionAssignedUser = FindObjectInArrayByPropertyValue($users, 'id', $chore->next_execution_assigned_to_user_id);
+            $nextExecutionAssignedUser = findObjectInArrayByPropertyValue($users, 'id', $chore->next_execution_assigned_to_user_id);
         }
 
         return [
@@ -155,7 +155,7 @@ class ChoresService extends BaseService
         $chores = $this->getDatabase()->chores_current();
         foreach ($chores as $chore) {
             if (!empty($chore->next_execution_assigned_to_user_id)) {
-                $chore->next_execution_assigned_user = FindObjectInArrayByPropertyValue($users, 'id', $chore->next_execution_assigned_to_user_id);
+                $chore->next_execution_assigned_user = findObjectInArrayByPropertyValue($users, 'id', $chore->next_execution_assigned_to_user_id);
             } else {
                 $chore->next_execution_assigned_user = null;
             }
@@ -195,7 +195,7 @@ class ChoresService extends BaseService
             'chore_id' => $choreId,
             'tracked_time' => $trackedTime,
             'done_by_user_id' => $doneBy,
-            'skipped' => BoolToInt($skipped),
+            'skipped' => boolToInt($skipped),
             'scheduled_execution_time' => $scheduledExecutionTime
         ]);
         $logRow->save();

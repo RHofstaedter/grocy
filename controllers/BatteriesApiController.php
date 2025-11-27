@@ -36,7 +36,7 @@ class BatteriesApiController extends BaseApiController
 
         try {
             $trackedTime = date('Y-m-d H:i:s');
-            if (array_key_exists('tracked_time', $requestBody) && IsIsoDateTime($requestBody['tracked_time'])) {
+            if (array_key_exists('tracked_time', $requestBody) && isIsoDateTime($requestBody['tracked_time'])) {
                 $trackedTime = $requestBody['tracked_time'];
             }
 

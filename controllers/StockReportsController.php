@@ -11,7 +11,7 @@ class StockReportsController extends BaseController
 	{
 		$where = "pph.transaction_type != 'self-production'";
 
-		if (isset($request->getQueryParams()['start_date']) && isset($request->getQueryParams()['end_date']) && IsIsoDate($request->getQueryParams()['start_date']) && IsIsoDate($request->getQueryParams()['end_date'])) {
+		if (isset($request->getQueryParams()['start_date']) && isset($request->getQueryParams()['end_date']) && isIsoDate($request->getQueryParams()['start_date']) && isIsoDate($request->getQueryParams()['end_date'])) {
 			$startDate = $request->getQueryParams()['start_date'];
 			$endDate = $request->getQueryParams()['end_date'];
 			$where .= " AND pph.purchased_date BETWEEN '$startDate' AND '$endDate'";

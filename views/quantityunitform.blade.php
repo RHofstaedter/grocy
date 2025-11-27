@@ -168,7 +168,7 @@
 								<span class="locale-number locale-number-quantity-amount">{{ $defaultQuConversion->factor }}</span>
 							</td>
 							<td>
-								{{ FindObjectInArrayByPropertyValue($quantityUnits, 'id', $defaultQuConversion->to_qu_id)->name }}
+								{{ findObjectInArrayByPropertyValue($quantityUnits, 'id', $defaultQuConversion->to_qu_id)->name }}
 							</td>
 						</tr>
 						@endforeach

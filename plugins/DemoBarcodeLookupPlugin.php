@@ -11,7 +11,7 @@ class DemoBarcodeLookupPlugin extends BaseBarcodeLookupPlugin
 {
     /*
         To use this plugin, configure it in data/config.php like this:
-        Setting('STOCK_BARCODE_LOOKUP_PLUGIN', 'DemoBarcodeLookupPlugin');
+        setting('STOCK_BARCODE_LOOKUP_PLUGIN', 'DemoBarcodeLookupPlugin');
     */
 
     /*
@@ -38,10 +38,10 @@ class DemoBarcodeLookupPlugin extends BaseBarcodeLookupPlugin
         Useful hints:
 
         Get a quantity unit by name:
-        $quantityUnit = FindObjectInArrayByPropertyValue($this->QuantityUnits, 'name', 'Piece');
+        $quantityUnit = findObjectInArrayByPropertyValue($this->QuantityUnits, 'name', 'Piece');
 
         Get a location by name:
-        $location = FindObjectInArrayByPropertyValue($this->Locations, 'name', 'Fridge');
+        $location = findObjectInArrayByPropertyValue($this->Locations, 'name', 'Fridge');
     */
 
     // Provide a name
@@ -89,7 +89,7 @@ class DemoBarcodeLookupPlugin extends BaseBarcodeLookupPlugin
             }
 
             return [
-                'name' => 'LookedUpProduct_' . RandomString(5),
+                'name' => 'LookedUpProduct_' . randomString(5),
                 'location_id' => $locationId,
                 'qu_id_purchase' => $quId,
                 'qu_id_stock' => $quId,

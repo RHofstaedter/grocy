@@ -22,7 +22,7 @@ class TasksApiController extends BaseApiController
         try {
             $doneTime = date('Y-m-d H:i:s');
 
-            if (array_key_exists('done_time', $requestBody) && IsIsoDateTime($requestBody['done_time'])) {
+            if (array_key_exists('done_time', $requestBody) && isIsoDateTime($requestBody['done_time'])) {
                 $doneTime = $requestBody['done_time'];
             }
 

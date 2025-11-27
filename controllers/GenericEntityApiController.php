@@ -182,7 +182,7 @@ class GenericEntityApiController extends BaseApiController
                         $userfieldReference = 'stock_id';
                     }
 
-                    $value = FindObjectInArrayByPropertyValue(FindAllObjectsInArrayByPropertyValue($allUserfieldValues, 'object_id', $object->{$userfieldReference}), 'name', $userfield->name);
+                    $value = findObjectInArrayByPropertyValue(findAllObjectsInArrayByPropertyValue($allUserfieldValues, 'object_id', $object->{$userfieldReference}), 'name', $userfield->name);
                     if ($value) {
                         $userfieldKeyValuePairs[$userfield->name] = $value->value;
                     } else {

@@ -14,7 +14,7 @@ class RecipesController extends BaseController
     public function mealPlan(Request $request, Response $response, array $args)
     {
         $start = date('Y-m-d');
-        if (isset($request->getQueryParams()['start']) && IsIsoDate($request->getQueryParams()['start'])) {
+        if (isset($request->getQueryParams()['start']) && isIsoDate($request->getQueryParams()['start'])) {
             $start = $request->getQueryParams()['start'];
         }
 
@@ -28,7 +28,7 @@ class RecipesController extends BaseController
         $recipes = $this->getDatabase()->recipes()->where('type', RecipesService::RECIPE_TYPE_NORMAL)->fetchAll();
         $events = [];
         foreach ($this->getDatabase()->meal_plan()->where($mealPlanWhereTimespan) as $mealPlanEntry) {
-            $recipe = FindObjectInArrayByPropertyValue($recipes, 'id', $mealPlanEntry['recipe_id']);
+            $recipe = findObjectInArrayByPropertyValue($recipes, 'id', $mealPlanEntry['recipe_id']);
             $title = '';
 
             if ($recipe !== null) {
@@ -90,8 +90,8 @@ class RecipesController extends BaseController
         $totalCosts = null;
         $totalCalories = null;
         if ($selectedRecipe) {
-            $totalCosts = FindObjectInArrayByPropertyValue($recipesResolved, 'recipe_id', $selectedRecipe->id)->costs;
-            $totalCalories = FindObjectInArrayByPropertyValue($recipesResolved, 'recipe_id', $selectedRecipe->id)->calories;
+            $totalCosts = findObjectInArrayByPropertyValue($recipesResolved, 'recipe_id', $selectedRecipe->id)->costs;
+            $totalCalories = findObjectInArrayByPropertyValue($recipesResolved, 'recipe_id', $selectedRecipe->id)->calories;
         }
 
         $viewData = [

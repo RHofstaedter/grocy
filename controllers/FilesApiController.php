@@ -18,7 +18,7 @@ class FilesApiController extends BaseApiController
                 throw new Exception('Invalid file group');
             }
 
-            if (IsValidFileName(base64_decode($args['fileName']))) {
+            if (isValidFileName(base64_decode($args['fileName']))) {
                 $fileName = base64_decode($args['fileName']);
             } else {
                 throw new Exception('Invalid filename');
@@ -113,7 +113,7 @@ class FilesApiController extends BaseApiController
 
     protected function checkFileName(string $fileName)
     {
-        if (IsValidFileName(base64_decode($fileName))) {
+        if (isValidFileName(base64_decode($fileName))) {
             $fileName = base64_decode($fileName);
         } else {
             throw new Exception('Invalid filename');

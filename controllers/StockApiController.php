@@ -88,12 +88,12 @@ class StockApiController extends BaseApiController
             }
 
             $bestBeforeDate = null;
-            if (array_key_exists('best_before_date', $requestBody) && IsIsoDate($requestBody['best_before_date'])) {
+            if (array_key_exists('best_before_date', $requestBody) && isIsoDate($requestBody['best_before_date'])) {
                 $bestBeforeDate = $requestBody['best_before_date'];
             }
 
             $purchasedDate = date('Y-m-d');
-            if (array_key_exists('purchased_date', $requestBody) && IsIsoDate($requestBody['purchased_date'])) {
+            if (array_key_exists('purchased_date', $requestBody) && isIsoDate($requestBody['purchased_date'])) {
                 $purchasedDate = $requestBody['purchased_date'];
             }
 
@@ -334,7 +334,7 @@ class StockApiController extends BaseApiController
             }
 
             $bestBeforeDate = null;
-            if (array_key_exists('best_before_date', $requestBody) && IsIsoDate($requestBody['best_before_date'])) {
+            if (array_key_exists('best_before_date', $requestBody) && isIsoDate($requestBody['best_before_date'])) {
                 $bestBeforeDate = $requestBody['best_before_date'];
             }
 
@@ -398,12 +398,12 @@ class StockApiController extends BaseApiController
             }
 
             $bestBeforeDate = null;
-            if (array_key_exists('best_before_date', $requestBody) && IsIsoDate($requestBody['best_before_date'])) {
+            if (array_key_exists('best_before_date', $requestBody) && isIsoDate($requestBody['best_before_date'])) {
                 $bestBeforeDate = $requestBody['best_before_date'];
             }
 
             $purchasedDate = null;
-            if (array_key_exists('purchased_date', $requestBody) && IsIsoDate($requestBody['purchased_date'])) {
+            if (array_key_exists('purchased_date', $requestBody) && isIsoDate($requestBody['purchased_date'])) {
                 $purchasedDate = $requestBody['purchased_date'];
             }
 

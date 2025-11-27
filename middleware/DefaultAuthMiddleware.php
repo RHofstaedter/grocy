@@ -33,7 +33,7 @@ class DefaultAuthMiddleware extends AuthMiddleware
             $inputPassword = $postParams['password'];
             $stayLoggedInPermanently = $postParams['stay_logged_in'] == 'on';
 
-            if ($user !== null && password_verify($inputPassword, $user->password)) {
+            if ($user !== null && password_verify($inputPassword, (string) $user->password)) {
                 $sessionKey = SessionService::getInstance()->createSession($user->id, $stayLoggedInPermanently);
                 self::SetSessionCookie($sessionKey);
 

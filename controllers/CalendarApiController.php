@@ -38,10 +38,10 @@ class CalendarApiController extends BaseApiController
 
                 if ($event['date_format'] === 'date' || (isset($event['allDay']) && $event['allDay'])) {
                     // All-day event
-                    $date = new Date(\DateTimeImmutable::createFromFormat('Y-m-d', substr($event['start'], 0, 10)));
+                    $date = new Date(\DateTimeImmutable::createFromFormat('Y-m-d', substr((string) $event['start'], 0, 10)));
                     $vEventOccurrence = new SingleDay($date);
 
-                    $compareDate = \DateTimeImmutable::createFromFormat('Y-m-d', substr($event['start'], 0, 10));
+                    $compareDate = \DateTimeImmutable::createFromFormat('Y-m-d', substr((string) $event['start'], 0, 10));
                 } else {
                     // Time-point event
                     $start = new DateTime(\DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $event['start']), true);

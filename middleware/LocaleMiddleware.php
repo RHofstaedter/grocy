@@ -48,13 +48,13 @@ class LocaleMiddleware extends BaseMiddleware
             }
 
             // e.g. en_GB
-            if (in_array(substr($locale, 0, 5), $availableLocales)) {
-                return substr($locale, 0, 5);
+            if (in_array(substr((string) $locale, 0, 5), $availableLocales)) {
+                return substr((string) $locale, 0, 5);
             }
 
             // e.g. cs
-            if (in_array(substr($locale, 0, 2), $availableLocales)) {
-                return substr($locale, 0, 2);
+            if (in_array(substr((string) $locale, 0, 2), $availableLocales)) {
+                return substr((string) $locale, 0, 2);
             }
         }
 

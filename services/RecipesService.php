@@ -98,7 +98,7 @@ class RecipesService extends BaseService
         $amount = $recipe->desired_servings;
         if ($recipe->type == self::RECIPE_TYPE_MEALPLAN_SHADOW) {
             // Use "Produces product" of the original recipe
-            $mealPlanEntry = $this->getDatabase()->meal_plan()->where('id = :1', explode('#', $recipe->name)[1])->fetch();
+            $mealPlanEntry = $this->getDatabase()->meal_plan()->where('id = :1', explode('#', (string) $recipe->name)[1])->fetch();
             $recipe = $this->getDatabase()->recipes()->where('id = :1', $mealPlanEntry->recipe_id)->fetch();
             $productId = $recipe->product_id;
             $amount = $mealPlanEntry->recipe_servings;

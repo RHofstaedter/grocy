@@ -81,7 +81,7 @@ class Grocycode implements \Stringable
 
     private function setFromCode($code)
     {
-        $parts = array_reverse(explode(':', $code));
+        $parts = array_reverse(explode(':', (string) $code));
         if (array_pop($parts) != self::MAGIC) {
             throw new Exception('Not a Grocycode');
         }

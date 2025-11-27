@@ -26,7 +26,7 @@ class SessionAuthMiddleware extends AuthMiddleware
         }
     }
 
-    public static function processLogin(array $postParams)
+    public static function processLogin(array $postParams): never
     {
         throw new Exception('Not implemented');
     }

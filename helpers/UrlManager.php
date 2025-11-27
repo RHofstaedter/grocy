@@ -18,15 +18,15 @@ class UrlManager
     public function ConstructUrl($relativePath, $isResource = false)
     {
         if (GROCY_DISABLE_URL_REWRITING === false || $isResource === true) {
-            return rtrim($this->BasePath, '/') . $relativePath;
+            return rtrim((string) $this->BasePath, '/') . $relativePath;
         } else { // Is not a resource and URL rewriting is disabled
-            return rtrim($this->BasePath, '/') . '/index.php' . $relativePath;
+            return rtrim((string) $this->BasePath, '/') . '/index.php' . $relativePath;
         }
     }
 
     private function GetBaseUrl()
     {
-        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && str_contains($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https')) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && str_contains((string) $_SERVER['HTTP_X_FORWARDED_PROTO'], 'https')) {
             $_SERVER['HTTPS'] = 'on';
         }
 

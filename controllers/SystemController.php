@@ -39,7 +39,7 @@ class SystemController extends BaseController
 
     public function manifest(Request $request, Response $response, array $args)
     {
-        $data = explode('#', base64_decode($request->getQueryParams()['data']));
+        $data = explode('#', base64_decode((string) $request->getQueryParams()['data']));
 
         $manifest = [
             'name' => 'Grocy ' . $data[0],

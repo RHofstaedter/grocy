@@ -641,7 +641,7 @@ class StockService extends BaseService
                 // Download and save image if provided
                 if (isset($pluginOutput['__image_url']) && !empty($pluginOutput['__image_url'])) {
                     try {
-                        if (preg_match('/^https?:\/\//', $pluginOutput['__image_url'])) {
+                        if (preg_match('/^https?:\/\//', (string) $pluginOutput['__image_url'])) {
                             $webClient = new Client();
                             $response = $webClient->request(
                                 'GET',
@@ -655,7 +655,7 @@ class StockService extends BaseService
                                 ]
                             );
                             $fileExtension = pathinfo(
-                                parse_url($pluginOutput['__image_url'], PHP_URL_PATH),
+                                parse_url((string) $pluginOutput['__image_url'], PHP_URL_PATH),
                                 PATHINFO_EXTENSION
                             );
 
@@ -665,7 +665,7 @@ class StockService extends BaseService
                             }
 
                             $imageData = $response->getBody();
-                        } elseif (preg_match('/data:image\/(\w+?);base64,([A-Za-z0-9+\/]*={0,2})$/', $pluginOutput['__image_url'], $matches)) {
+                        } elseif (preg_match('/data:image\/(\w+?);base64,([A-Za-z0-9+\/]*={0,2})$/', (string) $pluginOutput['__image_url'], $matches)) {
                             $fileExtension = $matches[1];
                             if (!($imageData = base64_decode($matches[2]))) {
                                 unset($imageData);
@@ -1019,7 +1019,7 @@ class StockService extends BaseService
                 $newBestBeforeDate = date('Y-m-d', strtotime('+' . $product->default_best_before_days_after_open . ' days'));
 
                 // The new due date should be never > the original due date
-                if (strtotime($newBestBeforeDate) > strtotime($stockEntry->best_before_date)) {
+                if (strtotime($newBestBeforeDate) > strtotime((string) $stockEntry->best_before_date)) {
                     $newBestBeforeDate = $stockEntry->best_before_date;
                 }
 
@@ -1639,7 +1639,7 @@ class StockService extends BaseService
         foreach ($splittedStockEntries as $splittedStockEntry) {
             $this->getDatabaseService()->getDbConnectionRaw()->beginTransaction();
             try {
-                $stockIds = explode(',', $splittedStockEntry->stock_id_group);
+                $stockIds = explode(',', (string) $splittedStockEntry->stock_id_group);
                 foreach ($stockIds as $stockId) {
                     if ($stockId != $splittedStockEntry->stock_id_to_keep) {
                         $this->getDatabaseService()
@@ -1653,7 +1653,7 @@ class StockService extends BaseService
                     }
                 }
 
-                $stockEntryIds = explode(',', $splittedStockEntry->id_group);
+                $stockEntryIds = explode(',', (string) $splittedStockEntry->id_group);
                 foreach ($stockEntryIds as $stockEntryId) {
                     if ($stockEntryId != $splittedStockEntry->id_to_keep) {
                         $this->getDatabaseService()

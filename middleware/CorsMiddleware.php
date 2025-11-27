@@ -9,7 +9,7 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 class CorsMiddleware
 {
-    public function __construct(private ResponseFactoryInterface $responseFactory)
+    public function __construct(private readonly ResponseFactoryInterface $responseFactory)
     {
     }
 

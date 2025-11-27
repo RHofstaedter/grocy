@@ -77,6 +77,6 @@ class SystemApiController extends BaseApiController
 
     public function getLocalizationStrings(Request $request, Response $response, array $args)
     {
-        return $this->apiResponse($response, json_decode($this->getLocalizationService()->getPoAsJsonString()), true);
+        return $this->apiResponse($response, json_decode((string) $this->getLocalizationService()->getPoAsJsonString()), true);
     }
 }

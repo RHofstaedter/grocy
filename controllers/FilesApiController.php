@@ -18,8 +18,8 @@ class FilesApiController extends BaseApiController
                 throw new Exception('Invalid file group');
             }
 
-            if (isValidFileName(base64_decode($args['fileName']))) {
-                $fileName = base64_decode($args['fileName']);
+            if (isValidFileName(base64_decode((string) $args['fileName']))) {
+                $fileName = base64_decode((string) $args['fileName']);
             } else {
                 throw new Exception('Invalid filename');
             }
@@ -62,7 +62,7 @@ class FilesApiController extends BaseApiController
                 throw new Exception('Invalid file group');
             }
 
-            $fileInfo = explode('_', $args['fileName']);
+            $fileInfo = explode('_', (string) $args['fileName']);
             $fileName = $this->checkFileName($fileInfo[1]);
             $filePath = $this->getFilePath($args['group'], base64_decode($fileInfo[0]), $request->getQueryParams());
 

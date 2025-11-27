@@ -34,8 +34,8 @@ class FilesService extends BaseService
     public function downscaleImage($group, $fileName, $bestFitHeight = null, $bestFitWidth = null)
     {
         $filePath = $this->getFilePath($group, $fileName);
-        $fileNameWithoutExtension = pathinfo($filePath, PATHINFO_FILENAME);
-        $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+        $fileNameWithoutExtension = pathinfo((string) $filePath, PATHINFO_FILENAME);
+        $fileExtension = pathinfo((string) $filePath, PATHINFO_EXTENSION);
 
         $fileNameDownscaled = $fileNameWithoutExtension . '__downscaledto' . ($bestFitHeight ?: 'auto')
             . 'x' . ($bestFitWidth ?: 'auto') . '.' . $fileExtension;
@@ -67,7 +67,7 @@ class FilesService extends BaseService
         $filePath = $this->getFilePath($group, $fileName);
 
         if (file_exists($filePath)) {
-            $fileNameWithoutExtension = pathinfo($filePath, PATHINFO_FILENAME);
+            $fileNameWithoutExtension = pathinfo((string) $filePath, PATHINFO_FILENAME);
 
             // Then the file is an image
             if (getimagesize($filePath) !== false) {

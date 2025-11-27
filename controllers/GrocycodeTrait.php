@@ -24,12 +24,12 @@ trait GrocycodeTrait
         if ($isDownload) {
             $response = $response->withHeader('Content-Type', 'application/octet-stream')
                 ->withHeader('Content-Disposition', 'attachment; filename=Grocycode.png')
-                ->withHeader('Content-Length', strlen($png))
+                ->withHeader('Content-Length', strlen((string) $png))
                 ->withHeader('Cache-Control', 'no-cache')
                 ->withHeader('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT');
         } else {
             $response = $response->withHeader('Content-Type', 'image/png')
-                ->withHeader('Content-Length', strlen($png))
+                ->withHeader('Content-Length', strlen((string) $png))
                 ->withHeader('Cache-Control', 'no-cache')
                 ->withHeader('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT');
         }

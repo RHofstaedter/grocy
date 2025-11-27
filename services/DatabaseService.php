@@ -101,7 +101,7 @@ class DatabaseService
 
     public function setDbChangedTime($dateTime)
     {
-        touch($this->getDbFilePath(), strtotime($dateTime));
+        touch($this->getDbFilePath(), strtotime((string) $dateTime));
     }
 
     public static function getInstance()

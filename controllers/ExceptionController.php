@@ -12,7 +12,7 @@ use Throwable;
 
 class ExceptionController extends BaseApiController
 {
-    public function __construct(private \Slim\App $app, Container $container)
+    public function __construct(private readonly \Slim\App $app, Container $container)
     {
         parent::__construct($container);
     }

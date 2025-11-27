@@ -84,7 +84,7 @@ class BaseApiController extends BaseController
                 '/(?P<field>' . self::PATTERN_FIELD . ')'
                     . '(?P<op>' . self::PATTERN_OPERATOR . ')'
                     . '(?P<value>' . self::PATTERN_VALUE . ')/u',
-                $q,
+                (string) $q,
                 $matches
             );
 

@@ -70,10 +70,10 @@ class ConfigurationValidator
     private function checkAutoNightModeRange()
     {
         global $GROCY_DEFAULT_USER_SETTINGS;
-        if (!(preg_match('/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/', $GROCY_DEFAULT_USER_SETTINGS['auto_night_mode_time_range_from']))) {
+        if (!(preg_match('/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/', (string) $GROCY_DEFAULT_USER_SETTINGS['auto_night_mode_time_range_from']))) {
             throw new EInvalidConfig('auto_night_mode_time_range_from is not in HH:mm format (' . $GROCY_DEFAULT_USER_SETTINGS['auto_night_mode_time_range_from'] . ')');
         }
-        if (!(preg_match('/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/', $GROCY_DEFAULT_USER_SETTINGS['auto_night_mode_time_range_to']))) {
+        if (!(preg_match('/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/', (string) $GROCY_DEFAULT_USER_SETTINGS['auto_night_mode_time_range_to']))) {
             throw new EInvalidConfig('auto_night_mode_time_range_to is not in HH:mm format (' . $GROCY_DEFAULT_USER_SETTINGS['auto_night_mode_time_range_to'] . ')');
         }
     }

@@ -191,7 +191,7 @@ function getUserDisplayName($user)
 
 function isValidFileName($fileName)
 {
-    if (preg_match('=^[^/?*;:{}\\\\]+\.[^/?*;:{}\\\\]+$=', $fileName)) {
+    if (preg_match('=^[^/?*;:{}\\\\]+\.[^/?*;:{}\\\\]+$=', (string) $fileName)) {
         return true;
     }
 
@@ -200,7 +200,7 @@ function isValidFileName($fileName)
 
 function isJsonString($text)
 {
-    json_decode($text);
+    json_decode((string) $text);
     return (json_last_error() == JSON_ERROR_NONE);
 }
 

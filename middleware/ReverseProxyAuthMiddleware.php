@@ -29,7 +29,7 @@ class ReverseProxyAuthMiddleware extends AuthMiddleware
             }
 
             $username = $_SERVER[GROCY_REVERSE_PROXY_AUTH_HEADER];
-            if (strlen($username) === 0) {
+            if (strlen((string) $username) === 0) {
                 // Variable is empty
                 throw new Exception('ReverseProxyAuthMiddleware: ' . GROCY_REVERSE_PROXY_AUTH_HEADER . ' env variable is invalid');
             }
@@ -50,7 +50,7 @@ class ReverseProxyAuthMiddleware extends AuthMiddleware
         return $user;
     }
 
-    public static function processLogin(array $postParams)
+    public static function processLogin(array $postParams): never
     {
         throw new Exception('Not implemented');
     }

@@ -17,7 +17,7 @@ class OpenFoodFactsBarcodeLookupPlugin extends BaseBarcodeLookupPlugin
         $productNameFieldLocalized = 'product_name_' . substr(GROCY_LOCALE, 0, 2);
 
         $webClient = new Client(['http_errors' => false]);
-        $response = $webClient->request('GET', 'https://world.openfoodfacts.org/api/v2/product/' . preg_replace('/[^0-9]/', '', $barcode) . '?fields=product_name,image_url,' . $productNameFieldLocalized, ['headers' => ['User-Agent' => 'GrocyOpenFoodFactsBarcodeLookupPlugin/1.0 (https://grocy.info)']]);
+        $response = $webClient->request('GET', 'https://world.openfoodfacts.org/api/v2/product/' . preg_replace('/[^0-9]/', '', (string) $barcode) . '?fields=product_name,image_url,' . $productNameFieldLocalized, ['headers' => ['User-Agent' => 'GrocyOpenFoodFactsBarcodeLookupPlugin/1.0 (https://grocy.info)']]);
         $statusCode = $response->getStatusCode();
 
         // Guzzle throws exceptions for connection errors, so nothing to do on that here
@@ -51,7 +51,7 @@ class OpenFoodFactsBarcodeLookupPlugin extends BaseBarcodeLookupPlugin
             }
 
             // Remove non-ASCII characters in product name (whyever a product name should have them at all)
-            $name = preg_replace('/[^a-zA-Z0-9äöüÄÖÜß ]/', '', $name);
+            $name = preg_replace('/[^a-zA-Z0-9äöüÄÖÜß ]/', '', (string) $name);
 
             return [
                 'name' => $name,

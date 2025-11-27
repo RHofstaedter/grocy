@@ -26,7 +26,7 @@ class UrlManager
 
     private function GetBaseUrl()
     {
-        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && str_contains($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https')) {
             $_SERVER['HTTPS'] = 'on';
         }
 

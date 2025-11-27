@@ -151,7 +151,7 @@ class BaseController
 
         $constants = get_defined_constants();
         foreach ($constants as $constant => $value) {
-            if (substr($constant, 0, 19) !== 'GROCY_FEATURE_FLAG_') {
+            if (!str_starts_with($constant, 'GROCY_FEATURE_FLAG_')) {
                 unset($constants[$constant]);
             }
         }

@@ -37,8 +37,8 @@ class FilesService extends BaseService
         $fileNameWithoutExtension = pathinfo($filePath, PATHINFO_FILENAME);
         $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
 
-        $fileNameDownscaled = $fileNameWithoutExtension . '__downscaledto' . ($bestFitHeight ? $bestFitHeight : 'auto')
-            . 'x' . ($bestFitWidth ? $bestFitWidth : 'auto') . '.' . $fileExtension;
+        $fileNameDownscaled = $fileNameWithoutExtension . '__downscaledto' . ($bestFitHeight ?: 'auto')
+            . 'x' . ($bestFitWidth ?: 'auto') . '.' . $fileExtension;
         $filePathDownscaled = $this->getFilePath($group, $fileNameDownscaled);
 
         try {
@@ -75,7 +75,7 @@ class FilesService extends BaseService
                 $groupFolderPath = $this->StoragePath . '/' . $group;
                 $files = scandir($groupFolderPath);
                 foreach ($files as $file) {
-                    if (string_starts_with($file, $fileNameWithoutExtension . '__downscaledto')) {
+                    if (str_starts_with($file, $fileNameWithoutExtension . '__downscaledto')) {
                         unlink($this->getFilePath($group, $file));
                     }
                 }

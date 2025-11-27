@@ -25,7 +25,7 @@ abstract class AuthMiddleware extends BaseMiddleware
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $routeName = $route->getName();
-        $isApiRoute = string_starts_with($request->getUri()->getPath(), '/api/');
+        $isApiRoute = str_starts_with($request->getUri()->getPath(), '/api/');
 
         if ($routeName === 'root') {
             return $handler->handle($request);

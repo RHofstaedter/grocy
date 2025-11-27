@@ -19,7 +19,7 @@ class SystemApiController extends BaseApiController
             $returnArray = [];
 
             foreach ($constants as $constant => $value) {
-                if (substr($constant, 0, 6) === 'GROCY_') {
+                if (str_starts_with($constant, 'GROCY_')) {
                     $returnArray[substr($constant, 6)] = $value;
                 }
             }

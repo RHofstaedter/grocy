@@ -17,7 +17,7 @@ use Exception;
  *
  * @author Katharina Bogad <katharina@hacked.xyz>
  */
-class Grocycode
+class Grocycode implements \Stringable
 {
     public const PRODUCT = 'p';
     public const BATTERY = 'b';
@@ -52,7 +52,7 @@ class Grocycode
         try {
             $gc = new self($code);
             return true;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return false;
         }
     }

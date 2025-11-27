@@ -9,16 +9,9 @@ abstract class BaseBarcodeLookupPlugin
     // That's a "self-referencing constant" and forces the child class to define it
     public const PLUGIN_NAME = self::PLUGIN_NAME;
 
-    final public function __construct($locations, $quantityUnits, $userSettings)
+    final public function __construct(protected $Locations, protected $QuantityUnits, protected $userSettings)
     {
-        $this->Locations = $locations;
-        $this->QuantityUnits = $quantityUnits;
-        $this->userSettings = $userSettings;
     }
-
-    protected $Locations;
-    protected $QuantityUnits;
-    protected $userSettings;
 
     final public function lookup($barcode)
     {

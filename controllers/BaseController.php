@@ -179,7 +179,7 @@ class BaseController
             } else {
                 $this->View->set('userSettings', null);
             }
-        } catch (\Exception $ex) {
+        } catch (\Exception) {
             // Happens when database is not initialised or migrated...
         }
 

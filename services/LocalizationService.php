@@ -175,7 +175,7 @@ class LocalizationService
         $quantityUnits = null;
         try {
             $quantityUnits = $this->getDatabase()->quantity_units()->where('active = 1')->fetchAll();
-        } catch (\Exception $ex) {
+        } catch (\Exception) {
             // Happens when database is not initialised or migrated...
         }
 

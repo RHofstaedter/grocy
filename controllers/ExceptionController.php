@@ -12,13 +12,10 @@ use Throwable;
 
 class ExceptionController extends BaseApiController
 {
-    public function __construct(\Slim\App $app, Container $container)
+    public function __construct(private \Slim\App $app, Container $container)
     {
         parent::__construct($container);
-        $this->app = $app;
     }
-
-    private $app;
 
     public function __invoke(ServerRequestInterface $request, Throwable $exception, bool $displayErrorDetails, bool $logErrors, bool $logErrorDetails, ?LoggerInterface $logger = null)
     {

@@ -32,11 +32,7 @@ class ApplicationService extends BaseService
 
         // Sort changelog items to have the changelog descending by newest version
         usort($changelogItems, function ($a, $b) {
-            if ($a['release_number'] == $b['release_number']) {
-                return 0;
-            }
-
-            return ($a['release_number'] < $b['release_number']) ? 1 : -1;
+            return $b['release_number'] <=> $a['release_number'];
         });
 
         return [
@@ -66,7 +62,7 @@ class ApplicationService extends BaseService
             'sqlite_version' => $sqliteVersion,
             'db_version' => $this->getDatabase()->migrations()->max('migration'),
             'os' => php_uname('s') . ' ' . php_uname('r') . ' ' . php_uname('v') . ' ' . php_uname('m'),
-            'client' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown'
+            'client' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown'
         ];
     }
 

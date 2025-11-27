@@ -8,7 +8,7 @@ class BaseService
 
     public static function getInstance()
     {
-        $className = get_called_class();
+        $className = static::class;
         if (!isset(self::$instances[$className])) {
             self::$instances[$className] = new $className();
         }

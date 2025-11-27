@@ -72,7 +72,7 @@ class StockController extends BaseController
             'products' => $this->getDatabase()->products()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
             'locations' => $this->getDatabase()->locations()->orderBy('name', 'COLLATE NOCASE'),
             'users' => $usersService->getUsersAsDto(),
-            'transactionTypes' => getClassConstants('\Grocy\Services\StockService', 'TRANSACTION_TYPE_'),
+            'transactionTypes' => getClassConstants(\Grocy\Services\StockService::class, 'TRANSACTION_TYPE_'),
             'userfieldsStock' => $this->getUserfieldsService()->getFields('stock'),
             'userfieldValuesStock' => $this->getUserfieldsService()->getAllValues('stock')
         ]);
@@ -556,7 +556,7 @@ class StockController extends BaseController
             'entries' => $entries,
             'products' => $this->getDatabase()->products()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
             'users' => $usersService->getUsersAsDto(),
-            'transactionTypes' => getClassConstants('\Grocy\Services\StockService', 'TRANSACTION_TYPE_')
+            'transactionTypes' => getClassConstants(\Grocy\Services\StockService::class, 'TRANSACTION_TYPE_')
         ]);
     }
 

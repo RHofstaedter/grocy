@@ -15,7 +15,7 @@ return RectorConfig::configure()
         __DIR__ . '/views',
     ])
     // uncomment to reach your current PHP version
-    ->withPhpSets(php53: true);
+    ->withPhpSets(php56: true);
     //->withTypeCoverageLevel(0)
     //->withDeadCodeLevel(0)
     //->withCodeQualityLevel(0);

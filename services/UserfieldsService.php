@@ -60,7 +60,7 @@ class UserfieldsService extends BaseService
 
     public function getFieldTypes()
     {
-        return getClassConstants('\Grocy\Services\UserfieldsService');
+        return getClassConstants(\Grocy\Services\UserfieldsService::class);
     }
 
     public function getFields($entity)

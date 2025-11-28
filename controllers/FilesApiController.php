@@ -111,15 +111,13 @@ class FilesApiController extends BaseApiController
         }
     }
 
-    protected function checkFileName(string $fileName)
+    protected function checkFileName(string $fileName): string|false
     {
         if (isValidFileName(base64_decode($fileName))) {
-            $fileName = base64_decode($fileName);
+            return base64_decode($fileName);
         } else {
             throw new Exception('Invalid filename');
         }
-
-        return $fileName;
     }
 
     protected function getFilePath(string $group, string $fileName, array $queryParams = [])

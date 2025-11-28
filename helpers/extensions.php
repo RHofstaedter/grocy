@@ -83,9 +83,9 @@ function findAllItemsInArrayByValue($array, $value, $operator = '=='): array
     return $returnArray;
 }
 
-function sumArrayValue($array, $propertyName)
+function sumArrayValue($array, $propertyName): float
 {
-    $sum = 0;
+    $sum = 0.0;
     foreach ($array as $object) {
         $sum += floatval($object->{$propertyName});
     }
@@ -144,7 +144,7 @@ function boolToInt(bool $bool): int
     return $bool ? 1 : 0;
 }
 
-function externalSettingValue(string $value)
+function externalSettingValue(string $value): bool|string
 {
     $tvalue = rtrim($value, "\r\n");
     $lvalue = strtolower($tvalue);

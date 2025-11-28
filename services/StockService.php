@@ -741,7 +741,7 @@ class StockService extends BaseService
         return $this->getDatabaseService()->executeDbQuery($sql)->fetchAll(\PDO::FETCH_OBJ);
     }
 
-    public function getDueProducts(int $days = 5, bool $excludeOverdue = false)
+    public function getDueProducts(int $days = 5, bool $excludeOverdue = false): array
     {
         if ($excludeOverdue) {
             return $this->getCurrentStock(sprintf("WHERE best_before_date <= date('now', '%d days') AND best_before_date >= date()", $days));
@@ -750,7 +750,7 @@ class StockService extends BaseService
         }
     }
 
-    public function getExpiredProducts()
+    public function getExpiredProducts(): array
     {
         return $this->getCurrentStock('WHERE best_before_date < date() AND due_type = 2');
     }
@@ -898,7 +898,7 @@ class StockService extends BaseService
         return $this->getDatabase()->stock()->where('location_id', $locationId);
     }
 
-    public function getProductStockEntriesForLocation($productId, $locationId, $excludeOpened = false, $allowSubproductSubstitution = false)
+    public function getProductStockEntriesForLocation($productId, $locationId, $excludeOpened = false, $allowSubproductSubstitution = false): array
     {
         $stockEntries = $this->getProductStockEntries($productId, $excludeOpened, $allowSubproductSubstitution);
         return findAllObjectsInArrayByPropertyValue($stockEntries, 'location_id', $locationId);

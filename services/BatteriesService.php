@@ -84,7 +84,7 @@ class BatteriesService extends BaseService
         ]);
     }
 
-    private function batteryExists($batteryId): bool
+    private function batteryExists(int $batteryId): bool
     {
         $batteryRow = $this->getDatabase()
             ->batteries()

@@ -14,9 +14,9 @@ class UrlManager
     public function ConstructUrl($relativePath, $isResource = false): string
     {
         if (GROCY_DISABLE_URL_REWRITING === false || $isResource === true) {
-            return rtrim((string) $this->BasePath, '/') . $relativePath;
+            return rtrim($this->BasePath, '/') . $relativePath;
         } else { // Is not a resource and URL rewriting is disabled
-            return rtrim((string) $this->BasePath, '/') . '/index.php' . $relativePath;
+            return rtrim($this->BasePath, '/') . '/index.php' . $relativePath;
         }
     }
 

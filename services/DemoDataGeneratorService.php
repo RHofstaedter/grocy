@@ -386,7 +386,7 @@ class DemoDataGeneratorService extends BaseService
         }
     }
 
-    private function downloadFileIfNotAlreadyExists($sourceUrl, $destinationPath): void
+    private function downloadFileIfNotAlreadyExists(string $sourceUrl, string $destinationPath): void
     {
         if (!file_exists($destinationPath)) {
             file_put_contents($destinationPath, file_get_contents($sourceUrl, false, stream_context_create([
@@ -407,12 +407,12 @@ class DemoDataGeneratorService extends BaseService
         return $returnValue;
     }
 
-    private function randomPrice()
+    private function randomPrice(): int|float
     {
         return mt_rand(2 * 100, 25 * 100) / 100 / 4;
     }
 
-    private function __n_sql($number, string $singularForm, string $pluralForm): string|array
+    private function __n_sql(int $number, string $singularForm, string $pluralForm): string|array
     {
         $localizedText = $this->getLocalizationService()->__n($number, $singularForm, $pluralForm);
         return str_replace("'", "''", $localizedText);

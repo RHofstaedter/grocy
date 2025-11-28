@@ -6,7 +6,7 @@ class SessionService extends BaseService
 {
     public const SESSION_COOKIE_NAME = 'grocy_session';
 
-    public function createSession($userId, $stayLoggedInPermanently = false)
+    public function createSession($userId, $stayLoggedInPermanently = false): string
     {
         $newSessionKey = $this->generateSessionKey();
         $expires = date('Y-m-d H:i:s', time() + 2592000);

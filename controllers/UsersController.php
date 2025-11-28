@@ -46,7 +46,7 @@ class UsersController extends BaseController
     {
         return $this->renderPage($response, 'usersettings', [
             'languages' => array_filter(scandir(__DIR__ . '/../localization'), function ($item) {
-                if ($item == '.' || $item == '..') {
+                if ($item === '.' || $item === '..') {
                     return false;
                 }
 

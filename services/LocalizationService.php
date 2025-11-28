@@ -33,12 +33,10 @@ class LocalizationService
 
     public function checkAndAddMissingTranslationToPot($text)
     {
-        if (GROCY_MODE === 'dev') {
-            if ($this->Pot->find('', $text) === false && empty($text) === false) {
-                $translation = new Translation('', $text);
-                $this->PotMain[] = $translation;
-                $this->PotMain->toPoFile(__DIR__ . '/../localization/strings.pot');
-            }
+        if (GROCY_MODE === 'dev' && ($this->Pot->find('', $text) === false && empty($text) === false)) {
+            $translation = new Translation('', $text);
+            $this->PotMain[] = $translation;
+            $this->PotMain->toPoFile(__DIR__ . '/../localization/strings.pot');
         }
     }
 
@@ -91,12 +89,10 @@ class LocalizationService
 
         if (func_num_args() === 1) {
             return $this->Translator->gettext($text);
+        } elseif (is_array(...$placeholderValues)) {
+            return vsprintf($this->Translator->gettext($text), ...$placeholderValues);
         } else {
-            if (is_array(...$placeholderValues)) {
-                return vsprintf($this->Translator->gettext($text), ...$placeholderValues);
-            } else {
-                return sprintf($this->Translator->gettext($text), array_shift($placeholderValues));
-            }
+            return sprintf($this->Translator->gettext($text), array_shift($placeholderValues));
         }
     }
 

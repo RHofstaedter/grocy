@@ -64,7 +64,7 @@ class ChoresApiController extends BaseApiController
             }
 
             $skipped = false;
-            if (array_key_exists('skipped', $requestBody) && filter_var($requestBody['skipped'], FILTER_VALIDATE_BOOLEAN) !== false) {
+            if (array_key_exists('skipped', $requestBody) && filter_var($requestBody['skipped'], FILTER_VALIDATE_BOOLEAN)) {
                 $skipped = $requestBody['skipped'];
             }
 

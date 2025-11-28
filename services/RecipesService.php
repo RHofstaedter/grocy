@@ -8,10 +8,13 @@ use Exception;
 class RecipesService extends BaseService
 {
     public const RECIPE_TYPE_MEALPLAN_DAY = 'mealplan-day';
+
      // A recipe per meal plan day => name = YYYY-MM-DD
     public const RECIPE_TYPE_MEALPLAN_WEEK = 'mealplan-week';
+
      // A recipe per meal plan week => name = YYYY-WW (week number)
     public const RECIPE_TYPE_MEALPLAN_SHADOW = 'mealplan-shadow';
+
      // A recipe per meal plan recipe (for separated stock fulfillment checking) => name = YYYY-MM-DD#<meal_plan.id>
     public const RECIPE_TYPE_NORMAL = 'normal'; // Normal / manually created recipes
 
@@ -40,7 +43,7 @@ class RecipesService extends BaseService
                 if ($recipePosition->only_check_single_unit_in_stock == 1) {
                     $conversion = $this->getDatabase()->cache__quantity_unit_conversions_resolved()->where('product_id = :1 AND from_qu_id = :2 AND to_qu_id = :3', $recipePosition->product_id, $recipePosition->qu_id, $product->qu_id_stock)->fetch();
                     if ($conversion != null) {
-                        $toOrderAmount = $toOrderAmount * $conversion->factor;
+                        $toOrderAmount *= $conversion->factor;
                     } else {
                         // No conversion exists => take the amount/unit as is
                         $quId = $recipePosition->qu_id;

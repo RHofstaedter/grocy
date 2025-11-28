@@ -6,11 +6,7 @@ class UrlManager
 {
     public function __construct(string $basePath)
     {
-        if ($basePath === '/') {
-            $this->BasePath = $this->GetBaseUrl();
-        } else {
-            $this->BasePath = $basePath;
-        }
+        $this->BasePath = $basePath === '/' ? $this->GetBaseUrl() : $basePath;
     }
 
     protected $BasePath;

@@ -13,7 +13,7 @@ class ApplicationService extends BaseService
             $fileName = basename($file);
             $fileNameParts = explode('_', $fileName);
 
-            if ($fileName == '__TEMPLATE.md') {
+            if ($fileName === '__TEMPLATE.md') {
                 continue;
             }
 
@@ -63,14 +63,14 @@ class ApplicationService extends BaseService
         ];
     }
 
-    private static function convertToUtc(int $timestamp): string
+    private function convertToUtc(int $timestamp): string
     {
         $dt = new \DateTime('now', new \DateTimeZone('UTC'));
         $dt->setTimestamp($timestamp);
         return $dt->format('Y-m-d H:i:s');
     }
 
-    private static function getSqliteLocaltime(int $offset): string
+    private function getSqliteLocaltime(int $offset): string
     {
         $pdo = new \PDO('sqlite::memory:');
         if ($offset > 0) {
@@ -84,11 +84,11 @@ class ApplicationService extends BaseService
     {
         $timestamp = time() + $offset;
         $timeLocal = date('Y-m-d H:i:s', $timestamp);
-        $timeUTC = self::convertToUtc($timestamp);
+        $timeUTC = $this->convertToUtc($timestamp);
         return [
             'timezone' => date_default_timezone_get(),
             'time_local' => $timeLocal,
-            'time_local_sqlite3' => self::getSqliteLocaltime($offset),
+            'time_local_sqlite3' => $this->getSqliteLocaltime($offset),
             'time_utc' => $timeUTC,
             'timestamp' => $timestamp,
             'offset' => $offset

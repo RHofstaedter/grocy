@@ -32,11 +32,11 @@ class Grocycode implements \Stringable
     public function __construct(...$args)
     {
         $argc = count($args);
-        if ($argc == 1) {
+        if ($argc === 1) {
             $this->setFromCode($args[0]);
             return;
-        } elseif ($argc == 2 || $argc == 3) {
-            if ($argc == 2) {
+        } elseif ($argc === 2 || $argc === 3) {
+            if ($argc === 2) {
                 $args[] = [];
             }
 
@@ -90,7 +90,7 @@ class Grocycode implements \Stringable
     private function setFromCode($code)
     {
         $parts = array_reverse(explode(':', (string) $code));
-        if (array_pop($parts) != self::MAGIC) {
+        if (array_pop($parts) !== self::MAGIC) {
             throw new Exception('Not a Grocycode');
         }
 

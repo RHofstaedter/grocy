@@ -15,10 +15,10 @@ return RectorConfig::configure()
         __DIR__ . '/views',
     ])
     // uncomment to reach your current PHP version
-    ->withPhpSets(php83: true)
+    ->withPhpSets()
     ->withPreparedSets(
         deadCode: true,
-        //codeQuality: true,
+        codeQuality: true,
         codingStyle: true,
         // privatization: true,
         // naming: true,

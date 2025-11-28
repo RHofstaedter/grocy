@@ -12,13 +12,13 @@ class PrintService extends BaseService
 {
     public function printShoppingList(bool $printHeader, array $lines): array
     {
-        $printer = self::getPrinterHandle();
+        $printer = $this->getPrinterHandle();
         if ($printer === false) {
             throw new Exception('Unable to connect to printer');
         }
 
         if ($printHeader) {
-            self::printHeader($printer);
+            $this->printHeader($printer);
         }
 
         foreach ($lines as $line) {
@@ -34,7 +34,7 @@ class PrintService extends BaseService
         ];
     }
 
-    private static function getPrinterHandle()
+    private function getPrinterHandle()
     {
         if (GROCY_TPRINTER_IS_NETWORK_PRINTER) {
             $connector = new NetworkPrintConnector(GROCY_TPRINTER_IP, GROCY_TPRINTER_PORT);
@@ -45,7 +45,7 @@ class PrintService extends BaseService
         return new Printer($connector);
     }
 
-    private static function printHeader(Printer $printer)
+    private function printHeader(Printer $printer)
     {
         $date = new DateTime();
         $dateFormatted = $date->format('d/m/Y H:i');

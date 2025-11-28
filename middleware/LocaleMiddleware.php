@@ -20,10 +20,8 @@ class LocaleMiddleware extends BaseMiddleware
     {
         if (defined('GROCY_AUTHENTICATED') && GROCY_AUTHENTICATED) {
             $locale = UsersService::getInstance()->getUserSetting(GROCY_USER_ID, 'locale');
-            if (isset($locale) && !empty($locale)) {
-                if (in_array($locale, scandir(__DIR__ . '/../localization'))) {
-                    return $locale;
-                }
+            if (isset($locale) && !empty($locale) && in_array($locale, scandir(__DIR__ . '/../localization'))) {
+                return $locale;
             }
         }
 
@@ -42,7 +40,7 @@ class LocaleMiddleware extends BaseMiddleware
         arsort($prefLocales);
 
         $availableLocales = scandir(__DIR__ . '/../localization');
-        foreach ($prefLocales as $locale => $q) {
+        foreach (array_keys($prefLocales) as $locale) {
             if (in_array($locale, $availableLocales)) {
                 return $locale;
             }

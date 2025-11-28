@@ -29,7 +29,7 @@ class SystemController extends BaseController
         $databaseMigrationService = DatabaseMigrationService::getInstance();
         $databaseMigrationService->migrateDatabase();
 
-        if (GROCY_MODE === 'dev' || GROCY_MODE === 'demo' || GROCY_MODE === 'prerelease') {
+        if (in_array(GROCY_MODE, ['dev', 'demo', 'prerelease'], true)) {
             $demoDataGeneratorService = DemoDataGeneratorService::getInstance();
             $demoDataGeneratorService->populateDemoData(isset($request->getQueryParams()['nodemodata']));
         }
@@ -61,11 +61,7 @@ class SystemController extends BaseController
 
     private function getEntryPageRelative()
     {
-        if (defined('GROCY_ENTRY_PAGE')) {
-            $entryPage = constant('GROCY_ENTRY_PAGE');
-        } else {
-            $entryPage = 'stock';
-        }
+        $entryPage = defined('GROCY_ENTRY_PAGE') ? constant('GROCY_ENTRY_PAGE') : 'stock';
 
         // Stock
         if ($entryPage === 'stock' && constant('GROCY_FEATURE_FLAG_STOCK')) {

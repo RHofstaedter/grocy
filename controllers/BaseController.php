@@ -147,7 +147,7 @@ class BaseController
         $this->View->set('embedded', $embedded);
 
         $constants = get_defined_constants();
-        foreach ($constants as $constant => $value) {
+        foreach (array_keys($constants) as $constant) {
             if (!str_starts_with($constant, 'GROCY_FEATURE_FLAG_')) {
                 unset($constants[$constant]);
             }
@@ -160,11 +160,7 @@ class BaseController
 
             $decimalPlacesAmounts = $this->getUsersService()
                 ->getUserSetting(GROCY_USER_ID, 'stock_decimal_places_amounts');
-            if ($decimalPlacesAmounts <= 0) {
-                $defaultMinAmount = 1;
-            } else {
-                $defaultMinAmount = '0.' . str_repeat('0', $decimalPlacesAmounts - 1) . '1';
-            }
+            $defaultMinAmount = $decimalPlacesAmounts <= 0 ? 1 : '0.' . str_repeat('0', $decimalPlacesAmounts - 1) . '1';
 
             $this->View->set('DEFAULT_MIN_AMOUNT', $defaultMinAmount);
         }

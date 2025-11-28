@@ -34,7 +34,7 @@ abstract class AuthMiddleware extends BaseMiddleware
             return $handler->handle($request);
         }
 
-        if (GROCY_MODE === 'dev' || GROCY_MODE === 'demo' || GROCY_MODE === 'prerelease' || GROCY_IS_EMBEDDED_INSTALL || GROCY_DISABLE_AUTH) {
+        if (in_array(GROCY_MODE, ['dev', 'demo', 'prerelease'], true) || GROCY_IS_EMBEDDED_INSTALL || GROCY_DISABLE_AUTH) {
             $sessionService = SessionService::getInstance();
             $user = $sessionService->getDefaultUser();
 
@@ -70,7 +70,7 @@ abstract class AuthMiddleware extends BaseMiddleware
     protected static function SetSessionCookie($sessionKey)
     {
         // Cookie never expires, session validity is up to SessionService
-        setcookie(SessionService::SESSION_COOKIE_NAME, (string) $sessionKey, ['expires' => PHP_INT_SIZE == 4 ? PHP_INT_MAX : PHP_INT_MAX >> 32]);
+        setcookie(SessionService::SESSION_COOKIE_NAME, (string) $sessionKey, ['expires' => PHP_INT_SIZE === 4 ? PHP_INT_MAX : PHP_INT_MAX >> 32]);
     }
 
     /**

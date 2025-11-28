@@ -458,7 +458,7 @@ class StockService extends BaseService
                             $subProduct->qu_id_stock
                         )->fetch();
                     if ($conversion != null) {
-                        $amount = $amount * $conversion->factor;
+                        $amount *= $conversion->factor;
                     }
                 }
 
@@ -491,7 +491,7 @@ class StockService extends BaseService
                         // A sub product with QU conversions was used
                         // => Convert the rest amount back to be based on
                         // the original (parent) product for the next round
-                        $amount = $amount / $conversion->factor;
+                        $amount /= $conversion->factor;
                     }
                 } else {
                     // Stock entry amount is > than needed amount -> split the stock entry resp. update the amount
@@ -631,85 +631,80 @@ class StockService extends BaseService
         $plugin = $this->loadexternalBarcodeLookupPlugin();
         $pluginOutput = $plugin->lookup($barcode);
 
-        if ($pluginOutput !== null) {
-            // Lookup was successful
-            if ($addFoundProduct === true) {
-                if ($this->getDatabase()->products()->where('name = :1', $pluginOutput['name'])->fetch() !== null) {
-                    throw new Exception('Product "' . $pluginOutput['name'] . '" already exists');
-                }
-
-                // Add product to database and include new product id in output
-                $productData = $pluginOutput;
-                // Virtual lookup plugin properties
-                unset(
-                    $productData['__barcode'],
-                    $productData['__qu_factor_purchase_to_stock'],
-                    $productData['__image_url']
-                );
-
-                // Download and save image if provided
-                if (isset($pluginOutput['__image_url']) && !empty($pluginOutput['__image_url'])) {
-                    try {
-                        if (preg_match('/^https?:\/\//', (string) $pluginOutput['__image_url'])) {
-                            $webClient = new Client();
-                            $response = $webClient->request(
-                                'GET',
-                                $pluginOutput['__image_url'],
-                                [
-                                    'headers' => [
-                                        'User-Agent' => 'Grocy/' .
-                                            $this->getApplicationService()->getInstalledVersion()->Version .
-                                            ' (https://grocy.info)'
-                                    ]
-                                ]
-                            );
-                            $fileExtension = pathinfo(
-                                parse_url((string) $pluginOutput['__image_url'], PHP_URL_PATH),
-                                PATHINFO_EXTENSION
-                            );
-
-                            // Fallback to Content-Type header if file extension is missing
-                            if (strlen($fileExtension) == 0 && $response->hasHeader('Content-Type')) {
-                                $fileExtension = explode('+', explode('/', $response->getHeader('Content-Type')[0])[1])[0];
-                            }
-
-                            $imageData = $response->getBody();
-                        } elseif (preg_match('/data:image\/(\w+?);base64,([A-Za-z0-9+\/]*={0,2})$/', (string) $pluginOutput['__image_url'], $matches)) {
-                            $fileExtension = $matches[1];
-                            if (!($imageData = base64_decode($matches[2]))) {
-                                unset($imageData);
-                            }
-                        }
-
-                        if (!empty($fileExtension) && !empty($imageData)) {
-                            $fileName = $pluginOutput['__barcode'] . '.' . $fileExtension;
-                            file_put_contents($this->getFilesService()->getFilePath('productpictures', $fileName), $imageData);
-                            $productData['picture_file_name'] = $fileName;
-                        }
-                    } catch (\Exception) {
-                        // Ignore
-                    }
-                }
-
-                $newProductRow = $this->getDatabase()->products()->createRow($productData);
-                $newProductRow->save();
-
-                $this->getDatabase()->product_barcodes()->createRow([
-                    'product_id' => $newProductRow->id,
-                    'barcode' => $pluginOutput['__barcode']
-                ])->save();
-
-                if ($pluginOutput['qu_id_stock'] != $pluginOutput['qu_id_purchase']) {
-                    $this->getDatabase()->quantity_unit_conversions()->createRow([
-                        'product_id' => $newProductRow->id,
-                        'from_qu_id' => $pluginOutput['qu_id_purchase'],
-                        'to_qu_id' => $pluginOutput['qu_id_stock'],
-                        'factor' => $pluginOutput['__qu_factor_purchase_to_stock'],
-                    ])->save();
-                }
-
-                $pluginOutput['id'] = $newProductRow->id;
+        // Lookup was successful
+        if ($pluginOutput !== null && $addFoundProduct === true) {
+            if ($this->getDatabase()->products()->where('name = :1', $pluginOutput['name'])->fetch() !== null) {
+                throw new Exception('Product "' . $pluginOutput['name'] . '" already exists');
             }
+
+            // Add product to database and include new product id in output
+            $productData = $pluginOutput;
+            // Virtual lookup plugin properties
+            unset(
+                $productData['__barcode'],
+                $productData['__qu_factor_purchase_to_stock'],
+                $productData['__image_url']
+            );
+            // Download and save image if provided
+            if (isset($pluginOutput['__image_url']) && !empty($pluginOutput['__image_url'])) {
+                try {
+                    if (preg_match('/^https?:\/\//', (string) $pluginOutput['__image_url'])) {
+                        $webClient = new Client();
+                        $response = $webClient->request(
+                            'GET',
+                            $pluginOutput['__image_url'],
+                            [
+                                'headers' => [
+                                    'User-Agent' => 'Grocy/' .
+                                        $this->getApplicationService()->getInstalledVersion()->Version .
+                                        ' (https://grocy.info)'
+                                ]
+                            ]
+                        );
+                        $fileExtension = pathinfo(
+                            parse_url((string) $pluginOutput['__image_url'], PHP_URL_PATH),
+                            PATHINFO_EXTENSION
+                        );
+
+                        // Fallback to Content-Type header if file extension is missing
+                        if ((string) $fileExtension === '' && $response->hasHeader('Content-Type')) {
+                            $fileExtension = explode('+', explode('/', $response->getHeader('Content-Type')[0])[1])[0];
+                        }
+
+                        $imageData = $response->getBody();
+                    } elseif (preg_match('/data:image\/(\w+?);base64,([A-Za-z0-9+\/]*={0,2})$/', (string) $pluginOutput['__image_url'], $matches)) {
+                        $fileExtension = $matches[1];
+                        if (!($imageData = base64_decode($matches[2]))) {
+                            unset($imageData);
+                        }
+                    }
+
+                    if (!empty($fileExtension) && !empty($imageData)) {
+                        $fileName = $pluginOutput['__barcode'] . '.' . $fileExtension;
+                        file_put_contents($this->getFilesService()->getFilePath('productpictures', $fileName), $imageData);
+                        $productData['picture_file_name'] = $fileName;
+                    }
+                } catch (\Exception) {
+                    // Ignore
+                }
+            }
+
+            $newProductRow = $this->getDatabase()->products()->createRow($productData);
+            $newProductRow->save();
+            $this->getDatabase()->product_barcodes()->createRow([
+                'product_id' => $newProductRow->id,
+                'barcode' => $pluginOutput['__barcode']
+            ])->save();
+            if ($pluginOutput['qu_id_stock'] != $pluginOutput['qu_id_purchase']) {
+                $this->getDatabase()->quantity_unit_conversions()->createRow([
+                    'product_id' => $newProductRow->id,
+                    'from_qu_id' => $pluginOutput['qu_id_purchase'],
+                    'to_qu_id' => $pluginOutput['qu_id_stock'],
+                    'factor' => $pluginOutput['__qu_factor_purchase_to_stock'],
+                ])->save();
+            }
+
+            $pluginOutput['id'] = $newProductRow->id;
         }
 
         return $pluginOutput;
@@ -1055,7 +1050,7 @@ class StockService extends BaseService
                 $subProduct = $this->getDatabase()->products($stockEntry->product_id);
                 $conversion = $this->getDatabase()->cache__quantity_unit_conversions_resolved()->where('product_id = :1 AND from_qu_id = :2 AND to_qu_id = :3', $stockEntry->product_id, $product->qu_id_stock, $subProduct->qu_id_stock)->fetch();
                 if ($conversion != null) {
-                    $amount = $amount * $conversion->factor;
+                    $amount *= $conversion->factor;
                 }
             }
 
@@ -1188,10 +1183,8 @@ class StockService extends BaseService
                 $amount = round($row->amount * $factor);
                 $note = '';
 
-                if (GROCY_TPRINTER_PRINT_NOTES) {
-                    if ($row->note != '') {
-                        $note = ' (' . $row->note . ')';
-                    }
+                if (GROCY_TPRINTER_PRINT_NOTES && $row->note != '') {
+                    $note = ' (' . $row->note . ')';
                 }
             }
 
@@ -1201,16 +1194,14 @@ class StockService extends BaseService
                     $quantityname = $row->qu_name_plural;
                 }
 
-                array_push($result_quantity, $amount . ' ' . $quantityname);
-                array_push($result_product, $row->product_name . $note);
+                $result_quantity[] = $amount . ' ' . $quantityname;
+                $result_product[] = $row->product_name . $note;
+            } elseif ($isValidProduct) {
+                $result_quantity[] = $amount;
+                $result_product[] = $row->product_name . $note;
             } else {
-                if ($isValidProduct) {
-                    array_push($result_quantity, $amount);
-                    array_push($result_product, $row->product_name . $note);
-                } else {
-                    array_push($result_quantity, round($row->amount));
-                    array_push($result_product, $row->note);
-                }
+                $result_quantity[] = round($row->amount);
+                $result_product[] = $row->note;
             }
         }
 
@@ -1226,7 +1217,7 @@ class StockService extends BaseService
         $length = count($result_quantity);
         for ($i = 0; $i < $length; $i++) {
             $quantity = str_pad($result_quantity[$i], $maxlength);
-            array_push($result, $quantity . '  ' . $result_product[$i]);
+            $result[] = $quantity . '  ' . $result_product[$i];
         }
 
         return $result;
@@ -1603,7 +1594,7 @@ class StockService extends BaseService
             throw new Exception('$productIdToRemove does not exist or is inactive');
         }
 
-        if ($productIdToKeep == $productIdToRemove) {
+        if ($productIdToKeep === $productIdToRemove) {
             throw new Exception('$productIdToKeep cannot equal $productIdToRemove');
         }
 

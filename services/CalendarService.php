@@ -118,8 +118,8 @@ class CalendarService extends BaseService
                     'title' => $titlePrefix . $titlePrefix2 . findObjectInArrayByPropertyValue($recipes, 'id', $mealPlanDayRecipe->recipe_id)->name,
                     'start' => $start,
                     'date_format' => $dateFormat,
-                    'description' => $this->UrlManager->ConstructUrl('/mealplan' . '?week=' . $mealPlanDayRecipe->day),
-                    'link' => $this->UrlManager->ConstructUrl('/recipes' . '?recipe=' . $mealPlanDayRecipe->recipe_id . '#fullscreen'),
+                    'description' => $this->UrlManager->ConstructUrl('/mealplan?week=' . $mealPlanDayRecipe->day),
+                    'link' => $this->UrlManager->ConstructUrl('/recipes?recipe=' . $mealPlanDayRecipe->recipe_id . '#fullscreen'),
                     'color' => $usersService->getUserSettings(GROCY_USER_ID)['calendar_color_meal_plan']
                 ];
             }
@@ -145,7 +145,7 @@ class CalendarService extends BaseService
                     'title' => $titlePrefix . $titlePrefix2 . $mealPlanDayNote->note,
                     'start' => $start,
                     'date_format' => $dateFormat,
-                    'link' => $this->UrlManager->ConstructUrl('/mealplan' . '?start=' . $start),
+                    'link' => $this->UrlManager->ConstructUrl('/mealplan?start=' . $start),
                     'color' => $usersService->getUserSettings(GROCY_USER_ID)['calendar_color_meal_plan']
                 ];
             }
@@ -171,7 +171,7 @@ class CalendarService extends BaseService
                     'title' => $titlePrefix . $titlePrefix2 . findObjectInArrayByPropertyValue($products, 'id', $mealPlanDayProduct->product_id)->name,
                     'start' => $start,
                     'date_format' => $dateFormat,
-                    'link' => $this->UrlManager->ConstructUrl('/mealplan' . '?start=' . $start),
+                    'link' => $this->UrlManager->ConstructUrl('/mealplan?start=' . $start),
                     'color' => $usersService->getUserSettings(GROCY_USER_ID)['calendar_color_meal_plan']
                 ];
             }

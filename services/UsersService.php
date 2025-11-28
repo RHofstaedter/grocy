@@ -63,7 +63,7 @@ class UsersService extends BaseService
 
         $user = $this->getDatabase()->users($userId);
 
-        if ($password == null || empty($password)) {
+        if ($password === null || $password === '') {
             $user->update([
                 'username' => $username,
                 'first_name' => $firstName,

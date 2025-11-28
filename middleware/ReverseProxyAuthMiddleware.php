@@ -29,7 +29,7 @@ class ReverseProxyAuthMiddleware extends AuthMiddleware
             }
 
             $username = $_SERVER[GROCY_REVERSE_PROXY_AUTH_HEADER];
-            if (strlen((string) $username) === 0) {
+            if ((string) $username === '') {
                 // Variable is empty
                 throw new Exception('ReverseProxyAuthMiddleware: ' . GROCY_REVERSE_PROXY_AUTH_HEADER . ' env variable is invalid');
             }

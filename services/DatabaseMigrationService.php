@@ -52,12 +52,12 @@ class DatabaseMigrationService extends BaseService
             ->executeDbQuery('SELECT COUNT(*) FROM migrations WHERE migration = ' . $migrationId)->fetchColumn();
         if (
             $rowCount == 0 ||
-            $migrationId == self::EMERGENCY_MIGRATION_ID ||
-            $migrationId == self::DOALWAYS_MIGRATION_ID
+            $migrationId === self::EMERGENCY_MIGRATION_ID ||
+            $migrationId === self::DOALWAYS_MIGRATION_ID
         ) {
             include $phpFile;
 
-            if ($migrationId != self::EMERGENCY_MIGRATION_ID && $migrationId != self::DOALWAYS_MIGRATION_ID) {
+            if ($migrationId !== self::EMERGENCY_MIGRATION_ID && $migrationId !== self::DOALWAYS_MIGRATION_ID) {
                 $this->getDatabaseService()
                     ->executeDbStatement('INSERT INTO migrations (migration) VALUES (' . $migrationId . ')');
                 $migrationCounter++;
@@ -71,15 +71,15 @@ class DatabaseMigrationService extends BaseService
             ->executeDbQuery('SELECT COUNT(*) FROM migrations WHERE migration = ' . $migrationId)->fetchColumn();
         if (
             $rowCount == 0 ||
-            $migrationId == self::EMERGENCY_MIGRATION_ID ||
-            $migrationId == self::DOALWAYS_MIGRATION_ID
+            $migrationId === self::EMERGENCY_MIGRATION_ID ||
+            $migrationId === self::DOALWAYS_MIGRATION_ID
         ) {
             $this->getDatabaseService()->getDbConnectionRaw()->beginTransaction();
 
             try {
                 $this->getDatabaseService()->executeDbStatement($sql);
 
-                if ($migrationId != self::EMERGENCY_MIGRATION_ID && $migrationId != self::DOALWAYS_MIGRATION_ID) {
+                if ($migrationId !== self::EMERGENCY_MIGRATION_ID && $migrationId !== self::DOALWAYS_MIGRATION_ID) {
                     $this->getDatabaseService()
                         ->executeDbStatement('INSERT INTO migrations (migration) VALUES (' . $migrationId . ')');
                     $migrationCounter++;

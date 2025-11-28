@@ -329,8 +329,8 @@ class DemoDataGeneratorService extends BaseService
 
                     $hours *= $i;
 
-                    $executionId = $choresService->trackChore($chore->id, date('Y-m-d', strtotime(sprintf('-%s hours', $hours))), array_rand([1, 2, 3, 4]) + 1, ($i % 10 == 0 || $i == 2));
-                    if ($i % 8 == 0) {
+                    $executionId = $choresService->trackChore($chore->id, date('Y-m-d', strtotime(sprintf('-%s hours', $hours))), array_rand([1, 2, 3, 4]) + 1, ($i % 10 === 0 || $i === 2));
+                    if ($i % 8 === 0) {
                         $choresService->undoChoreExecution($executionId);
                     }
                 }
@@ -402,11 +402,7 @@ class DemoDataGeneratorService extends BaseService
     {
         $returnValue = $this->LastSupermarketId;
 
-        if ($this->LastSupermarketId == 1) {
-            $this->LastSupermarketId = 2;
-        } else {
-            $this->LastSupermarketId = 1;
-        }
+        $this->LastSupermarketId = $this->LastSupermarketId == 1 ? 2 : 1;
 
         return $returnValue;
     }

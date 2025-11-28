@@ -17,13 +17,7 @@ class WebhookRunner
 
     public function run($url, $args, $json = false)
     {
-        $reqArgs = [];
-        if ($json) {
-            $reqArgs = ['json' => $args];
-        } else {
-            $reqArgs = ['form_params' => $args];
-        }
-
+        $reqArgs = $json ? ['json' => $args] : ['form_params' => $args];
         try {
             file_put_contents('php://stderr', 'Running Webhook: ' . $url . "\n" . print_r($reqArgs, true));
 

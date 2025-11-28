@@ -203,7 +203,7 @@ class StockApiController extends BaseApiController
             }
 
             $doneOnly = false;
-            if (array_key_exists('done_only', $requestBody) && filter_var($requestBody['done_only'], FILTER_VALIDATE_BOOLEAN) !== false) {
+            if (array_key_exists('done_only', $requestBody) && filter_var($requestBody['done_only'], FILTER_VALIDATE_BOOLEAN)) {
                 $doneOnly = boolval($requestBody['done_only']);
             }
 
@@ -535,7 +535,7 @@ class StockApiController extends BaseApiController
     public function ProductStockEntries(Request $request, Response $response, array $args)
     {
         $allowSubproductSubstitution = false;
-        if (isset($request->getQueryParams()['include_sub_products']) && filter_var($request->getQueryParams()['include_sub_products'], FILTER_VALIDATE_BOOLEAN) !== false) {
+        if (isset($request->getQueryParams()['include_sub_products']) && filter_var($request->getQueryParams()['include_sub_products'], FILTER_VALIDATE_BOOLEAN)) {
             $allowSubproductSubstitution = true;
         }
 
@@ -550,7 +550,7 @@ class StockApiController extends BaseApiController
     public function ProductStockLocations(Request $request, Response $response, array $args)
     {
         $allowSubproductSubstitution = false;
-        if (isset($request->getQueryParams()['include_sub_products']) && filter_var($request->getQueryParams()['include_sub_products'], FILTER_VALIDATE_BOOLEAN) !== false) {
+        if (isset($request->getQueryParams()['include_sub_products']) && filter_var($request->getQueryParams()['include_sub_products'], FILTER_VALIDATE_BOOLEAN)) {
             $allowSubproductSubstitution = true;
         }
 

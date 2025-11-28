@@ -82,7 +82,7 @@ class DatabaseService
 
             $pdo->sqliteCreateFunction('regexp', function ($pattern, $value) {
                 mb_regex_encoding('UTF-8');
-                return (false !== mb_ereg($pattern, $value)) ? 1 : 0;
+                return (mb_ereg($pattern, $value)) ? 1 : 0;
             });
 
             $pdo->sqliteCreateFunction('grocy_user_setting', function ($value) {

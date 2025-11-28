@@ -61,7 +61,7 @@ class ChoresService extends BaseService
             $nextExecutionUserId = null;
             if ($chore->assignment_type == self::CHORE_ASSIGNMENT_TYPE_RANDOM) {
                 // Random assignment and only 1 user in the group? Well, ok - will be hard to guess the next one...
-                if (count($assignedUsers) == 1) {
+                if (count($assignedUsers) === 1) {
                     $nextExecutionUserId = array_shift($assignedUsers)->id;
                 } else {
                     $nextExecutionUserId = $assignedUsers[array_rand($assignedUsers)]->id;
@@ -188,10 +188,8 @@ class ChoresService extends BaseService
             $trackedTime = substr($trackedTime, 0, 10) . ' 00:00:00';
         }
 
-        if ($skipped) {
-            if ($chore->period_type == self::CHORE_PERIOD_TYPE_MANUALLY) {
-                throw new Exception("Chores without a schedule can't be skipped");
-            }
+        if ($skipped && $chore->period_type == self::CHORE_PERIOD_TYPE_MANUALLY) {
+            throw new Exception("Chores without a schedule can't be skipped");
         }
 
         $scheduledExecutionTime = $this->getDatabase()
@@ -259,7 +257,7 @@ class ChoresService extends BaseService
             throw new Exception('$choreIdToRemove does not exist or is inactive');
         }
 
-        if ($choreIdToKeep == $choreIdToRemove) {
+        if ($choreIdToKeep === $choreIdToRemove) {
             throw new Exception('$choreIdToKeep cannot equal $choreIdToRemove');
         }
 

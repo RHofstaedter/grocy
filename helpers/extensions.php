@@ -178,36 +178,25 @@ function defaultUserSetting(string $name, $value)
     }
 }
 
-function getUserDisplayName($user)
+function getUserDisplayName(object $user): string
 {
-    $displayName = '';
-
-    if (empty($user->first_name) && !empty($user->last_name)) {
-        $displayName = $user->last_name;
-    } elseif (empty($user->last_name) && !empty($user->first_name)) {
-        $displayName = $user->first_name;
-    } elseif (!empty($user->last_name) && !empty($user->first_name)) {
-        $displayName = $user->first_name . ' ' . $user->last_name;
-    } else {
-        $displayName = $user->username;
-    }
-
-    return $displayName;
+    return match (true) {
+        empty($user->first_name) && !empty($user->last_name) => $user->last_name,
+        empty($user->last_name) && !empty($user->first_name) => $user->first_name,
+        !empty($user->first_name) && !empty($user->last_name) => $user->first_name . ' ' . $user->last_name,
+        default => $user->username,
+    };
 }
 
-function isValidFileName($fileName)
+function isValidFileName(string $fileName): bool
 {
-    if (preg_match('=^[^/?*;:{}\\\\]+\.[^/?*;:{}\\\\]+$=', (string) $fileName)) {
-        return true;
-    }
-
-    return false;
+    return (bool) preg_match('=^[^/?*;:{}\\\\]+\.[^/?*;:{}\\\\]+$=', $fileName);
 }
 
 function isJsonString($text)
 {
     json_decode((string) $text);
-    return (json_last_error() == JSON_ERROR_NONE);
+    return (json_last_error() === JSON_ERROR_NONE);
 }
 
 function require_frontend_packages(array $packages)

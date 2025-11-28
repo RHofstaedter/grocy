@@ -13,7 +13,7 @@ class GenericEntityApiController extends BaseApiController
     {
         if ($args['entity'] == 'shopping_list' || $args['entity'] == 'shopping_lists') {
             User::checkPermission($request, User::PERMISSION_SHOPPINGLIST_ITEMS_ADD);
-        } elseif ($args['entity'] == 'recipes' || $args['entity'] == 'recipes_pos' || $args['entity'] == 'recipes_nestings') {
+        } elseif (in_array($args['entity'], ['recipes', 'recipes_pos', 'recipes_nestings'])) {
             User::checkPermission($request, User::PERMISSION_RECIPES);
         } elseif ($args['entity'] == 'meal_plan') {
             User::checkPermission($request, User::PERMISSION_RECIPES_MEALPLAN);
@@ -59,7 +59,7 @@ class GenericEntityApiController extends BaseApiController
     {
         if ($args['entity'] == 'shopping_list' || $args['entity'] == 'shopping_lists') {
             User::checkPermission($request, User::PERMISSION_SHOPPINGLIST_ITEMS_DELETE);
-        } elseif ($args['entity'] == 'recipes' || $args['entity'] == 'recipes_pos' || $args['entity'] == 'recipes_nestings') {
+        } elseif (in_array($args['entity'], ['recipes', 'recipes_pos', 'recipes_nestings'])) {
             User::checkPermission($request, User::PERMISSION_RECIPES);
         } elseif ($args['entity'] == 'meal_plan') {
             User::checkPermission($request, User::PERMISSION_RECIPES_MEALPLAN);
@@ -93,7 +93,7 @@ class GenericEntityApiController extends BaseApiController
     {
         if ($args['entity'] == 'shopping_list' || $args['entity'] == 'shopping_lists') {
             User::checkPermission($request, User::PERMISSION_SHOPPINGLIST_ITEMS_ADD);
-        } elseif ($args['entity'] == 'recipes' || $args['entity'] == 'recipes_pos' || $args['entity'] == 'recipes_nestings') {
+        } elseif (in_array($args['entity'], ['recipes', 'recipes_pos', 'recipes_nestings'])) {
             User::checkPermission($request, User::PERMISSION_RECIPES);
         } elseif ($args['entity'] == 'meal_plan') {
             User::checkPermission($request, User::PERMISSION_RECIPES_MEALPLAN);
@@ -185,11 +185,7 @@ class GenericEntityApiController extends BaseApiController
                     }
 
                     $value = findObjectInArrayByPropertyValue(findAllObjectsInArrayByPropertyValue($allUserfieldValues, 'object_id', $object->{$userfieldReference}), 'name', $userfield->name);
-                    if ($value) {
-                        $userfieldKeyValuePairs[$userfield->name] = $value->value;
-                    } else {
-                        $userfieldKeyValuePairs[$userfield->name] = null;
-                    }
+                    $userfieldKeyValuePairs[$userfield->name] = $value?->value;
                 }
 
                 $object->userfields = $userfieldKeyValuePairs;

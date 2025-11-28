@@ -64,7 +64,7 @@ class BaseApiController extends BaseController
         if (isset($query['order'])) {
             $parts = explode(':', $query['order']);
 
-            if (count($parts) == 1) {
+            if (count($parts) === 1) {
                 $data = $data->orderBy($parts[0]);
             } else {
                 if ($parts[1] != 'asc' && $parts[1] != 'desc') {
@@ -99,7 +99,7 @@ class BaseApiController extends BaseController
             }
 
             $sqlOrNull = '';
-            if (strtolower($matches['value']) == 'null') {
+            if (strtolower($matches['value']) === 'null') {
                 $sqlOrNull = ' OR ' . $matches['field'] . ' IS NULL';
             }
 

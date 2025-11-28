@@ -35,8 +35,7 @@ class ConfigurationValidator
     private function checkFirstDayOfWeek()
     {
         if (
-            !(GROCY_CALENDAR_FIRST_DAY_OF_WEEK == '' ||
-            (is_numeric(GROCY_CALENDAR_FIRST_DAY_OF_WEEK) && GROCY_CALENDAR_FIRST_DAY_OF_WEEK >= 0 && GROCY_CALENDAR_FIRST_DAY_OF_WEEK <= 6))
+            GROCY_CALENDAR_FIRST_DAY_OF_WEEK != '' && !(is_numeric(GROCY_CALENDAR_FIRST_DAY_OF_WEEK) && GROCY_CALENDAR_FIRST_DAY_OF_WEEK >= 0 && GROCY_CALENDAR_FIRST_DAY_OF_WEEK <= 6)
         ) {
             throw new EInvalidConfig('Invalid value for CALENDAR_FIRST_DAY_OF_WEEK');
         }
@@ -60,8 +59,7 @@ class ConfigurationValidator
     private function checkMealplanFirstDayOfWeek()
     {
         if (
-            !(GROCY_MEAL_PLAN_FIRST_DAY_OF_WEEK == '' ||
-            (is_numeric(GROCY_MEAL_PLAN_FIRST_DAY_OF_WEEK) && GROCY_MEAL_PLAN_FIRST_DAY_OF_WEEK >= -1 && GROCY_MEAL_PLAN_FIRST_DAY_OF_WEEK <= 6))
+            GROCY_MEAL_PLAN_FIRST_DAY_OF_WEEK != '' && !(is_numeric(GROCY_MEAL_PLAN_FIRST_DAY_OF_WEEK) && GROCY_MEAL_PLAN_FIRST_DAY_OF_WEEK >= -1 && GROCY_MEAL_PLAN_FIRST_DAY_OF_WEEK <= 6)
         ) {
             throw new EInvalidConfig('Invalid value for MEAL_PLAN_FIRST_DAY_OF_WEEK');
         }
@@ -70,11 +68,11 @@ class ConfigurationValidator
     private function checkAutoNightModeRange()
     {
         global $GROCY_DEFAULT_USER_SETTINGS;
-        if (!(preg_match('/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/', (string) $GROCY_DEFAULT_USER_SETTINGS['auto_night_mode_time_range_from']))) {
+        if (!(preg_match('/^(?:2[0-3]|[01]\d):[0-5]\d$/', (string) $GROCY_DEFAULT_USER_SETTINGS['auto_night_mode_time_range_from']))) {
             throw new EInvalidConfig('auto_night_mode_time_range_from is not in HH:mm format (' . $GROCY_DEFAULT_USER_SETTINGS['auto_night_mode_time_range_from'] . ')');
         }
 
-        if (!(preg_match('/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/', (string) $GROCY_DEFAULT_USER_SETTINGS['auto_night_mode_time_range_to']))) {
+        if (!(preg_match('/^(?:2[0-3]|[01]\d):[0-5]\d$/', (string) $GROCY_DEFAULT_USER_SETTINGS['auto_night_mode_time_range_to']))) {
             throw new EInvalidConfig('auto_night_mode_time_range_to is not in HH:mm format (' . $GROCY_DEFAULT_USER_SETTINGS['auto_night_mode_time_range_to'] . ')');
         }
     }

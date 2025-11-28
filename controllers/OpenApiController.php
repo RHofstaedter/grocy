@@ -52,7 +52,7 @@ class OpenApiController extends BaseApiController
 
         $spec->components->schemas->ExposedEntity_IncludingUserEntities = clone $spec->components->schemas->StringEnumTemplate;;
         foreach ($this->getUserfieldsService()->getEntities() as $userEntity) {
-            array_push($spec->components->schemas->ExposedEntity_IncludingUserEntities->enum, $userEntity);
+            $spec->components->schemas->ExposedEntity_IncludingUserEntities->enum[] = $userEntity;
         }
 
         sort($spec->components->schemas->ExposedEntity_IncludingUserEntities->enum);
@@ -60,7 +60,7 @@ class OpenApiController extends BaseApiController
         $spec->components->schemas->ExposedEntity_NotIncludingNotEditable = clone $spec->components->schemas->StringEnumTemplate;
         foreach ($spec->components->schemas->ExposedEntity->enum as $value) {
             if (!in_array($value, $spec->components->schemas->ExposedEntityNoEdit->enum)) {
-                array_push($spec->components->schemas->ExposedEntity_NotIncludingNotEditable->enum, $value);
+                $spec->components->schemas->ExposedEntity_NotIncludingNotEditable->enum[] = $value;
             }
         }
 
@@ -69,17 +69,17 @@ class OpenApiController extends BaseApiController
         $spec->components->schemas->ExposedEntity_IncludingUserEntities_NotIncludingNotEditable = clone $spec->components->schemas->StringEnumTemplate;
         foreach ($spec->components->schemas->ExposedEntity_IncludingUserEntities->enum as $value) {
             if (!in_array($value, $spec->components->schemas->ExposedEntityNoEdit->enum)) {
-                array_push($spec->components->schemas->ExposedEntity_IncludingUserEntities_NotIncludingNotEditable->enum, $value);
+                $spec->components->schemas->ExposedEntity_IncludingUserEntities_NotIncludingNotEditable->enum[] = $value;
             }
         }
 
-        array_push($spec->components->schemas->ExposedEntity_IncludingUserEntities_NotIncludingNotEditable->enum, 'stock'); // TODO: Don't hardcode this here - stock entries are normally not editable, but the corresponding Userfields are
+        $spec->components->schemas->ExposedEntity_IncludingUserEntities_NotIncludingNotEditable->enum[] = 'stock'; // TODO: Don't hardcode this here - stock entries are normally not editable, but the corresponding Userfields are
         sort($spec->components->schemas->ExposedEntity_IncludingUserEntities_NotIncludingNotEditable->enum);
 
         $spec->components->schemas->ExposedEntity_NotIncludingNotDeletable = clone $spec->components->schemas->StringEnumTemplate;
         foreach ($spec->components->schemas->ExposedEntity->enum as $value) {
             if (!in_array($value, $spec->components->schemas->ExposedEntityNoDelete->enum)) {
-                array_push($spec->components->schemas->ExposedEntity_NotIncludingNotDeletable->enum, $value);
+                $spec->components->schemas->ExposedEntity_NotIncludingNotDeletable->enum[] = $value;
             }
         }
 
@@ -88,7 +88,7 @@ class OpenApiController extends BaseApiController
         $spec->components->schemas->ExposedEntity_NotIncludingNotListable = clone $spec->components->schemas->StringEnumTemplate;
         foreach ($spec->components->schemas->ExposedEntity->enum as $value) {
             if (!in_array($value, $spec->components->schemas->ExposedEntityNoListing->enum)) {
-                array_push($spec->components->schemas->ExposedEntity_NotIncludingNotListable->enum, $value);
+                $spec->components->schemas->ExposedEntity_NotIncludingNotListable->enum[] = $value;
             }
         }
 

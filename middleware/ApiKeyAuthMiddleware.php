@@ -44,13 +44,9 @@ class ApiKeyAuthMiddleware extends AuthMiddleware
         }
 
         // Handling of special purpose API keys
-        if (!$validApiKey) {
-            if ($routeName === 'calendar-ical') {
-                if ($request->getQueryParam('secret') !== null && $apiKeyService->isValidApiKey($request->getQueryParam('secret'), ApiKeyService::API_KEY_TYPE_SPECIAL_PURPOSE_CALENDAR_ICAL)) {
-                    $validApiKey = true;
-                    $usedApiKey = $request->getQueryParam('secret');
-                }
-            }
+        if (!$validApiKey && $routeName === 'calendar-ical' && ($request->getQueryParam('secret') !== null && $apiKeyService->isValidApiKey($request->getQueryParam('secret'), ApiKeyService::API_KEY_TYPE_SPECIAL_PURPOSE_CALENDAR_ICAL))) {
+            $validApiKey = true;
+            $usedApiKey = $request->getQueryParam('secret');
         }
 
         if ($validApiKey) {

@@ -65,13 +65,13 @@ class TasksController extends BaseController
                 'mode' => 'create',
                 'userfields' => $this->getUserfieldsService()->getFields('task_categories')
             ]);
-        } else {
-            return $this->renderPage($response, 'taskcategoryform', [
-                'category' => $this->getDatabase()->task_categories($args['categoryId']),
-                'mode' => 'edit',
-                'userfields' => $this->getUserfieldsService()->getFields('task_categories')
-            ]);
         }
+
+        return $this->renderPage($response, 'taskcategoryform', [
+            'category' => $this->getDatabase()->task_categories($args['categoryId']),
+            'mode' => 'edit',
+            'userfields' => $this->getUserfieldsService()->getFields('task_categories')
+        ]);
     }
 
     public function taskEditForm(Request $request, Response $response, array $args)
@@ -83,15 +83,15 @@ class TasksController extends BaseController
                 'users' => $this->getDatabase()->users()->orderBy('username'),
                 'userfields' => $this->getUserfieldsService()->getFields('tasks')
             ]);
-        } else {
-            return $this->renderPage($response, 'taskform', [
-                'task' => $this->getDatabase()->tasks($args['taskId']),
-                'mode' => 'edit',
-                'taskCategories' => $this->getDatabase()->task_categories()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
-                'users' => $this->getDatabase()->users()->orderBy('username'),
-                'userfields' => $this->getUserfieldsService()->getFields('tasks')
-            ]);
         }
+
+        return $this->renderPage($response, 'taskform', [
+            'task' => $this->getDatabase()->tasks($args['taskId']),
+            'mode' => 'edit',
+            'taskCategories' => $this->getDatabase()->task_categories()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
+            'users' => $this->getDatabase()->users()->orderBy('username'),
+            'userfields' => $this->getUserfieldsService()->getFields('tasks')
+        ]);
     }
 
     public function tasksSettings(Request $request, Response $response, array $args)

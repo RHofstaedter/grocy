@@ -169,17 +169,17 @@ class RecipesController extends BaseController
                 'quantityUnits' => $this->getDatabase()->quantity_units()->orderBy('name', 'COLLATE NOCASE'),
                 'quantityUnitConversionsResolved' => $this->getDatabase()->cache__quantity_unit_conversions_resolved()
             ]);
-        } else {
-            return $this->renderPage($response, 'recipeposform', [
-                'mode' => 'edit',
-                'recipe' => $this->getDatabase()->recipes($args['recipeId']),
-                'recipePos' => $this->getDatabase()->recipes_pos($args['recipePosId']),
-                'products' => $this->getDatabase()->products()->orderBy('name', 'COLLATE NOCASE'),
-                'barcodes' => $this->getDatabase()->product_barcodes_comma_separated(),
-                'quantityUnits' => $this->getDatabase()->quantity_units()->orderBy('name', 'COLLATE NOCASE'),
-                'quantityUnitConversionsResolved' => $this->getDatabase()->cache__quantity_unit_conversions_resolved()
-            ]);
         }
+
+        return $this->renderPage($response, 'recipeposform', [
+            'mode' => 'edit',
+            'recipe' => $this->getDatabase()->recipes($args['recipeId']),
+            'recipePos' => $this->getDatabase()->recipes_pos($args['recipePosId']),
+            'products' => $this->getDatabase()->products()->orderBy('name', 'COLLATE NOCASE'),
+            'barcodes' => $this->getDatabase()->product_barcodes_comma_separated(),
+            'quantityUnits' => $this->getDatabase()->quantity_units()->orderBy('name', 'COLLATE NOCASE'),
+            'quantityUnitConversionsResolved' => $this->getDatabase()->cache__quantity_unit_conversions_resolved()
+        ]);
     }
 
     public function recipesSettings(Request $request, Response $response, array $args)
@@ -193,12 +193,12 @@ class RecipesController extends BaseController
             return $this->renderPage($response, 'mealplansectionform', [
                 'mode' => 'create'
             ]);
-        } else {
-            return $this->renderPage($response, 'mealplansectionform', [
-                'mealplanSection' => $this->getDatabase()->meal_plan_sections($args['sectionId']),
-                'mode' => 'edit'
-            ]);
         }
+
+        return $this->renderPage($response, 'mealplansectionform', [
+            'mealplanSection' => $this->getDatabase()->meal_plan_sections($args['sectionId']),
+            'mode' => 'edit'
+        ]);
     }
 
     public function mealPlanSectionsList(Request $request, Response $response, array $args)

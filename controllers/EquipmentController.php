@@ -16,13 +16,13 @@ class EquipmentController extends BaseController
                 'mode' => 'create',
                 'userfields' => $this->getUserfieldsService()->getFields('equipment')
             ]);
-        } else {
-            return $this->renderPage($response, 'equipmentform', [
-                'equipment' => $this->getDatabase()->equipment($args['equipmentId']),
-                'mode' => 'edit',
-                'userfields' => $this->getUserfieldsService()->getFields('equipment')
-            ]);
         }
+
+        return $this->renderPage($response, 'equipmentform', [
+            'equipment' => $this->getDatabase()->equipment($args['equipmentId']),
+            'mode' => 'edit',
+            'userfields' => $this->getUserfieldsService()->getFields('equipment')
+        ]);
     }
 
     public function overview(Request $request, Response $response, array $args)

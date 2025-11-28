@@ -26,42 +26,41 @@ class OpenFoodFactsBarcodeLookupPlugin extends BaseBarcodeLookupPlugin
         if ($statusCode == 404 || $data->status != 1) {
             // Nothing found for the given barcode
             return null;
-        } else {
-            $imageUrl = '';
-            if (isset($data->product->image_url) && !empty($data->product->image_url)) {
-                $imageUrl = $data->product->image_url;
-            }
-
-            // Take the preset user setting or otherwise simply the first existing location
-            $locationId = $this->Locations[0]->id;
-            if ($this->userSettings['product_presets_location_id'] != -1) {
-                $locationId = $this->userSettings['product_presets_location_id'];
-            }
-
-            // Take the preset user setting or otherwise simply the first existing quantity unit
-            $quId = $this->QuantityUnits[0]->id;
-            if ($this->userSettings['product_presets_qu_id'] != -1) {
-                $quId = $this->userSettings['product_presets_qu_id'];
-            }
-
-            // Use the localized product name, if provided
-            $name = $data->product->product_name;
-            if (isset($data->product->$productNameFieldLocalized) && !empty($data->product->$productNameFieldLocalized)) {
-                $name = $data->product->$productNameFieldLocalized;
-            }
-
-            // Remove non-ASCII characters in product name (whyever a product name should have them at all)
-            $name = preg_replace('/[^a-zA-Z0-9äöüÄÖÜß ]/', '', (string) $name);
-
-            return [
-                'name' => $name,
-                'location_id' => $locationId,
-                'qu_id_purchase' => $quId,
-                'qu_id_stock' => $quId,
-                '__qu_factor_purchase_to_stock' => 1,
-                '__barcode' => $barcode,
-                '__image_url' => $imageUrl
-            ];
         }
+
+        $imageUrl = '';
+        if (isset($data->product->image_url) && !empty($data->product->image_url)) {
+            $imageUrl = $data->product->image_url;
+        }
+
+        // Take the preset user setting or otherwise simply the first existing location
+        $locationId = $this->Locations[0]->id;
+        if ($this->userSettings['product_presets_location_id'] != -1) {
+            $locationId = $this->userSettings['product_presets_location_id'];
+        }
+
+        // Take the preset user setting or otherwise simply the first existing quantity unit
+        $quId = $this->QuantityUnits[0]->id;
+        if ($this->userSettings['product_presets_qu_id'] != -1) {
+            $quId = $this->userSettings['product_presets_qu_id'];
+        }
+
+        // Use the localized product name, if provided
+        $name = $data->product->product_name;
+        if (isset($data->product->$productNameFieldLocalized) && !empty($data->product->$productNameFieldLocalized)) {
+            $name = $data->product->$productNameFieldLocalized;
+        }
+
+        // Remove non-ASCII characters in product name (whyever a product name should have them at all)
+        $name = preg_replace('/[^a-zA-Z0-9äöüÄÖÜß ]/', '', (string) $name);
+        return [
+            'name' => $name,
+            'location_id' => $locationId,
+            'qu_id_purchase' => $quId,
+            'qu_id_stock' => $quId,
+            '__qu_factor_purchase_to_stock' => 1,
+            '__barcode' => $barcode,
+            '__image_url' => $imageUrl
+        ];
     }
 }

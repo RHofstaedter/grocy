@@ -26,20 +26,20 @@ class UsersController extends BaseController
                 'mode' => 'create',
                 'userfields' => $this->getUserfieldsService()->getFields('users')
             ]);
-        } else {
-            if ($args['userId'] == GROCY_USER_ID) {
-                User::checkPermission($request, User::PERMISSION_USERS_EDIT_SELF);
-            } else {
-                User::checkPermission($request, User::PERMISSION_USERS_EDIT);
-            }
-
-            return $this->renderPage($response, 'userform', [
-                'user' => $this->getDatabase()->users($args['userId']),
-                'mode' => 'edit',
-                'userfields' => $this->getUserfieldsService()->getFields('users'),
-                'userfieldValues' => $this->getUserfieldsService()->getAllValues('users')
-            ]);
         }
+
+        if ($args['userId'] == GROCY_USER_ID) {
+            User::checkPermission($request, User::PERMISSION_USERS_EDIT_SELF);
+        } else {
+            User::checkPermission($request, User::PERMISSION_USERS_EDIT);
+        }
+
+        return $this->renderPage($response, 'userform', [
+            'user' => $this->getDatabase()->users($args['userId']),
+            'mode' => 'edit',
+            'userfields' => $this->getUserfieldsService()->getFields('users'),
+            'userfieldValues' => $this->getUserfieldsService()->getAllValues('users')
+        ]);
     }
 
     public function userSettings(Request $request, Response $response, array $args)

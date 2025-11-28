@@ -76,15 +76,14 @@ class LdapAuthMiddleware extends AuthMiddleware
                 self::SetSessionCookie($sessionKey);
 
                 return true;
-            } else {
-                ldap_close($connect);
-
-                // User authentication failed
-                return false;
             }
-        } else {
-            // LDAP connection failed
+
+            ldap_close($connect);
+            // User authentication failed
             return false;
         }
+
+        // LDAP connection failed
+        return false;
     }
 }

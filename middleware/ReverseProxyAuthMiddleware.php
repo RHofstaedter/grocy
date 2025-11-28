@@ -45,7 +45,7 @@ class ReverseProxyAuthMiddleware extends AuthMiddleware
 
         $user = $db->users()->where('username', $username)->fetch();
         if ($user == null) {
-            $user = UsersService::getInstance()->createUser($username, '', '', '');
+            return UsersService::getInstance()->createUser($username, '', '', '');
         }
 
         return $user;

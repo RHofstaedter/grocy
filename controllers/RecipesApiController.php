@@ -49,9 +49,9 @@ class RecipesApiController extends BaseApiController
 
             if (!$recipeResolved) {
                 throw new Exception('Recipe does not exist');
-            } else {
-                return $this->apiResponse($response, $recipeResolved);
             }
+
+            return $this->apiResponse($response, $recipeResolved);
         } catch (\Exception $exception) {
             return $this->genericErrorResponse($response, $exception->getMessage());
         }

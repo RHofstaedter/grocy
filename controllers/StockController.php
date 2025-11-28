@@ -95,13 +95,13 @@ class StockController extends BaseController
                 'mode' => 'create',
                 'userfields' => $this->getUserfieldsService()->getFields('locations')
             ]);
-        } else {
-            return $this->renderPage($response, 'locationform', [
-                'location' => $this->getDatabase()->locations($args['locationId']),
-                'mode' => 'edit',
-                'userfields' => $this->getUserfieldsService()->getFields('locations')
-            ]);
         }
+
+        return $this->renderPage($response, 'locationform', [
+            'location' => $this->getDatabase()->locations($args['locationId']),
+            'mode' => 'edit',
+            'userfields' => $this->getUserfieldsService()->getFields('locations')
+        ]);
     }
 
     public function locationsList(Request $request, Response $response, array $args)
@@ -158,17 +158,17 @@ class StockController extends BaseController
                 'quantityUnitConversionsResolved' => $this->getDatabase()->cache__quantity_unit_conversions_resolved(),
                 'userfields' => $this->getUserfieldsService()->getFields('product_barcodes')
             ]);
-        } else {
-            return $this->renderPage($response, 'productbarcodeform', [
-                'mode' => 'edit',
-                'barcode' => $this->getDatabase()->product_barcodes($args['productBarcodeId']),
-                'product' => $product,
-                'shoppinglocations' => $this->getDatabase()->shopping_locations()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
-                'quantityUnits' => $this->getDatabase()->quantity_units()->orderBy('name', 'COLLATE NOCASE'),
-                'quantityUnitConversionsResolved' => $this->getDatabase()->cache__quantity_unit_conversions_resolved(),
-                'userfields' => $this->getUserfieldsService()->getFields('product_barcodes')
-            ]);
         }
+
+        return $this->renderPage($response, 'productbarcodeform', [
+            'mode' => 'edit',
+            'barcode' => $this->getDatabase()->product_barcodes($args['productBarcodeId']),
+            'product' => $product,
+            'shoppinglocations' => $this->getDatabase()->shopping_locations()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
+            'quantityUnits' => $this->getDatabase()->quantity_units()->orderBy('name', 'COLLATE NOCASE'),
+            'quantityUnitConversionsResolved' => $this->getDatabase()->cache__quantity_unit_conversions_resolved(),
+            'userfields' => $this->getUserfieldsService()->getFields('product_barcodes')
+        ]);
     }
 
     public function productEditForm(Request $request, Response $response, array $args)
@@ -187,27 +187,26 @@ class StockController extends BaseController
                 'isSubProductOfOthers' => false,
                 'mode' => 'create'
             ]);
-        } else {
-            $product = $this->getDatabase()->products($args['productId']);
-
-            return $this->renderPage($response, 'productform', [
-                'product' => $product,
-                'locations' => $this->getDatabase()->locations()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
-                'barcodes' => $this->getDatabase()->product_barcodes()->orderBy('barcode'),
-                'quantityunits' => $this->getDatabase()->quantity_units()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
-                'quantityunitsStock' => $this->getDatabase()->quantity_units()->where('id IN (SELECT to_qu_id FROM cache__quantity_unit_conversions_resolved WHERE product_id = :1) OR NOT EXISTS(SELECT 1 FROM stock_log WHERE product_id = :1)', $product->id)->orderBy('name', 'COLLATE NOCASE'),
-                'referencedQuantityunits' => $this->getDatabase()->quantity_units()->where('active = 1')->where('id IN (SELECT to_qu_id FROM cache__quantity_unit_conversions_resolved WHERE product_id = :1)', $product->id)->orderBy('name', 'COLLATE NOCASE'),
-                'shoppinglocations' => $this->getDatabase()->shopping_locations()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
-                'productgroups' => $this->getDatabase()->product_groups()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
-                'userfields' => $this->getUserfieldsService()->getFields('products'),
-                'products' => $this->getDatabase()->products()->where('id != :1 AND parent_product_id IS NULL and active = 1', $product->id)->orderBy('name', 'COLLATE NOCASE'),
-                'isSubProductOfOthers' => $this->getDatabase()->products()->where('parent_product_id = :1', $product->id)->count() !== 0,
-                'mode' => 'edit',
-                'quConversions' => $this->getDatabase()->quantity_unit_conversions()->where('product_id', $product->id),
-                'productBarcodeUserfields' => $this->getUserfieldsService()->getFields('product_barcodes'),
-                'productBarcodeUserfieldValues' => $this->getUserfieldsService()->getAllValues('product_barcodes')
-            ]);
         }
+
+        $product = $this->getDatabase()->products($args['productId']);
+        return $this->renderPage($response, 'productform', [
+            'product' => $product,
+            'locations' => $this->getDatabase()->locations()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
+            'barcodes' => $this->getDatabase()->product_barcodes()->orderBy('barcode'),
+            'quantityunits' => $this->getDatabase()->quantity_units()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
+            'quantityunitsStock' => $this->getDatabase()->quantity_units()->where('id IN (SELECT to_qu_id FROM cache__quantity_unit_conversions_resolved WHERE product_id = :1) OR NOT EXISTS(SELECT 1 FROM stock_log WHERE product_id = :1)', $product->id)->orderBy('name', 'COLLATE NOCASE'),
+            'referencedQuantityunits' => $this->getDatabase()->quantity_units()->where('active = 1')->where('id IN (SELECT to_qu_id FROM cache__quantity_unit_conversions_resolved WHERE product_id = :1)', $product->id)->orderBy('name', 'COLLATE NOCASE'),
+            'shoppinglocations' => $this->getDatabase()->shopping_locations()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
+            'productgroups' => $this->getDatabase()->product_groups()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
+            'userfields' => $this->getUserfieldsService()->getFields('products'),
+            'products' => $this->getDatabase()->products()->where('id != :1 AND parent_product_id IS NULL and active = 1', $product->id)->orderBy('name', 'COLLATE NOCASE'),
+            'isSubProductOfOthers' => $this->getDatabase()->products()->where('parent_product_id = :1', $product->id)->count() !== 0,
+            'mode' => 'edit',
+            'quConversions' => $this->getDatabase()->quantity_unit_conversions()->where('product_id', $product->id),
+            'productBarcodeUserfields' => $this->getUserfieldsService()->getFields('product_barcodes'),
+            'productBarcodeUserfieldValues' => $this->getUserfieldsService()->getAllValues('product_barcodes')
+        ]);
     }
 
     public function productGrocycodeImage(Request $request, Response $response, array $args)
@@ -223,13 +222,13 @@ class StockController extends BaseController
                 'mode' => 'create',
                 'userfields' => $this->getUserfieldsService()->getFields('product_groups')
             ]);
-        } else {
-            return $this->renderPage($response, 'productgroupform', [
-                'group' => $this->getDatabase()->product_groups($args['productGroupId']),
-                'mode' => 'edit',
-                'userfields' => $this->getUserfieldsService()->getFields('product_groups')
-            ]);
         }
+
+        return $this->renderPage($response, 'productgroupform', [
+            'group' => $this->getDatabase()->product_groups($args['productGroupId']),
+            'mode' => 'edit',
+            'userfields' => $this->getUserfieldsService()->getFields('product_groups')
+        ]);
     }
 
     public function productGroupsList(Request $request, Response $response, array $args)
@@ -310,16 +309,16 @@ class StockController extends BaseController
                 'product' => $product,
                 'defaultQuUnit' => $defaultQuUnit
             ]);
-        } else {
-            return $this->renderPage($response, 'quantityunitconversionform', [
-                'quConversion' => $this->getDatabase()->quantity_unit_conversions($args['quConversionId']),
-                'mode' => 'edit',
-                'userfields' => $this->getUserfieldsService()->getFields('quantity_unit_conversions'),
-                'quantityunits' => $this->getDatabase()->quantity_units()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
-                'product' => $product,
-                'defaultQuUnit' => $defaultQuUnit
-            ]);
         }
+
+        return $this->renderPage($response, 'quantityunitconversionform', [
+            'quConversion' => $this->getDatabase()->quantity_unit_conversions($args['quConversionId']),
+            'mode' => 'edit',
+            'userfields' => $this->getUserfieldsService()->getFields('quantity_unit_conversions'),
+            'quantityunits' => $this->getDatabase()->quantity_units()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
+            'product' => $product,
+            'defaultQuUnit' => $defaultQuUnit
+        ]);
     }
 
     public function quantityUnitEditForm(Request $request, Response $response, array $args)
@@ -331,19 +330,18 @@ class StockController extends BaseController
                 'pluralCount' => $this->getLocalizationService()->getPluralCount(),
                 'pluralRule' => $this->getLocalizationService()->getPluralDefinition()
             ]);
-        } else {
-            $quantityUnit = $this->getDatabase()->quantity_units($args['quantityunitId']);
-
-            return $this->renderPage($response, 'quantityunitform', [
-                'quantityUnit' => $quantityUnit,
-                'mode' => 'edit',
-                'userfields' => $this->getUserfieldsService()->getFields('quantity_units'),
-                'pluralCount' => $this->getLocalizationService()->getPluralCount(),
-                'pluralRule' => $this->getLocalizationService()->getPluralDefinition(),
-                'defaultQuConversions' => $this->getDatabase()->quantity_unit_conversions()->where('from_qu_id = :1 AND product_id IS NULL', $quantityUnit->id),
-                'quantityUnits' => $this->getDatabase()->quantity_units()
-            ]);
         }
+
+        $quantityUnit = $this->getDatabase()->quantity_units($args['quantityunitId']);
+        return $this->renderPage($response, 'quantityunitform', [
+            'quantityUnit' => $quantityUnit,
+            'mode' => 'edit',
+            'userfields' => $this->getUserfieldsService()->getFields('quantity_units'),
+            'pluralCount' => $this->getLocalizationService()->getPluralCount(),
+            'pluralRule' => $this->getLocalizationService()->getPluralDefinition(),
+            'defaultQuConversions' => $this->getDatabase()->quantity_unit_conversions()->where('from_qu_id = :1 AND product_id IS NULL', $quantityUnit->id),
+            'quantityUnits' => $this->getDatabase()->quantity_units()
+        ]);
     }
 
     public function quantityUnitPluralFormTesting(Request $request, Response $response, array $args)
@@ -399,13 +397,13 @@ class StockController extends BaseController
                 'mode' => 'create',
                 'userfields' => $this->getUserfieldsService()->getFields('shopping_lists')
             ]);
-        } else {
-            return $this->renderPage($response, 'shoppinglistform', [
-                'shoppingList' => $this->getDatabase()->shopping_lists($args['listId']),
-                'mode' => 'edit',
-                'userfields' => $this->getUserfieldsService()->getFields('shopping_lists')
-            ]);
         }
+
+        return $this->renderPage($response, 'shoppinglistform', [
+            'shoppingList' => $this->getDatabase()->shopping_lists($args['listId']),
+            'mode' => 'edit',
+            'userfields' => $this->getUserfieldsService()->getFields('shopping_lists')
+        ]);
     }
 
     public function shoppingListItemEditForm(Request $request, Response $response, array $args)
@@ -420,18 +418,18 @@ class StockController extends BaseController
                 'quantityUnitConversionsResolved' => $this->getDatabase()->cache__quantity_unit_conversions_resolved(),
                 'userfields' => $this->getUserfieldsService()->getFields('shopping_list')
             ]);
-        } else {
-            return $this->renderPage($response, 'shoppinglistitemform', [
-                'listItem' => $this->getDatabase()->shopping_list($args['itemId']),
-                'products' => $this->getDatabase()->products()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
-                'barcodes' => $this->getDatabase()->product_barcodes_comma_separated(),
-                'shoppingLists' => $this->getDatabase()->shopping_lists()->orderBy('name', 'COLLATE NOCASE'),
-                'mode' => 'edit',
-                'quantityUnits' => $this->getDatabase()->quantity_units()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
-                'quantityUnitConversionsResolved' => $this->getDatabase()->cache__quantity_unit_conversions_resolved(),
-                'userfields' => $this->getUserfieldsService()->getFields('shopping_list')
-            ]);
         }
+
+        return $this->renderPage($response, 'shoppinglistitemform', [
+            'listItem' => $this->getDatabase()->shopping_list($args['itemId']),
+            'products' => $this->getDatabase()->products()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
+            'barcodes' => $this->getDatabase()->product_barcodes_comma_separated(),
+            'shoppingLists' => $this->getDatabase()->shopping_lists()->orderBy('name', 'COLLATE NOCASE'),
+            'mode' => 'edit',
+            'quantityUnits' => $this->getDatabase()->quantity_units()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
+            'quantityUnitConversionsResolved' => $this->getDatabase()->cache__quantity_unit_conversions_resolved(),
+            'userfields' => $this->getUserfieldsService()->getFields('shopping_list')
+        ]);
     }
 
     public function shoppingListSettings(Request $request, Response $response, array $args)
@@ -448,13 +446,13 @@ class StockController extends BaseController
                 'mode' => 'create',
                 'userfields' => $this->getUserfieldsService()->getFields('shopping_locations')
             ]);
-        } else {
-            return $this->renderPage($response, 'shoppinglocationform', [
-                'shoppingLocation' => $this->getDatabase()->shopping_locations($args['shoppingLocationId']),
-                'mode' => 'edit',
-                'userfields' => $this->getUserfieldsService()->getFields('shopping_locations')
-            ]);
         }
+
+        return $this->renderPage($response, 'shoppinglocationform', [
+            'shoppingLocation' => $this->getDatabase()->shopping_locations($args['shoppingLocationId']),
+            'mode' => 'edit',
+            'userfields' => $this->getUserfieldsService()->getFields('shopping_locations')
+        ]);
     }
 
     public function shoppingLocationsList(Request $request, Response $response, array $args)

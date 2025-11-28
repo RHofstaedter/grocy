@@ -24,8 +24,8 @@ class LoginController extends BaseController
         $authMiddlewareClass = GROCY_AUTH_CLASS;
         if ($authMiddlewareClass::processLogin($request->getParsedBody())) {
             return $response->withRedirect($this->AppContainer->get('UrlManager')->ConstructUrl('/'));
-        } else {
-            return $response->withRedirect($this->AppContainer->get('UrlManager')->ConstructUrl('/login?invalid=true'));
         }
+
+        return $response->withRedirect($this->AppContainer->get('UrlManager')->ConstructUrl('/login?invalid=true'));
     }
 }

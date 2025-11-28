@@ -35,7 +35,9 @@ class Grocycode implements \Stringable
         if ($argc === 1) {
             $this->setFromCode($args[0]);
             return;
-        } elseif ($argc === 2 || $argc === 3) {
+        }
+
+        if ($argc === 2 || $argc === 3) {
             if ($argc === 2) {
                 $args[] = [];
             }

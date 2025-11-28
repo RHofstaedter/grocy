@@ -54,7 +54,7 @@ class BaseController
         return ChoresService::getInstance();
     }
 
-    protected function getDatabase()
+    protected function getDatabase(): \LessQL\Database
     {
         return $this->getDatabaseService()->getDbConnection();
     }

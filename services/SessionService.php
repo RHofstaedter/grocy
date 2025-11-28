@@ -45,22 +45,22 @@ class SessionService extends BaseService
     {
         if ($sessionKey === null || empty($sessionKey)) {
             return false;
-        } else {
-            $sessionRow = $this->getDatabase()->sessions()->where('session_key = :1 AND expires > :2', $sessionKey, date('Y-m-d H:i:s', time()))->fetch();
-            if ($sessionRow !== null) {
-                // This should not change the database file modification time as this is used
-                // to determine if REALLY something has changed
-                $dbModTime = $this->getDatabaseService()->getDbChangedTime();
-                $sessionRow->update([
-                    'last_used' => date('Y-m-d H:i:s', time())
-                ]);
-                $this->getDatabaseService()->setDbChangedTime($dbModTime);
-
-                return true;
-            } else {
-                return false;
-            }
         }
+
+        $sessionRow = $this->getDatabase()->sessions()->where('session_key = :1 AND expires > :2', $sessionKey, date('Y-m-d H:i:s', time()))->fetch();
+        if ($sessionRow !== null) {
+            // This should not change the database file modification time as this is used
+            // to determine if REALLY something has changed
+            $dbModTime = $this->getDatabaseService()->getDbChangedTime();
+            $sessionRow->update([
+                'last_used' => date('Y-m-d H:i:s', time())
+            ]);
+            $this->getDatabaseService()->setDbChangedTime($dbModTime);
+
+            return true;
+        }
+
+        return false;
     }
 
     public function removeSession($sessionKey): void

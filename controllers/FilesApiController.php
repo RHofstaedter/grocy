@@ -47,9 +47,9 @@ class FilesApiController extends BaseApiController
                 $response = $response->withHeader('Content-Type', mime_content_type($filePath));
                 $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $fileName . '"');
                 return $response->withBody(new Stream(fopen($filePath, 'rb')));
-            } else {
-                throw new HttpNotFoundException($request, 'File not found');
             }
+
+            throw new HttpNotFoundException($request, 'File not found');
         } catch (\Exception $exception) {
             throw new HttpNotFoundException($request, $exception->getMessage(), $exception);
         }
@@ -71,9 +71,9 @@ class FilesApiController extends BaseApiController
                 $response = $response->withHeader('Content-Type', mime_content_type($filePath));
                 $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $fileName . '"');
                 return $response->withBody(new Stream(fopen($filePath, 'rb')));
-            } else {
-                throw new HttpNotFoundException($request, 'File not found');
             }
+
+            throw new HttpNotFoundException($request, 'File not found');
         } catch (\Exception $exception) {
             throw new HttpNotFoundException($request, $exception->getMessage(), $exception);
         }
@@ -115,9 +115,9 @@ class FilesApiController extends BaseApiController
     {
         if (isValidFileName(base64_decode($fileName))) {
             return base64_decode($fileName);
-        } else {
-            throw new Exception('Invalid filename');
         }
+
+        throw new Exception('Invalid filename');
     }
 
     protected function getFilePath(string $group, string $fileName, array $queryParams = [])
@@ -138,11 +138,9 @@ class FilesApiController extends BaseApiController
                 $bestFitWidth = $queryParams['best_fit_width'];
             }
 
-            $filePath = $this->getFilesService()->downscaleImage($group, $fileName, $bestFitHeight, $bestFitWidth);
-        } else {
-            $filePath = $this->getFilesService()->getFilePath($group, $fileName);
+            return $this->getFilesService()->downscaleImage($group, $fileName, $bestFitHeight, $bestFitWidth);
         }
 
-        return $filePath;
+        return $this->getFilesService()->getFilePath($group, $fileName);
     }
 }

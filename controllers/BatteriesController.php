@@ -37,13 +37,13 @@ class BatteriesController extends BaseController
                 'mode' => 'create',
                 'userfields' => $this->getUserfieldsService()->getFields('batteries')
             ]);
-        } else {
-            return $this->renderPage($response, 'batteryform', [
-                'battery' => $this->getDatabase()->batteries($args['batteryId']),
-                'mode' => 'edit',
-                'userfields' => $this->getUserfieldsService()->getFields('batteries')
-            ]);
         }
+
+        return $this->renderPage($response, 'batteryform', [
+            'battery' => $this->getDatabase()->batteries($args['batteryId']),
+            'mode' => 'edit',
+            'userfields' => $this->getUserfieldsService()->getFields('batteries')
+        ]);
     }
 
     public function journal(Request $request, Response $response, array $args)

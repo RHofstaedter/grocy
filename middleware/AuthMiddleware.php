@@ -26,7 +26,9 @@ abstract class AuthMiddleware extends BaseMiddleware
 
         if ($routeName === 'root') {
             return $handler->handle($request);
-        } elseif ($routeName === 'login') {
+        }
+
+        if ($routeName === 'login') {
             define('GROCY_AUTHENTICATED', false);
             return $handler->handle($request);
         }

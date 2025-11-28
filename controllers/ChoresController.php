@@ -24,17 +24,17 @@ class ChoresController extends BaseController
                 'users' => $users,
                 'products' => $this->getDatabase()->products()->orderBy('name', 'COLLATE NOCASE')
             ]);
-        } else {
-            return $this->renderPage($response, 'choreform', [
-                'chore' => $this->getDatabase()->chores($args['choreId']),
-                'periodTypes' => getClassConstants(\Grocy\Services\ChoresService::class, 'CHORE_PERIOD_TYPE_'),
-                'mode' => 'edit',
-                'userfields' => $this->getUserfieldsService()->getFields('chores'),
-                'assignmentTypes' => getClassConstants(\Grocy\Services\ChoresService::class, 'CHORE_ASSIGNMENT_TYPE_'),
-                'users' => $users,
-                'products' => $this->getDatabase()->products()->orderBy('name', 'COLLATE NOCASE')
-            ]);
         }
+
+        return $this->renderPage($response, 'choreform', [
+            'chore' => $this->getDatabase()->chores($args['choreId']),
+            'periodTypes' => getClassConstants(\Grocy\Services\ChoresService::class, 'CHORE_PERIOD_TYPE_'),
+            'mode' => 'edit',
+            'userfields' => $this->getUserfieldsService()->getFields('chores'),
+            'assignmentTypes' => getClassConstants(\Grocy\Services\ChoresService::class, 'CHORE_ASSIGNMENT_TYPE_'),
+            'users' => $users,
+            'products' => $this->getDatabase()->products()->orderBy('name', 'COLLATE NOCASE')
+        ]);
     }
 
     public function choresList(Request $request, Response $response, array $args)

@@ -20,12 +20,12 @@ class GenericEntityController extends BaseController
             return $this->renderPage($response, 'userentityform', [
                 'mode' => 'create'
             ]);
-        } else {
-            return $this->renderPage($response, 'userentityform', [
-                'mode' => 'edit',
-                'userentity' => $this->getDatabase()->userentities($args['userentityId'])
-            ]);
         }
+
+        return $this->renderPage($response, 'userentityform', [
+            'mode' => 'edit',
+            'userentity' => $this->getDatabase()->userentities($args['userentityId'])
+        ]);
     }
 
     public function userfieldEditForm(Request $request, Response $response, array $args)
@@ -36,14 +36,14 @@ class GenericEntityController extends BaseController
                 'userfieldTypes' => $this->getUserfieldsService()->getFieldTypes(),
                 'entities' => $this->getUserfieldsService()->getEntities()
             ]);
-        } else {
-            return $this->renderPage($response, 'userfieldform', [
-                'mode' => 'edit',
-                'userfield' => $this->getUserfieldsService()->getField($args['userfieldId']),
-                'userfieldTypes' => $this->getUserfieldsService()->getFieldTypes(),
-                'entities' => $this->getUserfieldsService()->getEntities()
-            ]);
         }
+
+        return $this->renderPage($response, 'userfieldform', [
+            'mode' => 'edit',
+            'userfield' => $this->getUserfieldsService()->getField($args['userfieldId']),
+            'userfieldTypes' => $this->getUserfieldsService()->getFieldTypes(),
+            'entities' => $this->getUserfieldsService()->getEntities()
+        ]);
     }
 
     public function userfieldsList(Request $request, Response $response, array $args)
@@ -64,14 +64,14 @@ class GenericEntityController extends BaseController
                 'mode' => 'create',
                 'userfields' => $this->getUserfieldsService()->getFields('userentity-' . $args['userentityName'])
             ]);
-        } else {
-            return $this->renderPage($response, 'userobjectform', [
-                'userentity' => $userentity,
-                'mode' => 'edit',
-                'userobject' => $this->getDatabase()->userobjects($args['userobjectId']),
-                'userfields' => $this->getUserfieldsService()->getFields('userentity-' . $args['userentityName'])
-            ]);
         }
+
+        return $this->renderPage($response, 'userobjectform', [
+            'userentity' => $userentity,
+            'mode' => 'edit',
+            'userobject' => $this->getDatabase()->userobjects($args['userobjectId']),
+            'userfields' => $this->getUserfieldsService()->getFields('userentity-' . $args['userentityName'])
+        ]);
     }
 
     public function userobjectsList(Request $request, Response $response, array $args)

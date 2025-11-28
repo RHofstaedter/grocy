@@ -100,10 +100,10 @@ function getClassConstants($className, $prefix = null)
 
     if ($prefix === null) {
         return $constants;
-    } else {
-        $matchingKeys = preg_grep('!^' . $prefix . '!', array_keys($constants));
-        return array_intersect_key($constants, array_flip($matchingKeys));
     }
+
+    $matchingKeys = preg_grep('!^' . $prefix . '!', array_keys($constants));
+    return array_intersect_key($constants, array_flip($matchingKeys));
 }
 
 function randomString($length, $allowedChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
@@ -148,10 +148,11 @@ function externalSettingValue(string $value): bool|string
 {
     $tvalue = rtrim($value, "\r\n");
     $lvalue = strtolower($tvalue);
-
     if ($lvalue === 'true') {
         return true;
-    } elseif ($lvalue === 'false') {
+    }
+
+    if ($lvalue === 'false') {
         return false;
     }
 

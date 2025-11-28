@@ -75,9 +75,9 @@ class ApplicationService extends BaseService
         $pdo = new \PDO('sqlite::memory:');
         if ($offset > 0) {
             return $pdo->query("SELECT datetime('now', '+" . $offset . " seconds', 'localtime');")->fetch()[0];
-        } else {
-            return $pdo->query("SELECT datetime('now', '" . $offset . " seconds', 'localtime');")->fetch()[0];
         }
+
+        return $pdo->query("SELECT datetime('now', '" . $offset . " seconds', 'localtime');")->fetch()[0];
     }
 
     public function getSystemTime(int $offset = 0): array

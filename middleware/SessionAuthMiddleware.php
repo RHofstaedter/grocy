@@ -21,9 +21,9 @@ class SessionAuthMiddleware extends AuthMiddleware
 
         if (!isset($_COOKIE[SessionService::SESSION_COOKIE_NAME]) || !$sessionService->isValidSession($_COOKIE[SessionService::SESSION_COOKIE_NAME])) {
             return null;
-        } else {
-            return $sessionService->getUserBySessionKey($_COOKIE[SessionService::SESSION_COOKIE_NAME]);
         }
+
+        return $sessionService->getUserBySessionKey($_COOKIE[SessionService::SESSION_COOKIE_NAME]);
     }
 
     public static function processLogin(array $postParams): never

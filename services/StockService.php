@@ -164,9 +164,8 @@ class StockService extends BaseService
         if ($bestBeforeDate == null) {
             if ($locationId !== null && !$this->locationExists($locationId)) {
                 throw new Exception('Location does not exist');
-            } else {
-                $location = $this->getDatabase()->locations()->where('id', $locationId)->fetch();
             }
+            $location = $this->getDatabase()->locations()->where('id', $locationId)->fetch();
 
             if (
                 GROCY_FEATURE_FLAG_STOCK_PRODUCT_FREEZING && $locationId !== null &&
@@ -305,9 +304,8 @@ class StockService extends BaseService
             $this->compactStockEntries($productId);
 
             return $transactionId;
-        } else {
-            throw new Exception(sprintf('Transaction type %s is not valid (StockService.addProduct)', $transactionType));
         }
+        throw new Exception(sprintf('Transaction type %s is not valid (StockService.addProduct)', $transactionType));
     }
 
     public function addProductToShoppingList($productId, $amount = 1, $quId = -1, $note = null, $listId = 1): void
@@ -535,9 +533,8 @@ class StockService extends BaseService
             }
 
             return $transactionId;
-        } else {
-            throw new Exception(sprintf('Transaction type %s is not valid (StockService.consumeProduct)', $transactionType));
         }
+        throw new Exception(sprintf('Transaction type %s is not valid (StockService.consumeProduct)', $transactionType));
     }
 
     public function editStockEntry(
@@ -745,9 +742,8 @@ class StockService extends BaseService
     {
         if ($excludeOverdue) {
             return $this->getCurrentStock(sprintf("WHERE best_before_date <= date('now', '%d days') AND best_before_date >= date()", $days));
-        } else {
-            return $this->getCurrentStock(sprintf("WHERE best_before_date <= date('now', '%d days')", $days));
         }
+        return $this->getCurrentStock(sprintf("WHERE best_before_date <= date('now', '%d days')", $days));
     }
 
     public function getExpiredProducts(): array
@@ -956,24 +952,22 @@ class StockService extends BaseService
         if ($productDetails->product->enable_tare_weight_handling == 1) {
             $containerWeight = $productDetails->product->tare_weight;
         }
-
         if ($newAmount == $productDetails->stock_amount + $containerWeight) {
             throw new Exception('The new amount cannot equal the current stock amount');
-        } elseif ($newAmount > $productDetails->stock_amount + $containerWeight) {
+        }
+        if ($newAmount > $productDetails->stock_amount + $containerWeight) {
             $bookingAmount = $newAmount - $productDetails->stock_amount;
-
             if ($productDetails->product->enable_tare_weight_handling == 1) {
                 $bookingAmount = $newAmount;
             }
-
             return $this->addProduct($productId, $bookingAmount, $bestBeforeDate, self::TRANSACTION_TYPE_INVENTORY_CORRECTION, $purchasedDate, $price, $locationId, $shoppingLocationId, $unusedTransactionId, $stockLabelType, false, $note);
-        } elseif ($newAmount < $productDetails->stock_amount + $containerWeight) {
-            $bookingAmount = $productDetails->stock_amount - $newAmount;
+        }
 
+        if ($newAmount < $productDetails->stock_amount + $containerWeight) {
+            $bookingAmount = $productDetails->stock_amount - $newAmount;
             if ($productDetails->product->enable_tare_weight_handling == 1) {
                 $bookingAmount = $newAmount;
             }
-
             return $this->consumeProduct($productId, $bookingAmount, false, self::TRANSACTION_TYPE_INVENTORY_CORRECTION);
         }
 
@@ -1673,7 +1667,7 @@ class StockService extends BaseService
         }
     }
 
-    private function loadexternalBarcodeLookupPlugin()
+    private function loadexternalBarcodeLookupPlugin(): ?object
     {
         $pluginName = defined('GROCY_STOCK_BARCODE_LOOKUP_PLUGIN') ? GROCY_STOCK_BARCODE_LOOKUP_PLUGIN : '';
         if (empty($pluginName)) {
@@ -1690,7 +1684,8 @@ class StockService extends BaseService
                 $this->getDatabase()->quantity_units()->where('active = 1')->fetchAll(),
                 $this->getUsersService()->getUserSettings(GROCY_USER_ID)
             );
-        } elseif (file_exists($standardPluginPath)) {
+        }
+        if (file_exists($standardPluginPath)) {
             require_once $standardPluginPath;
             return new $pluginName(
                 $this->getDatabase()->locations()->where('active = 1')->fetchAll(),
@@ -1700,6 +1695,7 @@ class StockService extends BaseService
         } else {
             throw new Exception(sprintf('Plugin %s was not found', $pluginName));
         }
+        return null;
     }
 
     private function locationExists($locationId): bool

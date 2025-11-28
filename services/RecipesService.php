@@ -128,9 +128,9 @@ class RecipesService extends BaseService
     {
         if ($customWhere == null) {
             return $this->getDatabase()->recipes_resolved();
-        } else {
-            return $this->getDatabase()->recipes_resolved()->where($customWhere);
         }
+
+        return $this->getDatabase()->recipes_resolved()->where($customWhere);
     }
 
     public function copyRecipe($recipeId)

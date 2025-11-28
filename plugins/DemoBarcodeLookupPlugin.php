@@ -72,30 +72,32 @@ class DemoBarcodeLookupPlugin extends BaseBarcodeLookupPlugin
         if ($barcode === 'nothing') {
             // Demonstration when nothing is found
             return null;
-        } elseif ($barcode === 'error') {
+        }
+
+        if ($barcode === 'error') {
             // Demonstration when an error occurred
             throw new Exception('This is the error message from the plugin...');
-        } else {
-            // Take the preset user setting or otherwise simply the first existing location
-            $locationId = $this->Locations[0]->id;
-            if ($this->userSettings['product_presets_location_id'] != -1) {
-                $locationId = $this->userSettings['product_presets_location_id'];
-            }
-
-            // Take the preset user setting or otherwise simply the first existing quantity unit
-            $quId = $this->QuantityUnits[0]->id;
-            if ($this->userSettings['product_presets_qu_id'] != -1) {
-                $quId = $this->userSettings['product_presets_qu_id'];
-            }
-
-            return [
-                'name' => 'LookedUpProduct_' . randomString(5),
-                'location_id' => $locationId,
-                'qu_id_purchase' => $quId,
-                'qu_id_stock' => $quId,
-                '__qu_factor_purchase_to_stock' => 1,
-                '__barcode' => $barcode
-            ];
         }
+
+        // Take the preset user setting or otherwise simply the first existing location
+        $locationId = $this->Locations[0]->id;
+        if ($this->userSettings['product_presets_location_id'] != -1) {
+            $locationId = $this->userSettings['product_presets_location_id'];
+        }
+
+        // Take the preset user setting or otherwise simply the first existing quantity unit
+        $quId = $this->QuantityUnits[0]->id;
+        if ($this->userSettings['product_presets_qu_id'] != -1) {
+            $quId = $this->userSettings['product_presets_qu_id'];
+        }
+
+        return [
+            'name' => 'LookedUpProduct_' . randomString(5),
+            'location_id' => $locationId,
+            'qu_id_purchase' => $quId,
+            'qu_id_stock' => $quId,
+            '__qu_factor_purchase_to_stock' => 1,
+            '__barcode' => $barcode
+        ];
     }
 }

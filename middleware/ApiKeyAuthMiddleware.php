@@ -49,11 +49,7 @@ class ApiKeyAuthMiddleware extends AuthMiddleware
             $usedApiKey = $request->getQueryParam('secret');
         }
 
-        if ($validApiKey) {
-            return $apiKeyService->getUserByApiKey($usedApiKey);
-        } else {
-            return null;
-        }
+        return ($validApiKey) ? $apiKeyService->getUserByApiKey($usedApiKey) : null;
     }
 
     public static function processLogin(array $postParams): never

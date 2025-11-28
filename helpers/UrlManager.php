@@ -15,9 +15,10 @@ class UrlManager
     {
         if (GROCY_DISABLE_URL_REWRITING === false || $isResource === true) {
             return rtrim($this->BasePath, '/') . $relativePath;
-        } else { // Is not a resource and URL rewriting is disabled
-            return rtrim($this->BasePath, '/') . '/index.php' . $relativePath;
         }
+
+        // Is not a resource and URL rewriting is disabled
+        return rtrim($this->BasePath, '/') . '/index.php' . $relativePath;
     }
 
     private function GetBaseUrl(): string

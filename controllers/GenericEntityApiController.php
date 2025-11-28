@@ -84,9 +84,9 @@ class GenericEntityApiController extends BaseApiController
             $row->delete();
 
             return $this->emptyApiResponse($response);
-        } else {
-            return $this->genericErrorResponse($response, 'Invalid entity');
         }
+
+        return $this->genericErrorResponse($response, 'Invalid entity');
     }
 
     public function editObject(Request $request, Response $response, array $args)

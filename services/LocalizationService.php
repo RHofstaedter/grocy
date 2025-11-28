@@ -40,18 +40,18 @@ class LocalizationService
     {
         if ($this->Po->getHeader(Translations::HEADER_PLURAL) !== null) {
             return intval($this->Po->getPluralForms()[0]);
-        } else {
-            return 2;
         }
+
+        return 2;
     }
 
     public function getPluralDefinition()
     {
         if ($this->Po->getHeader(Translations::HEADER_PLURAL) !== null) {
             return $this->Po->getPluralForms()[1];
-        } else {
-            return '(n != 1)';
         }
+
+        return '(n != 1)';
     }
 
     public function getPoAsJsonString()
@@ -74,22 +74,23 @@ class LocalizationService
 
         if ($isQu) {
             return sprintf($this->TranslatorQu->ngettext($singularForm, $pluralForm, abs(floatval($number))), $number);
-        } else {
-            return sprintf($this->Translator->ngettext($singularForm, $pluralForm, abs(floatval($number))), $number);
         }
+
+        return sprintf($this->Translator->ngettext($singularForm, $pluralForm, abs(floatval($number))), $number);
     }
 
     public function __t($text, ...$placeholderValues)
     {
         $this->checkAndAddMissingTranslationToPot($text);
-
         if (func_num_args() === 1) {
             return $this->Translator->gettext($text);
-        } elseif (is_array(...$placeholderValues)) {
-            return vsprintf($this->Translator->gettext($text), ...$placeholderValues);
-        } else {
-            return sprintf($this->Translator->gettext($text), array_shift($placeholderValues));
         }
+
+        if (is_array(...$placeholderValues)) {
+            return vsprintf($this->Translator->gettext($text), ...$placeholderValues);
+        }
+
+        return sprintf($this->Translator->gettext($text), array_shift($placeholderValues));
     }
 
     public static function getInstance(string $culture)
@@ -106,7 +107,7 @@ class LocalizationService
         return DatabaseService::getInstance();
     }
 
-    protected function getdatabase()
+    protected function getdatabase(): \LessQL\Database
     {
         return $this->getDatabaseService()->getDbConnection();
     }

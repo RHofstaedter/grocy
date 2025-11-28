@@ -150,7 +150,7 @@ class UserfieldsService extends BaseService
         return $this->openApiSpec;
     }
 
-    private function isValidExposedEntity($entity)
+    private function isValidExposedEntity($entity): bool
     {
         return in_array($entity, $this->getEntities());
     }

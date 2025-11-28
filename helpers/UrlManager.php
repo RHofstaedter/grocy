@@ -11,7 +11,7 @@ class UrlManager
 
     protected $BasePath;
 
-    public function ConstructUrl($relativePath, $isResource = false)
+    public function ConstructUrl($relativePath, $isResource = false): string
     {
         if (GROCY_DISABLE_URL_REWRITING === false || $isResource === true) {
             return rtrim((string) $this->BasePath, '/') . $relativePath;
@@ -20,7 +20,7 @@ class UrlManager
         }
     }
 
-    private function GetBaseUrl()
+    private function GetBaseUrl(): string
     {
         if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && str_contains((string) $_SERVER['HTTP_X_FORWARDED_PROTO'], 'https')) {
             $_SERVER['HTTPS'] = 'on';

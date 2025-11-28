@@ -104,7 +104,7 @@ class ChoresService extends BaseService
         ]);
     }
 
-    public function getChoreDetails(int $choreId)
+    public function getChoreDetails(int $choreId): array
     {
         if (!$this->choreExists($choreId)) {
             throw new Exception('Chore does not exist');
@@ -278,7 +278,7 @@ class ChoresService extends BaseService
         $this->getDatabaseService()->getDbConnectionRaw()->commit();
     }
 
-    private function choreExists($choreId)
+    private function choreExists($choreId): bool
     {
         $choreRow = $this->getDatabase()->chores()->where('id = :1', $choreId)->fetch();
         return $choreRow !== null;

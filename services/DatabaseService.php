@@ -18,7 +18,7 @@ class DatabaseService
     {
         $pdo = $this->getDbConnectionRaw();
 
-        if ($this->executeDbStatement($sql) === true) {
+        if ($this->executeDbStatement($sql)) {
             return $pdo->query($sql);
         }
 
@@ -50,7 +50,7 @@ class DatabaseService
         return true;
     }
 
-    public function getDbChangedTime()
+    public function getDbChangedTime(): string
     {
         return date('Y-m-d H:i:s', filemtime($this->getDbFilePath()));
     }
@@ -115,7 +115,7 @@ class DatabaseService
         return self::$instance;
     }
 
-    private function getDbFilePath()
+    private function getDbFilePath(): string
     {
         if (GROCY_MODE === 'demo' || GROCY_MODE === 'prerelease') {
             $dbSuffix = GROCY_DEFAULT_LOCALE;

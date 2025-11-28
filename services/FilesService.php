@@ -85,7 +85,7 @@ class FilesService extends BaseService
         }
     }
 
-    public function getFilePath($group, $fileName)
+    public function getFilePath($group, $fileName): string
     {
         $groupFolderPath = $this->StoragePath . '/' . $group;
 

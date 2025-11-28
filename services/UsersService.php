@@ -160,7 +160,7 @@ class UsersService extends BaseService
         $this->getDatabase()->user_settings()->where('user_id = :1 AND key = :2', $userId, $settingKey)->delete();
     }
 
-    private function userExists($userId)
+    private function userExists($userId): bool
     {
         $userRow = $this->getDatabase()->users()->where('id = :1', $userId)->fetch();
         return $userRow !== null;

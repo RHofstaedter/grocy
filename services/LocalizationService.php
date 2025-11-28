@@ -40,7 +40,7 @@ class LocalizationService
         }
     }
 
-    public function getPluralCount()
+    public function getPluralCount(): int
     {
         if ($this->Po->getHeader(Translations::HEADER_PLURAL) !== null) {
             return intval($this->Po->getPluralForms()[0]);
@@ -68,7 +68,7 @@ class LocalizationService
         return $this->PoQu->toJsonString();
     }
 
-    public function __n($number, $singularForm, $pluralForm, $isQu = false)
+    public function __n($number, $singularForm, $pluralForm, $isQu = false): string
     {
         $this->checkAndAddMissingTranslationToPot($singularForm);
 

@@ -6,7 +6,7 @@ class ApplicationService extends BaseService
 {
     private $installedVersion;
 
-    public function getChangelog()
+    public function getChangelog(): array
     {
         $changelogItems = [];
         foreach (glob(__DIR__ . '/../changelog/*.md') as $file) {
@@ -48,7 +48,7 @@ class ApplicationService extends BaseService
         return $this->installedVersion;
     }
 
-    public function getSystemInfo()
+    public function getSystemInfo(): array
     {
         $pdo = new \PDO('sqlite::memory:');
         $sqliteVersion = $pdo->query('SELECT sqlite_version()')->fetch()[0];

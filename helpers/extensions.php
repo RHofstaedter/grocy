@@ -106,7 +106,7 @@ function getClassConstants($className, $prefix = null)
     }
 }
 
-function randomString($length, $allowedChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+function randomString($length, $allowedChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
 {
     $randomString = '';
     for ($i = 0; $i < $length; $i++) {
@@ -116,19 +116,19 @@ function randomString($length, $allowedChars = '0123456789abcdefghijklmnopqrstuv
     return $randomString;
 }
 
-function isAssociativeArray(array $array)
+function isAssociativeArray(array $array): bool
 {
     $keys = array_keys($array);
     return array_keys($keys) !== $keys;
 }
 
-function isIsoDate($dateString)
+function isIsoDate($dateString): bool
 {
     $d = DateTime::createFromFormat('Y-m-d', $dateString);
     return $d && $d->format('Y-m-d') === $dateString;
 }
 
-function isIsoDateTime($dateTimeString)
+function isIsoDateTime($dateTimeString): bool
 {
     $d = DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString);
     return $d && $d->format('Y-m-d H:i:s') === $dateTimeString;
@@ -199,7 +199,7 @@ function isValidFileName(string $fileName): bool
     return (bool) preg_match('=^[^/?*;:{}\\\\]+\.[^/?*;:{}\\\\]+$=', $fileName);
 }
 
-function isJsonString($text)
+function isJsonString($text): bool
 {
     json_decode((string) $text);
     return (json_last_error() === JSON_ERROR_NONE);

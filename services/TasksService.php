@@ -60,7 +60,7 @@ class TasksService extends BaseService
         return true;
     }
 
-    private function taskExists($taskId)
+    private function taskExists($taskId): bool
     {
         $taskRow = $this->getDatabase()->tasks()->where('id = :1', $taskId)->fetch();
         return $taskRow !== null;

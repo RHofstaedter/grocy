@@ -28,6 +28,6 @@ return RectorConfig::configure()
         // carbon: true,
         // rectorPreset: true
     )
-    ->withTypeCoverageLevel(10);
+    ->withTypeCoverageLevel(20);
     //->withDeadCodeLevel(0)
     //->withCodeQualityLevel(0);

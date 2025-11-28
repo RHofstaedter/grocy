@@ -6,7 +6,7 @@ use Exception;
 
 class BatteriesService extends BaseService
 {
-    public function getBatteryDetails(int $batteryId)
+    public function getBatteryDetails(int $batteryId): array
     {
         if (!$this->batteryExists($batteryId)) {
             throw new Exception('Battery does not exist');
@@ -84,7 +84,7 @@ class BatteriesService extends BaseService
         ]);
     }
 
-    private function batteryExists($batteryId)
+    private function batteryExists($batteryId): bool
     {
         $batteryRow = $this->getDatabase()
             ->batteries()

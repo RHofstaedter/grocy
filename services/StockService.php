@@ -550,7 +550,7 @@ class StockService extends BaseService
         $open,
         $purchasedDate,
         $note = null
-    ) {
+    ): string {
         $stockRow = $this->getDatabase()->stock()->where('id = :1', $stockRowId)->fetch();
         if ($stockRow === null) {
             throw new Exception('Stock does not exist');
@@ -767,7 +767,7 @@ class StockService extends BaseService
         return $missingProductsResponse;
     }
 
-    public function getProductDetails(int $productId)
+    public function getProductDetails(int $productId): array
     {
         if (!$this->productExists($productId)) {
             throw new Exception('Product does not exist or is inactive');
@@ -850,7 +850,10 @@ class StockService extends BaseService
         return $potentialProduct->product_id;
     }
 
-    public function getProductPriceHistory(int $productId)
+    /**
+     * @return array{date: mixed, price: mixed, shopping_location: mixed}[]
+     */
+    public function getProductPriceHistory(int $productId): array
     {
         if (!$this->productExists($productId)) {
             throw new Exception('Product does not exist or is inactive');
@@ -1699,19 +1702,19 @@ class StockService extends BaseService
         }
     }
 
-    private function locationExists($locationId)
+    private function locationExists($locationId): bool
     {
         $locationRow = $this->getDatabase()->locations()->where('id = :1', $locationId)->where('active = 1')->fetch();
         return $locationRow !== null;
     }
 
-    private function productExists($productId)
+    private function productExists($productId): bool
     {
         $productRow = $this->getDatabase()->products()->where('id = :1 and active = 1', $productId)->fetch();
         return $productRow !== null;
     }
 
-    private function shoppingListExists($listId)
+    private function shoppingListExists($listId): bool
     {
         $shoppingListRow = $this->getDatabase()->shopping_lists()->where('id = :1', $listId)->fetch();
         return $shoppingListRow !== null;

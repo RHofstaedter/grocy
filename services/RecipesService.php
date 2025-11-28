@@ -149,7 +149,7 @@ class RecipesService extends BaseService
         return $lastInsertId;
     }
 
-    private function recipeExists($recipeId)
+    private function recipeExists($recipeId): bool
     {
         $recipeRow = $this->getDataBase()->recipes()->where('id = :1', $recipeId)->fetch();
         return $recipeRow !== null;

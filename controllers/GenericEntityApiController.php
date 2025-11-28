@@ -222,27 +222,27 @@ class GenericEntityApiController extends BaseApiController
         }
     }
 
-    private function isEntityWithEditRequiresAdmin($entity)
+    private function isEntityWithEditRequiresAdmin($entity): bool
     {
         return in_array($entity, $this->getOpenApiSpec()->components->schemas->ExposedEntityEditRequiresAdmin->enum);
     }
 
-    private function isEntityWithNoListing($entity)
+    private function isEntityWithNoListing($entity): bool
     {
         return in_array($entity, $this->getOpenApiSpec()->components->schemas->ExposedEntityNoListing->enum);
     }
 
-    private function isEntityWithNoEdit($entity)
+    private function isEntityWithNoEdit($entity): bool
     {
         return in_array($entity, $this->getOpenApiSpec()->components->schemas->ExposedEntityNoEdit->enum);
     }
 
-    private function isEntityWithNoDelete($entity)
+    private function isEntityWithNoDelete($entity): bool
     {
         return in_array($entity, $this->getOpenApiSpec()->components->schemas->ExposedEntityNoDelete->enum);
     }
 
-    private function isValidExposedEntity($entity)
+    private function isValidExposedEntity($entity): bool
     {
         return in_array($entity, $this->getOpenApiSpec()->components->schemas->ExposedEntity->enum);
     }

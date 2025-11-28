@@ -34,7 +34,7 @@ class PrintService extends BaseService
         ];
     }
 
-    private function getPrinterHandle()
+    private function getPrinterHandle(): \Mike42\Escpos\Printer
     {
         if (GROCY_TPRINTER_IS_NETWORK_PRINTER) {
             $connector = new NetworkPrintConnector(GROCY_TPRINTER_IP, GROCY_TPRINTER_PORT);

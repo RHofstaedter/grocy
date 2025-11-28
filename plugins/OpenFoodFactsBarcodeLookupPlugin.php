@@ -12,7 +12,7 @@ class OpenFoodFactsBarcodeLookupPlugin extends BaseBarcodeLookupPlugin
 {
     public const PLUGIN_NAME = 'Open Food Facts';
 
-    protected function executeLookup($barcode)
+    protected function executeLookup($barcode): ?array
     {
         $productNameFieldLocalized = 'product_name_' . substr(GROCY_LOCALE, 0, 2);
 

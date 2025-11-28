@@ -87,7 +87,7 @@ class Grocycode implements \Stringable
         return implode(':', $arr);
     }
 
-    private function setFromCode($code)
+    private function setFromCode($code): void
     {
         $parts = array_reverse(explode(':', (string) $code));
         if (array_pop($parts) !== self::MAGIC) {
@@ -102,7 +102,7 @@ class Grocycode implements \Stringable
         $this->extra_data = array_reverse($parts);
     }
 
-    private function setFromData($type, $id, $extra_data = [])
+    private function setFromData($type, $id, $extra_data = []): void
     {
         if (!is_array($extra_data)) {
             throw new Exception('Extra data must be array of string');

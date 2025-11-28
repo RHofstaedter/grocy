@@ -87,12 +87,12 @@ class ApiKeyService extends BaseService
         }
     }
 
-    public function removeApiKey($apiKey)
+    public function removeApiKey($apiKey): void
     {
         $this->getDatabase()->api_keys()->where('api_key', $apiKey)->delete();
     }
 
-    private function generateApiKey()
+    private function generateApiKey(): string
     {
         return randomString(50);
     }

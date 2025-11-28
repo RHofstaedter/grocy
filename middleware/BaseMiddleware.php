@@ -7,13 +7,10 @@ use DI\Container;
 
 class BaseMiddleware
 {
-    protected $AppContainer;
-
     protected $ApplicationService;
 
-    public function __construct(Container $container)
+    public function __construct(protected \DI\Container $AppContainer)
     {
-        $this->AppContainer = $container;
         $this->ApplicationService = ApplicationService::getInstance();
     }
 }

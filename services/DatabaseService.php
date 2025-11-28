@@ -101,7 +101,7 @@ class DatabaseService
         return self::$DbConnectionRaw;
     }
 
-    public function setDbChangedTime($dateTime)
+    public function setDbChangedTime($dateTime): void
     {
         touch($this->getDbFilePath(), strtotime((string) $dateTime));
     }

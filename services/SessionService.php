@@ -63,12 +63,12 @@ class SessionService extends BaseService
         }
     }
 
-    public function removeSession($sessionKey)
+    public function removeSession($sessionKey): void
     {
         $this->getDatabase()->sessions()->where('session_key', $sessionKey)->delete();
     }
 
-    private function generateSessionKey()
+    private function generateSessionKey(): string
     {
         return randomString(50);
     }

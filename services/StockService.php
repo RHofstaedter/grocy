@@ -27,7 +27,7 @@ class StockService extends BaseService
 
     public const TRANSACTION_TYPE_TRANSFER_TO = 'transfer_to';
 
-    public function addMissingProductsToShoppingList($listId = 1)
+    public function addMissingProductsToShoppingList($listId = 1): void
     {
         if (!$this->shoppingListExists($listId)) {
             throw new Exception('Shopping list does not exist');
@@ -63,7 +63,7 @@ class StockService extends BaseService
         }
     }
 
-    public function addOverdueProductsToShoppingList($listId = 1)
+    public function addOverdueProductsToShoppingList($listId = 1): void
     {
         if (!$this->shoppingListExists($listId)) {
             throw new Exception('Shopping list does not exist');
@@ -93,7 +93,7 @@ class StockService extends BaseService
         }
     }
 
-    public function addExpiredProductsToShoppingList($listId = 1)
+    public function addExpiredProductsToShoppingList($listId = 1): void
     {
         if (!$this->shoppingListExists($listId)) {
             throw new Exception('Shopping list does not exist');
@@ -310,7 +310,7 @@ class StockService extends BaseService
         }
     }
 
-    public function addProductToShoppingList($productId, $amount = 1, $quId = -1, $note = null, $listId = 1)
+    public function addProductToShoppingList($productId, $amount = 1, $quId = -1, $note = null, $listId = 1): void
     {
         if (!$this->shoppingListExists($listId)) {
             throw new Exception('Shopping list does not exist');
@@ -348,7 +348,7 @@ class StockService extends BaseService
         }
     }
 
-    public function clearShoppingList($listId = 1, $doneOnly = false)
+    public function clearShoppingList($listId = 1, $doneOnly = false): void
     {
         if (!$this->shoppingListExists($listId)) {
             throw new Exception('Shopping list does not exist');
@@ -710,7 +710,7 @@ class StockService extends BaseService
         return $pluginOutput;
     }
 
-    public function getCurrentStock($customWhere = '')
+    public function getCurrentStock($customWhere = ''): array
     {
         $sql = 'SELECT * FROM stock_current ' . $customWhere;
         $currentStockMapped = $this->getDatabaseService()->executeDbQuery($sql)->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_OBJ);
@@ -1142,7 +1142,7 @@ class StockService extends BaseService
         return $transactionId;
     }
 
-    public function removeProductFromShoppingList($productId, $amount = 1, $listId = 1)
+    public function removeProductFromShoppingList($productId, $amount = 1, $listId = 1): void
     {
         if (!$this->shoppingListExists($listId)) {
             throw new Exception('Shopping list does not exist');
@@ -1419,7 +1419,7 @@ class StockService extends BaseService
         return $transactionId;
     }
 
-    public function undoBooking($bookingId, $skipCorrelatedBookings = false)
+    public function undoBooking($bookingId, $skipCorrelatedBookings = false): void
     {
         $logRow = $this->getDatabase()->stock_log()->where('id = :1 AND undone = 0', $bookingId)->fetch();
         if ($logRow == null) {
@@ -1574,7 +1574,7 @@ class StockService extends BaseService
         }
     }
 
-    public function undoTransaction($transactionId)
+    public function undoTransaction($transactionId): void
     {
         $transactionBookings = $this->getDatabase()->stock_log()->where('undone = 0 AND transaction_id = :1', $transactionId)->orderBy('id', 'DESC')->fetchAll();
 
@@ -1587,7 +1587,7 @@ class StockService extends BaseService
         }
     }
 
-    public function mergeProducts(int $productIdToKeep, int $productIdToRemove)
+    public function mergeProducts(int $productIdToKeep, int $productIdToRemove): void
     {
         if (!$this->productExists($productIdToKeep)) {
             throw new Exception('$productIdToKeep does not exist or is inactive');
@@ -1628,7 +1628,7 @@ class StockService extends BaseService
         $this->getDatabaseService()->getDbConnectionRaw()->commit();
     }
 
-    public function compactStockEntries($productId = null)
+    public function compactStockEntries($productId = null): void
     {
         if ($productId == null) {
             $splittedStockEntries = $this->getDatabase()->stock_splits();

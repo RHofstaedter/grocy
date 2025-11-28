@@ -13,9 +13,9 @@ class WebhookRunner
         $this->client = new Client(['timeout' => 2.0]);
     }
 
-    private $client;
+    private readonly \GuzzleHttp\Client $client;
 
-    public function run($url, $args, $json = false)
+    public function run($url, $args, $json = false): void
     {
         $reqArgs = $json ? ['json' => $args] : ['form_params' => $args];
         try {
@@ -27,7 +27,7 @@ class WebhookRunner
         }
     }
 
-    public function runAll($urls, $args)
+    public function runAll($urls, $args): void
     {
         foreach ($urls as $url) {
             $this->run($url, $args);

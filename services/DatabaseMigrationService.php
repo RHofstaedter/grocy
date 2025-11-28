@@ -10,7 +10,7 @@ class DatabaseMigrationService extends BaseService
     // This migration will be always executed, is used for things which need to be checked always
     public const DOALWAYS_MIGRATION_ID = 8888;
 
-    public function migrateDatabase()
+    public function migrateDatabase(): void
     {
         $this->getDatabaseService()
             ->executeDbStatement("CREATE TABLE IF NOT EXISTS migrations (migration INTEGER NOT NULL PRIMARY KEY UNIQUE, execution_time_timestamp DATETIME DEFAULT (datetime('now', 'localtime')))");
@@ -46,7 +46,7 @@ class DatabaseMigrationService extends BaseService
         }
     }
 
-    private function executePhpMigrationWhenNeeded(int $migrationId, string $phpFile, int &$migrationCounter)
+    private function executePhpMigrationWhenNeeded(int $migrationId, string $phpFile, int &$migrationCounter): void
     {
         $rowCount = $this->getDatabaseService()
             ->executeDbQuery('SELECT COUNT(*) FROM migrations WHERE migration = ' . $migrationId)->fetchColumn();
@@ -65,7 +65,7 @@ class DatabaseMigrationService extends BaseService
         }
     }
 
-    private function executeSqlMigrationWhenNeeded(int $migrationId, string $sql, int &$migrationCounter)
+    private function executeSqlMigrationWhenNeeded(int $migrationId, string $sql, int &$migrationCounter): void
     {
         $rowCount = $this->getDatabaseService()
             ->executeDbQuery('SELECT COUNT(*) FROM migrations WHERE migration = ' . $migrationId)->fetchColumn();

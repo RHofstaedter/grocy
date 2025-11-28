@@ -9,7 +9,7 @@ class FilesService extends BaseService
 {
     public const FILE_SERVE_TYPE_PICTURE = 'picture';
 
-    private $StoragePath;
+    private string $StoragePath;
 
     public function __construct()
     {
@@ -31,11 +31,11 @@ class FilesService extends BaseService
         }
     }
 
-    public function downscaleImage($group, $fileName, $bestFitHeight = null, $bestFitWidth = null)
+    public function downscaleImage($group, $fileName, $bestFitHeight = null, $bestFitWidth = null): string
     {
         $filePath = $this->getFilePath($group, $fileName);
-        $fileNameWithoutExtension = pathinfo((string) $filePath, PATHINFO_FILENAME);
-        $fileExtension = pathinfo((string) $filePath, PATHINFO_EXTENSION);
+        $fileNameWithoutExtension = pathinfo($filePath, PATHINFO_FILENAME);
+        $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
 
         $fileNameDownscaled = $fileNameWithoutExtension . '__downscaledto' . ($bestFitHeight ?: 'auto')
             . 'x' . ($bestFitWidth ?: 'auto') . '.' . $fileExtension;
@@ -62,12 +62,12 @@ class FilesService extends BaseService
         return $filePathDownscaled;
     }
 
-    public function deleteFile($group, $fileName)
+    public function deleteFile($group, $fileName): void
     {
         $filePath = $this->getFilePath($group, $fileName);
 
         if (file_exists($filePath)) {
-            $fileNameWithoutExtension = pathinfo((string) $filePath, PATHINFO_FILENAME);
+            $fileNameWithoutExtension = pathinfo($filePath, PATHINFO_FILENAME);
 
             // Then the file is an image
             if (getimagesize($filePath) !== false) {

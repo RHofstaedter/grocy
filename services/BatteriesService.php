@@ -66,7 +66,7 @@ class BatteriesService extends BaseService
         return $this->getDatabase()->lastInsertId();
     }
 
-    public function undoChargeCycle($chargeCycleId)
+    public function undoChargeCycle($chargeCycleId): void
     {
         $logRow = $this->getDatabase()
             ->battery_charge_cycles()

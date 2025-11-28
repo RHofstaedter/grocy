@@ -22,13 +22,10 @@ use DI\Container;
 
 class BaseController
 {
-    public function __construct(Container $container)
+    public function __construct(protected \DI\Container $AppContainer)
     {
-        $this->AppContainer = $container;
-        $this->View = $container->get('view');
+        $this->View = $this->AppContainer->get('view');
     }
-
-    protected $AppContainer;
 
     protected $View;
 

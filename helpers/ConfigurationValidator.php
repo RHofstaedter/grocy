@@ -6,7 +6,7 @@ class EInvalidConfig extends Exception
 
 class ConfigurationValidator
 {
-    public function validateConfig()
+    public function validateConfig(): void
     {
         self::checkMode();
         self::checkDefaultLocale();
@@ -17,7 +17,7 @@ class ConfigurationValidator
         self::checkAutoNightModeRange();
     }
 
-    private function checkMode()
+    private function checkMode(): void
     {
         $allowedModes = ['production', 'dev', 'demo', 'prerelease'];
         if (!in_array(GROCY_MODE, $allowedModes)) {
@@ -25,14 +25,14 @@ class ConfigurationValidator
         }
     }
 
-    private function checkDefaultLocale()
+    private function checkDefaultLocale(): void
     {
         if (!file_exists(__DIR__ . '/../localization/' . GROCY_DEFAULT_LOCALE)) {
             throw new EInvalidConfig('Invalid locale "' . GROCY_DEFAULT_LOCALE . '" set, locale needs to exist in folder localization');
         }
     }
 
-    private function checkFirstDayOfWeek()
+    private function checkFirstDayOfWeek(): void
     {
         if (
             GROCY_CALENDAR_FIRST_DAY_OF_WEEK != '' && !(is_numeric(GROCY_CALENDAR_FIRST_DAY_OF_WEEK) && GROCY_CALENDAR_FIRST_DAY_OF_WEEK >= 0 && GROCY_CALENDAR_FIRST_DAY_OF_WEEK <= 6)
@@ -41,14 +41,14 @@ class ConfigurationValidator
         }
     }
 
-    private function checkCurrencyFormat()
+    private function checkCurrencyFormat(): void
     {
         if (!(preg_match('/^([A-z]){3}$/', GROCY_CURRENCY))) {
             throw new EInvalidConfig('CURRENCY is not in ISO 4217 format (three letter code)');
         }
     }
 
-    private function checkEntryPage()
+    private function checkEntryPage(): void
     {
         $allowedPages = ['stock', 'shoppinglist', 'recipes', 'chores', 'tasks', 'batteries', 'equipment', 'calendar', 'mealplan'];
         if (!in_array(GROCY_ENTRY_PAGE, $allowedPages)) {
@@ -56,7 +56,7 @@ class ConfigurationValidator
         }
     }
 
-    private function checkMealplanFirstDayOfWeek()
+    private function checkMealplanFirstDayOfWeek(): void
     {
         if (
             GROCY_MEAL_PLAN_FIRST_DAY_OF_WEEK != '' && !(is_numeric(GROCY_MEAL_PLAN_FIRST_DAY_OF_WEEK) && GROCY_MEAL_PLAN_FIRST_DAY_OF_WEEK >= -1 && GROCY_MEAL_PLAN_FIRST_DAY_OF_WEEK <= 6)
@@ -65,7 +65,7 @@ class ConfigurationValidator
         }
     }
 
-    private function checkAutoNightModeRange()
+    private function checkAutoNightModeRange(): void
     {
         global $GROCY_DEFAULT_USER_SETTINGS;
         if (!(preg_match('/^(?:2[0-3]|[01]\d):[0-5]\d$/', (string) $GROCY_DEFAULT_USER_SETTINGS['auto_night_mode_time_range_from']))) {

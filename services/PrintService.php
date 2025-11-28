@@ -45,7 +45,7 @@ class PrintService extends BaseService
         return new Printer($connector);
     }
 
-    private function printHeader(Printer $printer)
+    private function printHeader(Printer $printer): void
     {
         $date = new DateTime();
         $dateFormatted = $date->format('d/m/Y H:i');

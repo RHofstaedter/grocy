@@ -11,9 +11,9 @@ class CalendarService extends BaseService
         $this->UrlManager = new UrlManager(GROCY_BASE_URL);
     }
 
-    private $UrlManager;
+    private readonly \Grocy\Helpers\UrlManager $UrlManager;
 
-    public function getEvents()
+    public function getEvents(): array
     {
         $usersService = $this->getUsersService();
 

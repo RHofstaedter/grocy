@@ -28,7 +28,7 @@ class ChoresService extends BaseService
 
     public const CHORE_PERIOD_TYPE_ADAPTIVE = 'adaptive';
 
-    public function calculateNextExecutionAssignment($choreId)
+    public function calculateNextExecutionAssignment($choreId): void
     {
         if (!$this->choreExists($choreId)) {
             throw new Exception('Chore does not exist');
@@ -231,7 +231,7 @@ class ChoresService extends BaseService
         return $lastInsertId;
     }
 
-    public function undoChoreExecution($executionId)
+    public function undoChoreExecution($executionId): void
     {
         $logRow = $this->getDatabase()->chores_log()->where('id = :1 AND undone = 0', $executionId)->fetch();
         if ($logRow == null) {
@@ -247,7 +247,7 @@ class ChoresService extends BaseService
         $this->calculateNextExecutionAssignment($logRow->chore_id);
     }
 
-    public function mergeChores(int $choreIdToKeep, int $choreIdToRemove)
+    public function mergeChores(int $choreIdToKeep, int $choreIdToRemove): void
     {
         if (!$this->choreExists($choreIdToKeep)) {
             throw new Exception('$choreIdToKeep does not exist or is inactive');

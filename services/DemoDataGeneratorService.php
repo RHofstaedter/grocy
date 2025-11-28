@@ -9,11 +9,11 @@ class DemoDataGeneratorService extends BaseService
         $this->LocalizationService = new LocalizationService(GROCY_DEFAULT_LOCALE);
     }
 
-    protected $LocalizationService;
+    protected \Grocy\Services\LocalizationService $LocalizationService;
 
     private $LastSupermarketId = 1;
 
-    public function populateDemoData($skip = false)
+    public function populateDemoData($skip = false): void
     {
         $rowCount = $this->getDatabaseService()->executeDbQuery('SELECT COUNT(*) FROM migrations WHERE migration = -1')->fetchColumn();
         if ($rowCount == 0) {
@@ -386,7 +386,7 @@ class DemoDataGeneratorService extends BaseService
         }
     }
 
-    private function downloadFileIfNotAlreadyExists($sourceUrl, $destinationPath)
+    private function downloadFileIfNotAlreadyExists($sourceUrl, $destinationPath): void
     {
         if (!file_exists($destinationPath)) {
             file_put_contents($destinationPath, file_get_contents($sourceUrl, false, stream_context_create([
@@ -412,13 +412,13 @@ class DemoDataGeneratorService extends BaseService
         return mt_rand(2 * 100, 25 * 100) / 100 / 4;
     }
 
-    private function __n_sql($number, string $singularForm, string $pluralForm)
+    private function __n_sql($number, string $singularForm, string $pluralForm): string|array
     {
         $localizedText = $this->getLocalizationService()->__n($number, $singularForm, $pluralForm);
         return str_replace("'", "''", $localizedText);
     }
 
-    private function __t_sql(string $text)
+    private function __t_sql(string $text): string|array
     {
         $localizedText = $this->getLocalizationService()->__t($text, null);
         return str_replace("'", "''", $localizedText);

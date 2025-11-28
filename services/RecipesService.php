@@ -18,7 +18,7 @@ class RecipesService extends BaseService
      // A recipe per meal plan recipe (for separated stock fulfillment checking) => name = YYYY-MM-DD#<meal_plan.id>
     public const RECIPE_TYPE_NORMAL = 'normal'; // Normal / manually created recipes
 
-    public function addNotFulfilledProductsToShoppingList($recipeId, $excludedProductIds = null)
+    public function addNotFulfilledProductsToShoppingList($recipeId, $excludedProductIds = null): void
     {
         $recipe = $this->getDataBase()->recipes($recipeId);
         $recipePositions = $this->getRecipesPosResolved();
@@ -72,7 +72,7 @@ class RecipesService extends BaseService
         }
     }
 
-    public function consumeRecipe($recipeId)
+    public function consumeRecipe($recipeId): void
     {
         if (!$this->recipeExists($recipeId)) {
             throw new Exception('Recipe does not exist');

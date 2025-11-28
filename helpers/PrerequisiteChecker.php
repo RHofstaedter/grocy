@@ -15,7 +15,7 @@ const REQUIRED_SQLITE_VERSION = '3.34.0';
 
 class PrerequisiteChecker
 {
-    public function checkRequirements()
+    public function checkRequirements(): void
     {
         self::checkForPhpVersion();
         self::checkForConfigFile();
@@ -25,28 +25,28 @@ class PrerequisiteChecker
         self::checkForSqliteVersion();
     }
 
-    private function checkForComposer()
+    private function checkForComposer(): void
     {
         if (!file_exists(__DIR__ . '/../packages/autoload.php')) {
             throw new ERequirementNotMet('/packages/autoload.php not found. Have you run Composer?');
         }
     }
 
-    private function checkForConfigDistFile()
+    private function checkForConfigDistFile(): void
     {
         if (!file_exists(__DIR__ . '/../config-dist.php')) {
             throw new ERequirementNotMet('config-dist.php not found. Please do not remove this file.');
         }
     }
 
-    private function checkForConfigFile()
+    private function checkForConfigFile(): void
     {
         if (!file_exists(GROCY_DATAPATH . '/config.php')) {
             throw new ERequirementNotMet('config.php in data directory (' . GROCY_DATAPATH . ') not found. Have you copied config-dist.php to the data directory and renamed it to config.php?');
         }
     }
 
-    private function checkForPhpExtensions()
+    private function checkForPhpExtensions(): void
     {
         $loadedExtensions = get_loaded_extensions();
         foreach (REQUIRED_PHP_EXTENSIONS as $extension) {
@@ -56,7 +56,7 @@ class PrerequisiteChecker
         }
     }
 
-    private function checkForSqliteVersion()
+    private function checkForSqliteVersion(): void
     {
         $sqliteVersion = self::getSqlVersionAsString();
         if (version_compare($sqliteVersion, REQUIRED_SQLITE_VERSION, '<')) {
@@ -64,7 +64,7 @@ class PrerequisiteChecker
         }
     }
 
-    private function checkForPhpVersion()
+    private function checkForPhpVersion(): void
     {
         $phpVersion = phpversion();
         if (version_compare($phpVersion, REQUIRED_PHP_VERSION, '<')) {

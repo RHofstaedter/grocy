@@ -9,7 +9,7 @@ class UrlManager
         $this->BasePath = $basePath === '/' ? $this->GetBaseUrl() : $basePath;
     }
 
-    protected $BasePath;
+    protected string $BasePath;
 
     public function ConstructUrl($relativePath, $isResource = false): string
     {

@@ -43,7 +43,7 @@ class UsersService extends BaseService
         return $newUserRow;
     }
 
-    public function deleteUser($userId)
+    public function deleteUser($userId): void
     {
         $row = $this->getDatabase()->users($userId);
         $row->delete();
@@ -56,7 +56,7 @@ class UsersService extends BaseService
         string $lastName,
         ?string $password,
         ?string $pictureFileName = null
-    ) {
+    ): void {
         if (!$this->userExists($userId)) {
             throw new Exception('User does not exist');
         }
@@ -107,7 +107,7 @@ class UsersService extends BaseService
         return $value;
     }
 
-    public function getUserSettings($userId)
+    public function getUserSettings($userId): array
     {
         $settings = [];
         $settingRows = $this->getDatabase()->user_settings()->where('user_id = :1', $userId)->fetchAll();
@@ -125,7 +125,7 @@ class UsersService extends BaseService
         return $this->getDatabase()->users_dto();
     }
 
-    public function setUserSetting($userId, $settingKey, $settingValue)
+    public function setUserSetting($userId, $settingKey, $settingValue): void
     {
         if (!array_key_exists($userId, self::$userSettingsCache)) {
             self::$userSettingsCache[$userId] = [];
@@ -149,7 +149,7 @@ class UsersService extends BaseService
         }
     }
 
-    public function deleteUserSetting($userId, $settingKey)
+    public function deleteUserSetting($userId, $settingKey): void
     {
         if (!array_key_exists($userId, self::$userSettingsCache)) {
             self::$userSettingsCache[$userId] = [];

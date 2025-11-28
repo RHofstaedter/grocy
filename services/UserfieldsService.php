@@ -109,7 +109,7 @@ class UserfieldsService extends BaseService
         return $userfieldKeyValuePairs;
     }
 
-    public function setValues($entity, $objectId, $userfields)
+    public function setValues($entity, $objectId, $userfields): void
     {
         if (!$this->isValidExposedEntity($entity)) {
             throw new Exception('Entity does not exist or is not exposed');

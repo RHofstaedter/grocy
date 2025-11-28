@@ -8,10 +8,8 @@ use Gettext\Translator;
 
 class LocalizationService
 {
-    public function __construct(string $culture)
+    public function __construct(protected string $Culture)
     {
-        $this->Culture = $culture;
-
         $this->loadLocalizations();
     }
 
@@ -27,11 +25,9 @@ class LocalizationService
 
     protected $TranslatorQu;
 
-    protected $Culture;
-
     private static $instanceMap = [];
 
-    public function checkAndAddMissingTranslationToPot($text)
+    public function checkAndAddMissingTranslationToPot($text): void
     {
         if (GROCY_MODE === 'dev' && ($this->Pot->find('', $text) === false && empty($text) === false)) {
             $translation = new Translation('', $text);
@@ -115,7 +111,7 @@ class LocalizationService
         return $this->getDatabaseService()->getDbConnection();
     }
 
-    private function loadLocalizations()
+    private function loadLocalizations(): void
     {
         $culture = $this->Culture;
 

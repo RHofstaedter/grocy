@@ -67,7 +67,7 @@ class DemoBarcodeLookupPlugin extends BaseBarcodeLookupPlugin
             '__image_url' => '' // When provided, the corresponding image will be downloaded and set as the product picture
         ]
     */
-    protected function executeLookup($barcode)
+    protected function executeLookup($barcode): ?array
     {
         if ($barcode === 'nothing') {
             // Demonstration when nothing is found

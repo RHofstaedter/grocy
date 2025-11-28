@@ -53,7 +53,7 @@ class Grocycode implements \Stringable
 
     private $id;
 
-    private $extra_data = [];
+    private array $extra_data = [];
 
     public static function validate(string $code): bool
     {
@@ -70,7 +70,7 @@ class Grocycode implements \Stringable
         return $this->id;
     }
 
-    public function getExtraData()
+    public function getExtraData(): array
     {
         return $this->extra_data;
     }

@@ -7,7 +7,7 @@ use Exception;
 
 class UsersService extends BaseService
 {
-    private static $userSettingsCache = [];
+    private static array $userSettingsCache = [];
 
     public function createUser(
         string $username,

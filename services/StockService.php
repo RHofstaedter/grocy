@@ -710,7 +710,7 @@ class StockService extends BaseService
         return $pluginOutput;
     }
 
-    public function getCurrentStock($customWhere = ''): array
+    public function getCurrentStock(string $customWhere = ''): array
     {
         $sql = 'SELECT * FROM stock_current ' . $customWhere;
         $currentStockMapped = $this->getDatabaseService()->executeDbQuery($sql)->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_OBJ);
@@ -898,7 +898,7 @@ class StockService extends BaseService
         return $this->getDatabase()->stock()->where('location_id', $locationId);
     }
 
-    public function getProductStockEntriesForLocation($productId, $locationId, $excludeOpened = false, $allowSubproductSubstitution = false): array
+    public function getProductStockEntriesForLocation(int $productId, $locationId, $excludeOpened = false, $allowSubproductSubstitution = false): array
     {
         $stockEntries = $this->getProductStockEntries($productId, $excludeOpened, $allowSubproductSubstitution);
         return findAllObjectsInArrayByPropertyValue($stockEntries, 'location_id', $locationId);

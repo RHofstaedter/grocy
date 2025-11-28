@@ -11,7 +11,7 @@ class UrlManager
 
     protected string $BasePath;
 
-    public function ConstructUrl($relativePath, $isResource = false): string
+    public function ConstructUrl(string $relativePath, $isResource = false): string
     {
         if (GROCY_DISABLE_URL_REWRITING === false || $isResource === true) {
             return rtrim($this->BasePath, '/') . $relativePath;

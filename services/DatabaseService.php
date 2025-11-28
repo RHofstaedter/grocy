@@ -8,11 +8,11 @@ use Exception;
 
 class DatabaseService
 {
-    private static $DbConnection;
+    private static ?\LessQL\Database $DbConnection = null;
 
-    private static $DbConnectionRaw;
+    private static ?\PDO $DbConnectionRaw = null;
 
-    private static $instance;
+    private static ?\Grocy\Services\DatabaseService $instance = null;
 
     public function executeDbQuery(string $sql)
     {
@@ -55,7 +55,7 @@ class DatabaseService
         return date('Y-m-d H:i:s', filemtime($this->getDbFilePath()));
     }
 
-    public function getDbConnection()
+    public function getDbConnection(): \LessQL\Database
     {
         if (self::$DbConnection == null) {
             self::$DbConnection = new Database($this->getDbConnectionRaw());
@@ -64,7 +64,7 @@ class DatabaseService
         if (GROCY_MODE === 'dev') {
             $logFilePath = GROCY_DATAPATH . '/sql.log';
             if (file_exists($logFilePath)) {
-                self::$DbConnection->setQueryCallback(function ($query, $params) use ($logFilePath): void {
+                self::$DbConnection->setQueryCallback(function (string $query, $params) use ($logFilePath): void {
                     file_put_contents($logFilePath, $query . ' #### ' . implode(';', $params) . PHP_EOL, FILE_APPEND);
                 });
             }
@@ -73,14 +73,14 @@ class DatabaseService
         return self::$DbConnection;
     }
 
-    public function getDbConnectionRaw()
+    public function getDbConnectionRaw(): \PDO
     {
         if (self::$DbConnectionRaw == null) {
             $pdo = new \PDO('sqlite:' . $this->getDbFilePath());
             $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $pdo->setAttribute(\PDO::ATTR_ORACLE_NULLS, \PDO::NULL_EMPTY_STRING);
 
-            $pdo->sqliteCreateFunction('regexp', function ($pattern, $value) {
+            $pdo->sqliteCreateFunction('regexp', function ($pattern, $value): int {
                 mb_regex_encoding('UTF-8');
                 return (mb_ereg($pattern, $value)) ? 1 : 0;
             });
@@ -106,7 +106,7 @@ class DatabaseService
         touch($this->getDbFilePath(), strtotime((string) $dateTime));
     }
 
-    public static function getInstance()
+    public static function getInstance(): \Grocy\Services\DatabaseService
     {
         if (self::$instance == null) {
             self::$instance = new self();

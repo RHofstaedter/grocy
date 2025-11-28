@@ -17,7 +17,7 @@ class BaseApiController extends BaseController
 
     protected $openApiSpec;
 
-    private static $htmlPurifierInstance;
+    private static ?\HTMLPurifier $htmlPurifierInstance = null;
 
     protected function apiResponse(Response $response, $data, $cache = false)
     {
@@ -29,12 +29,12 @@ class BaseApiController extends BaseController
         return $response;
     }
 
-    protected function emptyApiResponse(Response $response, $status = 204)
+    protected function emptyApiResponse(Response $response, int $status = 204)
     {
         return $response->withStatus($status);
     }
 
-    protected function genericErrorResponse(Response $response, $errorMessage, $status = 400)
+    protected function genericErrorResponse(Response $response, $errorMessage, int $status = 400)
     {
         return $response->withStatus($status)->withJson([
             'error_message' => $errorMessage

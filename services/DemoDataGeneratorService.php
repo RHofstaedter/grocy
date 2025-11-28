@@ -11,7 +11,7 @@ class DemoDataGeneratorService extends BaseService
 
     protected \Grocy\Services\LocalizationService $LocalizationService;
 
-    private $LastSupermarketId = 1;
+    private int $LastSupermarketId = 1;
 
     public function populateDemoData($skip = false): void
     {
@@ -398,11 +398,11 @@ class DemoDataGeneratorService extends BaseService
         }
     }
 
-    private function nextSupermarketId()
+    private function nextSupermarketId(): int
     {
         $returnValue = $this->LastSupermarketId;
 
-        $this->LastSupermarketId = $this->LastSupermarketId == 1 ? 2 : 1;
+        $this->LastSupermarketId = $this->LastSupermarketId === 1 ? 2 : 1;
 
         return $returnValue;
     }

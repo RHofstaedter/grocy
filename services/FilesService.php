@@ -31,7 +31,7 @@ class FilesService extends BaseService
         }
     }
 
-    public function downscaleImage($group, $fileName, $bestFitHeight = null, $bestFitWidth = null): string
+    public function downscaleImage(string $group, string $fileName, $bestFitHeight = null, $bestFitWidth = null): string
     {
         $filePath = $this->getFilePath($group, $fileName);
         $fileNameWithoutExtension = pathinfo($filePath, PATHINFO_FILENAME);
@@ -62,7 +62,7 @@ class FilesService extends BaseService
         return $filePathDownscaled;
     }
 
-    public function deleteFile($group, $fileName): void
+    public function deleteFile(string $group, string $fileName): void
     {
         $filePath = $this->getFilePath($group, $fileName);
 
@@ -85,7 +85,7 @@ class FilesService extends BaseService
         }
     }
 
-    public function getFilePath($group, $fileName): string
+    public function getFilePath(string $group, string $fileName): string
     {
         $groupFolderPath = $this->StoragePath . '/' . $group;
 

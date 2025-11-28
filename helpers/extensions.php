@@ -212,7 +212,7 @@ function require_frontend_packages(array $packages): void
     $GROCY_REQUIRED_FRONTEND_PACKAGES = array_unique(array_merge($GROCY_REQUIRED_FRONTEND_PACKAGES, $packages));
 }
 
-function emptyFolder($folderPath): void
+function emptyFolder(string $folderPath): void
 {
     foreach (glob($folderPath . '/*') as $item) {
         if (is_dir($item)) {

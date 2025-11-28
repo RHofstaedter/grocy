@@ -15,7 +15,7 @@ class WebhookRunner
 
     private readonly \GuzzleHttp\Client $client;
 
-    public function run($url, $args, $json = false): void
+    public function run(string $url, $args, $json = false): void
     {
         $reqArgs = $json ? ['json' => $args] : ['form_params' => $args];
         try {

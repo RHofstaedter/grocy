@@ -4,7 +4,7 @@ namespace Grocy\Services;
 
 class BaseService
 {
-    private static $instances = [];
+    private static array $instances = [];
 
     public static function getInstance()
     {

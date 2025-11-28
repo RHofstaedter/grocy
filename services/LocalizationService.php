@@ -101,7 +101,7 @@ class LocalizationService
         return self::$instanceMap[$culture];
     }
 
-    protected function getDatabaseService()
+    protected function getDatabaseService(): \Grocy\Services\DatabaseService
     {
         return DatabaseService::getInstance();
     }

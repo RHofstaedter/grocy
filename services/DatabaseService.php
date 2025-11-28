@@ -14,7 +14,7 @@ class DatabaseService
 
     private static ?\Grocy\Services\DatabaseService $instance = null;
 
-    public function executeDbQuery(string $sql)
+    public function executeDbQuery(string $sql): \PDOStatement|false
     {
         $pdo = $this->getDbConnectionRaw();
 

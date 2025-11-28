@@ -72,7 +72,7 @@ class User
         $this->db = DatabaseService::getInstance()->getDbConnection();
     }
 
-    protected $db;
+    protected \LessQL\Database $db;
 
     public static function permissionList()
     {

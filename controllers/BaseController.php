@@ -59,7 +59,7 @@ class BaseController
         return $this->getDatabaseService()->getDbConnection();
     }
 
-    protected function getDatabaseService()
+    protected function getDatabaseService(): \Grocy\Services\DatabaseService
     {
         return DatabaseService::getInstance();
     }

@@ -28,7 +28,7 @@ class LdapAuthMiddleware extends AuthMiddleware
         return $auth->authenticate($request);
     }
 
-    public static function processLogin(array $postParams)
+    public static function processLogin(array $postParams): bool
     {
         if ($connect = ldap_connect(GROCY_LDAP_ADDRESS)) {
             ldap_set_option($connect, LDAP_OPT_PROTOCOL_VERSION, 3);

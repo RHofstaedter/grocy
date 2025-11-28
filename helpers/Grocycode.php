@@ -55,7 +55,7 @@ class Grocycode implements \Stringable
 
     private $extra_data = [];
 
-    public static function validate(string $code)
+    public static function validate(string $code): bool
     {
         try {
             $gc = new self($code);

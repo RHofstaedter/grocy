@@ -98,7 +98,7 @@ class User
         return $this->getPermissions()->where('permission_name', $permission)->fetch() !== null;
     }
 
-    public static function hasPermissions(string ...$permissions)
+    public static function hasPermissions(string ...$permissions): bool
     {
         $user = new self();
 

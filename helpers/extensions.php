@@ -19,7 +19,10 @@ function findObjectInArrayByPropertyValue($array, $propertyName, $propertyValue)
     return null;
 }
 
-function findAllObjectsInArrayByPropertyValue($array, $propertyName, $propertyValue, $operator = '==')
+/**
+ * @return mixed[]
+ */
+function findAllObjectsInArrayByPropertyValue($array, $propertyName, $propertyValue, $operator = '=='): array
 {
     $returnArray = [];
     foreach ($array as $object) {
@@ -48,7 +51,10 @@ function findAllObjectsInArrayByPropertyValue($array, $propertyName, $propertyVa
     return $returnArray;
 }
 
-function findAllItemsInArrayByValue($array, $value, $operator = '==')
+/**
+ * @return mixed[]
+ */
+function findAllItemsInArrayByValue($array, $value, $operator = '=='): array
 {
     $returnArray = [];
     foreach ($array as $item) {
@@ -152,7 +158,7 @@ function externalSettingValue(string $value)
     return $tvalue;
 }
 
-function setting(string $name, $value)
+function setting(string $name, $value): void
 {
     if (!defined('GROCY_' . $name)) {
         // The content of a $name.txt file in /data/settingoverrides can overwrite the given setting (for embedded mode)
@@ -169,7 +175,7 @@ function setting(string $name, $value)
     }
 }
 
-function defaultUserSetting(string $name, $value)
+function defaultUserSetting(string $name, $value): void
 {
     global $GROCY_DEFAULT_USER_SETTINGS;
 
@@ -199,14 +205,14 @@ function isJsonString($text)
     return (json_last_error() === JSON_ERROR_NONE);
 }
 
-function require_frontend_packages(array $packages)
+function require_frontend_packages(array $packages): void
 {
     global $GROCY_REQUIRED_FRONTEND_PACKAGES;
 
     $GROCY_REQUIRED_FRONTEND_PACKAGES = array_unique(array_merge($GROCY_REQUIRED_FRONTEND_PACKAGES, $packages));
 }
 
-function emptyFolder($folderPath)
+function emptyFolder($folderPath): void
 {
     foreach (glob($folderPath . '/*') as $item) {
         if (is_dir($item)) {

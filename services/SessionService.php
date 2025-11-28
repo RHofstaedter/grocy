@@ -41,7 +41,7 @@ class SessionService extends BaseService
         return null;
     }
 
-    public function isValidSession($sessionKey)
+    public function isValidSession($sessionKey): bool
     {
         if ($sessionKey === null || empty($sessionKey)) {
             return false;

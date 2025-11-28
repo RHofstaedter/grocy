@@ -30,7 +30,7 @@ class TasksService extends BaseService
         return $tasks;
     }
 
-    public function markTaskAsCompleted($taskId, $doneTime)
+    public function markTaskAsCompleted($taskId, $doneTime): bool
     {
         if (!$this->taskExists($taskId)) {
             throw new Exception('Task does not exist');
@@ -45,7 +45,7 @@ class TasksService extends BaseService
         return true;
     }
 
-    public function undoTask($taskId)
+    public function undoTask($taskId): bool
     {
         if (!$this->taskExists($taskId)) {
             throw new Exception('Task does not exist');

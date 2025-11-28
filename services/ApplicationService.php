@@ -31,7 +31,7 @@ class ApplicationService extends BaseService
         }
 
         // Sort changelog items to have the changelog descending by newest version
-        usort($changelogItems, fn($a, $b) => $b['release_number'] <=> $a['release_number']);
+        usort($changelogItems, fn($a, $b): int => $b['release_number'] <=> $a['release_number']);
 
         return [
             'changelog_items' => $changelogItems,

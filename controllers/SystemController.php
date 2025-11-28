@@ -59,7 +59,7 @@ class SystemController extends BaseController
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    private function getEntryPageRelative()
+    private function getEntryPageRelative(): string
     {
         $entryPage = defined('GROCY_ENTRY_PAGE') ? constant('GROCY_ENTRY_PAGE') : 'stock';
 

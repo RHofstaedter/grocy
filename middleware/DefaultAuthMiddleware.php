@@ -23,7 +23,7 @@ class DefaultAuthMiddleware extends AuthMiddleware
         return $auth->authenticate($request);
     }
 
-    public static function processLogin(array $postParams)
+    public static function processLogin(array $postParams): bool
     {
         if (isset($postParams['username']) && isset($postParams['password'])) {
             $db = DatabaseService::getInstance()->getDbConnection();

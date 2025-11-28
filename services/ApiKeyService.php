@@ -61,7 +61,7 @@ class ApiKeyService extends BaseService
         return null;
     }
 
-    public function isValidApiKey($apiKey, $keyType = self::API_KEY_TYPE_DEFAULT)
+    public function isValidApiKey($apiKey, $keyType = self::API_KEY_TYPE_DEFAULT): bool
     {
         if ($apiKey === null || empty($apiKey)) {
             return false;

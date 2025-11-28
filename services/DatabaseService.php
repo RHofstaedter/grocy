@@ -25,7 +25,7 @@ class DatabaseService
         return false;
     }
 
-    public function executeDbStatement(string $sql, ?array $params = null)
+    public function executeDbStatement(string $sql, ?array $params = null): bool
     {
         $pdo = $this->getDbConnectionRaw();
 
@@ -64,7 +64,7 @@ class DatabaseService
         if (GROCY_MODE === 'dev') {
             $logFilePath = GROCY_DATAPATH . '/sql.log';
             if (file_exists($logFilePath)) {
-                self::$DbConnection->setQueryCallback(function ($query, $params) use ($logFilePath) {
+                self::$DbConnection->setQueryCallback(function ($query, $params) use ($logFilePath): void {
                     file_put_contents($logFilePath, $query . ' #### ' . implode(';', $params) . PHP_EOL, FILE_APPEND);
                 });
             }
@@ -93,7 +93,7 @@ class DatabaseService
 
             // Unfortunately not included by default
             // https://www.sqlite.org/lang_mathfunc.html#ceil
-            $pdo->sqliteCreateFunction('ceil', fn($value) => ceil($value));
+            $pdo->sqliteCreateFunction('ceil', fn($value): float => ceil($value));
 
             self::$DbConnectionRaw = $pdo;
         }

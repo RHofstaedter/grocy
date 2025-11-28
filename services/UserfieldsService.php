@@ -51,7 +51,10 @@ class UserfieldsService extends BaseService
         return $this->getDatabase()->userfield_values_resolved()->where('entity', $entity)->orderBy('name', 'COLLATE NOCASE')->fetchAll();
     }
 
-    public function getEntities()
+    /**
+     * @return mixed[]
+     */
+    public function getEntities(): array
     {
         $exposedDefaultEntities = $this->getOpenApiSpec()->components->schemas->ExposedEntity->enum;
         $userEntities = [];
@@ -85,7 +88,10 @@ class UserfieldsService extends BaseService
         return $this->getDatabase()->userfields()->where('entity', $entity)->orderBy('sort_number')->orderBy('name', 'COLLATE NOCASE')->fetchAll();
     }
 
-    public function getValues($entity, $objectId)
+    /**
+     * @return mixed[]
+     */
+    public function getValues($entity, $objectId): array
     {
         if (!$this->isValidExposedEntity($entity)) {
             throw new Exception('Entity does not exist or is not exposed');

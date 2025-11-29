@@ -165,6 +165,7 @@ class StockService extends BaseService
             if ($locationId !== null && !$this->locationExists($locationId)) {
                 throw new Exception('Location does not exist');
             }
+
             $location = $this->getDatabase()->locations()->where('id', $locationId)->fetch();
 
             if (
@@ -305,6 +306,7 @@ class StockService extends BaseService
 
             return $transactionId;
         }
+
         throw new Exception(sprintf('Transaction type %s is not valid (StockService.addProduct)', $transactionType));
     }
 
@@ -534,6 +536,7 @@ class StockService extends BaseService
 
             return $transactionId;
         }
+
         throw new Exception(sprintf('Transaction type %s is not valid (StockService.consumeProduct)', $transactionType));
     }
 
@@ -743,6 +746,7 @@ class StockService extends BaseService
         if ($excludeOverdue) {
             return $this->getCurrentStock(sprintf("WHERE best_before_date <= date('now', '%d days') AND best_before_date >= date()", $days));
         }
+
         return $this->getCurrentStock(sprintf("WHERE best_before_date <= date('now', '%d days')", $days));
     }
 
@@ -952,14 +956,17 @@ class StockService extends BaseService
         if ($productDetails->product->enable_tare_weight_handling == 1) {
             $containerWeight = $productDetails->product->tare_weight;
         }
+
         if ($newAmount == $productDetails->stock_amount + $containerWeight) {
             throw new Exception('The new amount cannot equal the current stock amount');
         }
+
         if ($newAmount > $productDetails->stock_amount + $containerWeight) {
             $bookingAmount = $newAmount - $productDetails->stock_amount;
             if ($productDetails->product->enable_tare_weight_handling == 1) {
                 $bookingAmount = $newAmount;
             }
+
             return $this->addProduct($productId, $bookingAmount, $bestBeforeDate, self::TRANSACTION_TYPE_INVENTORY_CORRECTION, $purchasedDate, $price, $locationId, $shoppingLocationId, $unusedTransactionId, $stockLabelType, false, $note);
         }
 
@@ -968,6 +975,7 @@ class StockService extends BaseService
             if ($productDetails->product->enable_tare_weight_handling == 1) {
                 $bookingAmount = $newAmount;
             }
+
             return $this->consumeProduct($productId, $bookingAmount, false, self::TRANSACTION_TYPE_INVENTORY_CORRECTION);
         }
 
@@ -1667,7 +1675,7 @@ class StockService extends BaseService
         }
     }
 
-    private function loadexternalBarcodeLookupPlugin(): ?object
+    private function loadexternalBarcodeLookupPlugin(): object
     {
         $pluginName = defined('GROCY_STOCK_BARCODE_LOOKUP_PLUGIN') ? GROCY_STOCK_BARCODE_LOOKUP_PLUGIN : '';
         if (empty($pluginName)) {
@@ -1685,6 +1693,7 @@ class StockService extends BaseService
                 $this->getUsersService()->getUserSettings(GROCY_USER_ID)
             );
         }
+
         if (file_exists($standardPluginPath)) {
             require_once $standardPluginPath;
             return new $pluginName(
@@ -1692,10 +1701,9 @@ class StockService extends BaseService
                 $this->getDatabase()->quantity_units()->where('active = 1')->fetchAll(),
                 $this->getUsersService()->getUserSettings(GROCY_USER_ID)
             );
-        } else {
-            throw new Exception(sprintf('Plugin %s was not found', $pluginName));
         }
-        return null;
+
+        throw new Exception(sprintf('Plugin %s was not found', $pluginName));
     }
 
     private function locationExists($locationId): bool

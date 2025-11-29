@@ -23,7 +23,7 @@ return RectorConfig::configure()
         typeDeclarations: true,
         privatization: true,
         // naming: true,
-        // instanceOf: true,
+        instanceOf: true,
         earlyReturn: true,
         // carbon: true,
         // rectorPreset: true

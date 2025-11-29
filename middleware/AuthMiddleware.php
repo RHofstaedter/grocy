@@ -42,28 +42,23 @@ abstract class AuthMiddleware extends BaseMiddleware
             define('GROCY_USER_PICTURE_FILE_NAME', $user->picture_file_name);
 
             return $handler->handle($request);
-        } else {
-            $user = $this->authenticate($request);
-
-            if ($user === null) {
-                define('GROCY_AUTHENTICATED', false);
-
-                $response = $this->ResponseFactory->createResponse();
-
-                if ($isApiRoute) {
-                    return $response->withStatus(401);
-                } else {
-                    return $response->withStatus(302)->withHeader('Location', $this->AppContainer->get('UrlManager')->ConstructUrl('/login'));
-                }
-            } else {
-                define('GROCY_AUTHENTICATED', true);
-                define('GROCY_USER_ID', $user->id);
-                define('GROCY_USER_USERNAME', $user->username);
-                define('GROCY_USER_PICTURE_FILE_NAME', $user->picture_file_name);
-
-                return $response = $handler->handle($request);
-            }
         }
+        $user = $this->authenticate($request);
+        if ($user === null) {
+            define('GROCY_AUTHENTICATED', false);
+
+            $response = $this->ResponseFactory->createResponse();
+
+            if ($isApiRoute) {
+                return $response->withStatus(401);
+            }
+            return $response->withStatus(302)->withHeader('Location', $this->AppContainer->get('UrlManager')->ConstructUrl('/login'));
+        }
+        define('GROCY_AUTHENTICATED', true);
+        define('GROCY_USER_ID', $user->id);
+        define('GROCY_USER_USERNAME', $user->username);
+        define('GROCY_USER_PICTURE_FILE_NAME', $user->picture_file_name);
+        return $response = $handler->handle($request);
     }
 
     protected static function SetSessionCookie($sessionKey)

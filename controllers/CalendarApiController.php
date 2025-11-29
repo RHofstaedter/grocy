@@ -27,10 +27,12 @@ class CalendarApiController extends BaseApiController
             $vCalendar->setProductIdentifier('Grocy');
 
             foreach ($events as $event) {
-                if (!isset($event['start']) || empty($event['start'])) {
+                if (!isset($event['start'])) {
                     continue;
                 }
-
+                if (empty($event['start'])) {
+                    continue;
+                }
                 $description = '';
                 if (isset($event['description'])) {
                     $description = $event['description'];

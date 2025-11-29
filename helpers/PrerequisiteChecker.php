@@ -74,7 +74,7 @@ class PrerequisiteChecker
 
     private function getSqlVersionAsString()
     {
-        $dbh = new PDO('sqlite::memory:');
-        return $dbh->query('select sqlite_version()')->fetch()[0];
+        $pdo = new PDO('sqlite::memory:');
+        return $pdo->query('select sqlite_version()')->fetch()[0];
     }
 }

@@ -279,10 +279,10 @@ class StockApiController extends BaseApiController
             $args['productId'] = $this->getStockService()->getProductIdFromBarcode($args['barcode']);
 
             if (Grocycode::validate($args['barcode'])) {
-                $gc = new Grocycode($args['barcode']);
-                if ($gc->getExtraData()) {
+                $grocycode = new Grocycode($args['barcode']);
+                if ($grocycode->getExtraData()) {
                     $requestBody = $request->getParsedBody();
-                    $requestBody['stock_entry_id'] = $gc->getExtraData()[0];
+                    $requestBody['stock_entry_id'] = $grocycode->getExtraData()[0];
                     $request = $request->withParsedBody($requestBody);
                 }
             }
@@ -490,10 +490,10 @@ class StockApiController extends BaseApiController
             $args['productId'] = $this->getStockService()->getProductIdFromBarcode($args['barcode']);
 
             if (Grocycode::validate($args['barcode'])) {
-                $gc = new Grocycode($args['barcode']);
-                if ($gc->getExtraData()) {
+                $grocycode = new Grocycode($args['barcode']);
+                if ($grocycode->getExtraData()) {
                     $requestBody = $request->getParsedBody();
-                    $requestBody['stock_entry_id'] = $gc->getExtraData()[0];
+                    $requestBody['stock_entry_id'] = $grocycode->getExtraData()[0];
                     $request = $request->withParsedBody($requestBody);
                 }
             }
@@ -716,10 +716,10 @@ class StockApiController extends BaseApiController
             $args['productId'] = $this->getStockService()->getProductIdFromBarcode($args['barcode']);
 
             if (Grocycode::validate($args['barcode'])) {
-                $gc = new Grocycode($args['barcode']);
-                if ($gc->getExtraData()) {
+                $grocycode = new Grocycode($args['barcode']);
+                if ($grocycode->getExtraData()) {
                     $requestBody = $request->getParsedBody();
-                    $requestBody['stock_entry_id'] = $gc->getExtraData()[0];
+                    $requestBody['stock_entry_id'] = $grocycode->getExtraData()[0];
                     $request = $request->withParsedBody($requestBody);
                 }
             }

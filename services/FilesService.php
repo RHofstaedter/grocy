@@ -43,17 +43,17 @@ class FilesService extends BaseService
 
         try {
             if (!file_exists($filePathDownscaled)) {
-                $image = new ImageResize($filePath);
+                $imageResize = new ImageResize($filePath);
 
                 if ($bestFitHeight !== null && $bestFitHeight !== null) {
-                    $image->resizeToBestFit($bestFitWidth, $bestFitHeight);
+                    $imageResize->resizeToBestFit($bestFitWidth, $bestFitHeight);
                 } elseif ($bestFitHeight !== null) {
-                    $image->resizeToHeight($bestFitHeight);
+                    $imageResize->resizeToHeight($bestFitHeight);
                 } elseif ($bestFitWidth !== null) {
-                    $image->resizeToWidth($bestFitWidth);
+                    $imageResize->resizeToWidth($bestFitWidth);
                 }
 
-                $image->save($filePathDownscaled);
+                $imageResize->save($filePathDownscaled);
             }
         } catch (ImageResizeException) {
             return $filePath;

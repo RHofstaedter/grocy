@@ -13,11 +13,11 @@ class ReverseProxyAuthMiddleware extends AuthMiddleware
     {
         define('GROCY_EXTERNALLY_MANAGED_AUTHENTICATION', true);
 
-        $db = DatabaseService::getInstance()->getDbConnection();
+        $database = DatabaseService::getInstance()->getDbConnection();
 
         // API key authentication is also ok
-        $auth = new ApiKeyAuthMiddleware($this->AppContainer, $this->ResponseFactory);
-        $user = $auth->authenticate($request);
+        $apiKeyAuthMiddleware = new ApiKeyAuthMiddleware($this->AppContainer, $this->ResponseFactory);
+        $user = $apiKeyAuthMiddleware->authenticate($request);
         if ($user !== null) {
             return $user;
         }
@@ -43,7 +43,7 @@ class ReverseProxyAuthMiddleware extends AuthMiddleware
             $username = $username[0];
         }
 
-        $user = $db->users()->where('username', $username)->fetch();
+        $user = $database->users()->where('username', $username)->fetch();
         if ($user == null) {
             return UsersService::getInstance()->createUser($username, '', '', '');
         }

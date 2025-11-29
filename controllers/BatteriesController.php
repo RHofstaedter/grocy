@@ -107,7 +107,7 @@ class BatteriesController extends BaseController
 
     public function batteryGrocycodeImage(Request $request, Response $response, array $args)
     {
-        $gc = new Grocycode(Grocycode::BATTERY, $args['batteryId']);
-        return $this->serveGrocycodeImage($request, $response, $gc);
+        $grocycode = new Grocycode(Grocycode::BATTERY, $args['batteryId']);
+        return $this->serveGrocycodeImage($request, $response, $grocycode);
     }
 }

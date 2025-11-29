@@ -121,7 +121,7 @@ class ChoresController extends BaseController
 
     public function choreGrocycodeImage(Request $request, Response $response, array $args)
     {
-        $gc = new Grocycode(Grocycode::CHORE, $args['choreId']);
-        return $this->serveGrocycodeImage($request, $response, $gc);
+        $grocycode = new Grocycode(Grocycode::CHORE, $args['choreId']);
+        return $this->serveGrocycodeImage($request, $response, $grocycode);
     }
 }

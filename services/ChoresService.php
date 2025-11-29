@@ -70,13 +70,13 @@ class ChoresService extends BaseService
                 usort($assignedUsers, fn($a, $b): int => strcmp((string) $a->display_name, (string) $b->display_name));
 
                 $nextRoundMatches = false;
-                foreach ($assignedUsers as $user) {
+                foreach ($assignedUsers as $assignedUser) {
                     if ($nextRoundMatches) {
-                        $nextExecutionUserId = $user->id;
+                        $nextExecutionUserId = $assignedUser->id;
                         break;
                     }
 
-                    if ($user->id == $lastDoneByUserId) {
+                    if ($assignedUser->id == $lastDoneByUserId) {
                         $nextRoundMatches = true;
                     }
                 }

@@ -17,10 +17,10 @@ class ExceptionController extends BaseApiController
         parent::__construct($container);
     }
 
-    public function __invoke(ServerRequestInterface $request, Throwable $exception, bool $displayErrorDetails, bool $logErrors, bool $logErrorDetails, ?LoggerInterface $logger = null)
+    public function __invoke(ServerRequestInterface $serverRequest, Throwable $throwable, bool $displayErrorDetails, bool $logErrors, bool $logErrorDetails, ?LoggerInterface $logger = null)
     {
         $response = $this->app->getResponseFactory()->createResponse();
-        $isApiRoute = str_starts_with($request->getUri()->getPath(), '/api/');
+        $isApiRoute = str_starts_with($serverRequest->getUri()->getPath(), '/api/');
 
         if (!defined('GROCY_AUTHENTICATED')) {
             define('GROCY_AUTHENTICATED', false);
@@ -29,43 +29,43 @@ class ExceptionController extends BaseApiController
         if ($isApiRoute) {
             $status = 500;
 
-            if ($exception instanceof HttpException) {
-                $status = $exception->getCode();
+            if ($throwable instanceof HttpException) {
+                $status = $throwable->getCode();
             }
 
             $data = [
-                'error_message' => $exception->getMessage()
+                'error_message' => $throwable->getMessage()
             ];
 
             if ($displayErrorDetails) {
                 $data['error_details'] = [
-                    'stack_trace' => $exception->getTraceAsString(),
-                    'file' => $exception->getFile(),
-                    'line' => $exception->getLine()
+                    'stack_trace' => $throwable->getTraceAsString(),
+                    'file' => $throwable->getFile(),
+                    'line' => $throwable->getLine()
                 ];
             }
 
             return $this->apiResponse($response->withStatus($status)->withHeader('Content-Type', 'application/json'), $data);
         }
 
-        if ($exception instanceof HttpNotFoundException) {
+        if ($throwable instanceof HttpNotFoundException) {
             if (!defined('GROCY_AUTHENTICATED')) {
                 define('GROCY_AUTHENTICATED', false);
             }
 
             return $this->renderPage($response->withStatus(404), 'errors/404', [
-                'exception' => $exception
+                'exception' => $throwable
             ]);
         }
 
-        if ($exception instanceof HttpForbiddenException) {
+        if ($throwable instanceof HttpForbiddenException) {
             return $this->renderPage($response->withStatus(403), 'errors/403', [
-                'exception' => $exception
+                'exception' => $throwable
             ]);
         }
 
         return $this->renderPage($response->withStatus(500), 'errors/500', [
-            'exception' => $exception,
+            'exception' => $throwable,
             'systemInfo' => $this->getApplicationService()->getSystemInfo()
         ]);
     }

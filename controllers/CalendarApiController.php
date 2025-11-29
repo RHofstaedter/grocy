@@ -30,9 +30,11 @@ class CalendarApiController extends BaseApiController
                 if (!isset($event['start'])) {
                     continue;
                 }
+
                 if (empty($event['start'])) {
                     continue;
                 }
+
                 $description = '';
                 if (isset($event['description'])) {
                     $description = $event['description'];

@@ -9,11 +9,11 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 class LocaleMiddleware extends BaseMiddleware
 {
-    public function __invoke(Request $request, RequestHandler $handler): Response
+    public function __invoke(Request $request, RequestHandler $requestHandler): Response
     {
         $locale = $this->getLocale($request);
         define('GROCY_LOCALE', $locale);
-        return $handler->handle($request);
+        return $requestHandler->handle($request);
     }
 
     protected function getLocale(Request $request)

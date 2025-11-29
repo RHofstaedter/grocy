@@ -211,8 +211,8 @@ class StockController extends BaseController
 
     public function productGrocycodeImage(Request $request, Response $response, array $args)
     {
-        $gc = new Grocycode(Grocycode::PRODUCT, $args['productId']);
-        return $this->serveGrocycodeImage($request, $response, $gc);
+        $grocycode = new Grocycode(Grocycode::PRODUCT, $args['productId']);
+        return $this->serveGrocycodeImage($request, $response, $grocycode);
     }
 
     public function productGroupEditForm(Request $request, Response $response, array $args)
@@ -484,8 +484,8 @@ class StockController extends BaseController
     public function stockEntryGrocycodeImage(Request $request, Response $response, array $args)
     {
         $stockEntry = $this->getDatabase()->stock()->where('id', $args['entryId'])->fetch();
-        $gc = new Grocycode(Grocycode::PRODUCT, $stockEntry->product_id, [$stockEntry->stock_id]);
-        return $this->serveGrocycodeImage($request, $response, $gc);
+        $grocycode = new Grocycode(Grocycode::PRODUCT, $stockEntry->product_id, [$stockEntry->stock_id]);
+        return $this->serveGrocycodeImage($request, $response, $grocycode);
     }
 
     public function stockEntryGrocycodeLabel(Request $request, Response $response, array $args)

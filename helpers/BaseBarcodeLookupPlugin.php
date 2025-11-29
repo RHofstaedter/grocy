@@ -41,9 +41,9 @@ abstract class BaseBarcodeLookupPlugin
             '__barcode'
         ];
 
-        foreach ($minimunNeededProperties as $prop) {
-            if (!array_key_exists($prop, $pluginOutput)) {
-                throw new Exception('Plugin output does not provide needed property ' . $prop);
+        foreach ($minimunNeededProperties as $minimunNeededProperty) {
+            if (!array_key_exists($minimunNeededProperty, $pluginOutput)) {
+                throw new Exception('Plugin output does not provide needed property ' . $minimunNeededProperty);
             }
         }
 

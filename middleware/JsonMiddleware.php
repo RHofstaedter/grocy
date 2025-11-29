@@ -8,9 +8,9 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 class JsonMiddleware extends BaseMiddleware
 {
-    public function __invoke(Request $request, RequestHandler $handler): Response
+    public function __invoke(Request $request, RequestHandler $requestHandler): Response
     {
-        $response = $handler->handle($request);
+        $response = $requestHandler->handle($request);
 
         if ($response->hasHeader('Content-Disposition')) {
             return $response;

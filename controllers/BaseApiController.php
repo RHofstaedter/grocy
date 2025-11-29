@@ -6,6 +6,7 @@ use LessQL\Result;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Exception\HttpException;
 use Exception;
+use InvalidArgumentException;
 
 class BaseApiController extends BaseController
 {
@@ -15,11 +16,11 @@ class BaseApiController extends BaseController
 
     public const PATTERN_VALUE = '[A-Za-z\p{L}\p{M}0-9*_.$#^| -\\\]+';
 
-    protected $openApiSpec;
+    protected mixed $openApiSpec;
 
-    private static ?\HTMLPurifier $htmlPurifierInstance = null;
+    private static ?\HTMLPurifier $htmlPurifier = null;
 
-    protected function apiResponse(Response $response, $data, $cache = false)
+    protected function apiResponse(Response $response, $data, $cache = false): Response
     {
         if ($cache) {
             $response = $response->withHeader('Cache-Control', 'max-age=2592000');
@@ -29,7 +30,7 @@ class BaseApiController extends BaseController
         return $response;
     }
 
-    protected function emptyApiResponse(Response $response, int $status = 204)
+    protected function emptyApiResponse(Response $response, int $status = 204): Response
     {
         return $response->withStatus($status);
     }
@@ -41,16 +42,16 @@ class BaseApiController extends BaseController
         ]);
     }
 
-    public function filteredApiResponse(Response $response, Result $data, array $query)
+    public function filteredApiResponse(Response $response, Result $result, array $query): Response
     {
-        $data = $this->queryData($data, $query);
-        return $this->apiResponse($response, $data);
+        $result = $this->queryData($result, $query);
+        return $this->apiResponse($response, $result);
     }
 
-    protected function queryData(Result $data, array $query)
+    protected function queryData(Result $result, array $query)
     {
         if (isset($query['query'])) {
-            $data = $this->filter($data, $query['query']);
+            $result = $this->filter($result, $query['query']);
         }
 
         if (isset($query['limit']) || isset($query['offset'])) {
@@ -58,27 +59,27 @@ class BaseApiController extends BaseController
                 $query['limit'] = -1;
             }
 
-            $data = $data->limit(intval($query['limit']), intval($query['offset'] ?? 0));
+            $result = $result->limit(intval($query['limit']), intval($query['offset'] ?? 0));
         }
 
         if (isset($query['order'])) {
             $parts = explode(':', $query['order']);
 
             if (count($parts) === 1) {
-                $data = $data->orderBy($parts[0]);
+                $result = $result->orderBy($parts[0]);
             } else {
                 if ($parts[1] != 'asc' && $parts[1] != 'desc') {
                     throw new Exception('Invalid sort order ' . $parts[1]);
                 }
 
-                $data = $data->orderBy($parts[0], $parts[1]);
+                $result = $result->orderBy($parts[0], $parts[1]);
             }
         }
 
-        return $data;
+        return $result;
     }
 
-    protected function filter(Result $data, array $query): Result
+    protected function filter(Result $result, array $query): Result
     {
         foreach ($query as $q) {
             $matches = [];
@@ -98,46 +99,29 @@ class BaseApiController extends BaseController
                 throw new Exception('Invalid query');
             }
 
-            $sqlOrNull = '';
-            if (strtolower($matches['value']) === 'null') {
-                $sqlOrNull = ' OR ' . $matches['field'] . ' IS NULL';
-            }
+            $sqlOrNull = strtolower($matches['value']) === 'null' ? ' OR ' . $matches['field'] . ' IS NULL' : '';
 
-            switch ($matches['op']) {
-                case '=':
-                    $data = $data->where($matches['field'] . ' = ?' . $sqlOrNull, $matches['value']);
-                    break;
-                case '!=':
-                    $data = $data->where($matches['field'] . ' != ?' . $sqlOrNull, $matches['value']);
-                    break;
-                case '~':
-                    $data = $data->where($matches['field'] . ' LIKE ?', '%' . $matches['value'] . '%');
-                    break;
-                case '!~':
-                    $data = $data->where($matches['field'] . ' NOT LIKE ?', '%' . $matches['value'] . '%');
-                    break;
-                case '<':
-                    $data = $data->where($matches['field'] . ' < ?', $matches['value']);
-                    break;
-                case '>':
-                    $data = $data->where($matches['field'] . ' > ?', $matches['value']);
-                    break;
-                case '>=':
-                    $data = $data->where($matches['field'] . ' >= ?', $matches['value']);
-                    break;
-                case '<=':
-                    $data = $data->where($matches['field'] . ' <= ?', $matches['value']);
-                    break;
-                case '§':
-                    $data = $data->where($matches['field'] . ' REGEXP ?', $matches['value']);
-                    break;
-            }
+            $result = match ($matches['op']) {
+                '='   => $result->where($matches['field'] . ' = ?' . $sqlOrNull, $matches['value']),
+                '!='  => $result->where($matches['field'] . ' != ?' . $sqlOrNull, $matches['value']),
+                '~'   => $result->where($matches['field'] . ' LIKE ?', '%' . $matches['value'] . '%'),
+                '!~'  => $result->where($matches['field'] . ' NOT LIKE ?', '%' . $matches['value'] . '%'),
+                '<'   => $result->where($matches['field'] . ' < ?', $matches['value']),
+                '>'   => $result->where($matches['field'] . ' > ?', $matches['value']),
+                '>='  => $result->where($matches['field'] . ' >= ?', $matches['value']),
+                '<='  => $result->where($matches['field'] . ' <= ?', $matches['value']),
+                '§'   => $result->where($matches['field'] . ' REGEXP ?', $matches['value']),
+                // Optional: a default case to guard against unexpected operators
+                default => throw new InvalidArgumentException(
+                    sprintf('Unsupported operator "%s".', $matches['op'])
+                ),
+            };
         }
 
-        return $data;
+        return $result;
     }
 
-    protected function getOpenApiSpec()
+    protected function getOpenApiSpec(): mixed
     {
         if ($this->openApiSpec == null) {
             $this->openApiSpec = json_decode(file_get_contents(__DIR__ . '/../grocy.openapi.json'));
@@ -152,7 +136,7 @@ class BaseApiController extends BaseController
             throw new HttpException($request, 'Bad Content-Type', 400);
         }
 
-        if (self::$htmlPurifierInstance == null) {
+        if (self::$htmlPurifier == null) {
             $htmlPurifierConfig = \HTMLPurifier_Config::createDefault();
             $htmlPurifierConfig->set('Cache.SerializerPath', GROCY_DATAPATH . '/viewcache');
             $htmlPurifierConfig->set('HTML.Allowed', 'div,b,strong,i,em,u,a[href|title|target],iframe[src|width|height|frameborder],ul,ol,li,p[style],br,span[style],img[style|width|height|alt|src],table[border|width|style],tbody,tr,td,th,blockquote,*[style|class|id],h1,h2,h3,h4,h5,h6');
@@ -163,7 +147,7 @@ class BaseApiController extends BaseController
             $htmlPurifierConfig->set('URI.SafeIframeRegexp', '%^.*%'); // Allow any iframe source
             $htmlPurifierConfig->set('CSS.MaxImgLength', null);
 
-            self::$htmlPurifierInstance = new \HTMLPurifier($htmlPurifierConfig);
+            self::$htmlPurifier = new \HTMLPurifier($htmlPurifierConfig);
         }
 
         $requestBody = $request->getParsedBody();
@@ -171,7 +155,7 @@ class BaseApiController extends BaseController
             // HTMLPurifier removes boolean values (true/false) and arrays, so explicitly keep them
             // Maybe also possible through HTMLPurifier config (http://htmlpurifier.org/live/configdoc/plain.html)
             if (!is_bool($value) && !is_array($value)) {
-                $value = self::$htmlPurifierInstance->purify($value);
+                $value = self::$htmlPurifier->purify($value);
 
                 // Allow some special chars
                 // Maybe also possible through HTMLPurifier config (http://htmlpurifier.org/live/configdoc/plain.html)

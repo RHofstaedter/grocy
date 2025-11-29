@@ -31,10 +31,10 @@ class UsersService extends BaseService
             ->where('name', GROCY_DEFAULT_PERMISSIONS)
             ->fetchAll();
 
-        foreach ($permissions as $perm) {
+        foreach ($permissions as $permission) {
             $permList[] = [
                 'user_id' => $newUserRow->id,
-                'permission_id' => $perm->id
+                'permission_id' => $permission->id
             ];
         }
 

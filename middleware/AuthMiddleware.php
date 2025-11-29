@@ -17,7 +17,7 @@ abstract class AuthMiddleware extends BaseMiddleware
         parent::__construct($container);
     }
 
-    public function __invoke(Request $request, RequestHandler $handler): Response
+    public function __invoke(Request $request, RequestHandler $requestHandler): Response
     {
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
@@ -25,24 +25,20 @@ abstract class AuthMiddleware extends BaseMiddleware
         $isApiRoute = str_starts_with($request->getUri()->getPath(), '/api/');
 
         if ($routeName === 'root') {
-            return $handler->handle($request);
+            return $requestHandler->handle($request);
         }
 
         if ($routeName === 'login') {
             define('GROCY_AUTHENTICATED', false);
-            return $handler->handle($request);
+            return $requestHandler->handle($request);
         }
+        $sessionService = SessionService::getInstance();
+        $user = $sessionService->getDefaultUser();
+        define('GROCY_AUTHENTICATED', true);
+        define('GROCY_USER_USERNAME', $user->username);
+        define('GROCY_USER_PICTURE_FILE_NAME', $user->picture_file_name);
+        return $requestHandler->handle($request);
 
-        if (in_array(GROCY_MODE, ['dev', 'demo', 'prerelease'], true) || GROCY_IS_EMBEDDED_INSTALL || GROCY_DISABLE_AUTH) {
-            $sessionService = SessionService::getInstance();
-            $user = $sessionService->getDefaultUser();
-
-            define('GROCY_AUTHENTICATED', true);
-            define('GROCY_USER_USERNAME', $user->username);
-            define('GROCY_USER_PICTURE_FILE_NAME', $user->picture_file_name);
-
-            return $handler->handle($request);
-        }
         $user = $this->authenticate($request);
         if ($user === null) {
             define('GROCY_AUTHENTICATED', false);
@@ -52,13 +48,15 @@ abstract class AuthMiddleware extends BaseMiddleware
             if ($isApiRoute) {
                 return $response->withStatus(401);
             }
+
             return $response->withStatus(302)->withHeader('Location', $this->AppContainer->get('UrlManager')->ConstructUrl('/login'));
         }
+
         define('GROCY_AUTHENTICATED', true);
         define('GROCY_USER_ID', $user->id);
         define('GROCY_USER_USERNAME', $user->username);
         define('GROCY_USER_PICTURE_FILE_NAME', $user->picture_file_name);
-        return $response = $handler->handle($request);
+        return $response = $requestHandler->handle($request);
     }
 
     protected static function SetSessionCookie($sessionKey)

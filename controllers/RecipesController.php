@@ -114,17 +114,17 @@ class RecipesController extends BaseController
 
             $includedRecipeIdsAbsolute = [];
             $includedRecipeIdsAbsolute[] = $selectedRecipe->id;
-            foreach ($selectedRecipeSubRecipes as $subRecipe) {
-                $includedRecipeIdsAbsolute[] = $subRecipe->id;
+            foreach ($selectedRecipeSubRecipes as $selectedRecipeSubRecipe) {
+                $includedRecipeIdsAbsolute[] = $selectedRecipeSubRecipe->id;
             }
 
             // TODO: Why not directly use recipes_pos_resolved for all recipe positions here (parent and child)?
             // This view already correctly recolves child recipe amounts...
             $allRecipePositions = [];
-            foreach ($includedRecipeIdsAbsolute as $id) {
-                $allRecipePositions[$id] = $this->getDatabase()->recipes_pos_resolved()->where('recipe_id = :1 AND is_nested_recipe_pos = 0', $id)->orderBy('ingredient_group', 'ASC', 'product_group', 'ASC');
-                foreach ($allRecipePositions[$id] as $pos) {
-                    if ($id != $selectedRecipe->id) {
+            foreach ($includedRecipeIdsAbsolute as $includedRecipeIdAbsolute) {
+                $allRecipePositions[$includedRecipeIdAbsolute] = $this->getDatabase()->recipes_pos_resolved()->where('recipe_id = :1 AND is_nested_recipe_pos = 0', $includedRecipeIdAbsolute)->orderBy('ingredient_group', 'ASC', 'product_group', 'ASC');
+                foreach ($allRecipePositions[$includedRecipeIdAbsolute] as $pos) {
+                    if ($includedRecipeIdAbsolute != $selectedRecipe->id) {
                         $pos2 = $this->getDatabase()->recipes_pos_resolved()->where('recipe_id = :1  AND recipe_pos_id = :2 AND is_nested_recipe_pos = 1', $selectedRecipe->id, $pos->recipe_pos_id)->fetch();
                         $pos->recipe_amount = $pos2->recipe_amount;
                         $pos->missing_amount = $pos2->missing_amount;
@@ -210,7 +210,7 @@ class RecipesController extends BaseController
 
     public function recipeGrocycodeImage(Request $request, Response $response, array $args)
     {
-        $gc = new Grocycode(Grocycode::RECIPE, $args['recipeId']);
-        return $this->serveGrocycodeImage($request, $response, $gc);
+        $grocycode = new Grocycode(Grocycode::RECIPE, $args['recipeId']);
+        return $this->serveGrocycodeImage($request, $response, $grocycode);
     }
 }

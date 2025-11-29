@@ -441,19 +441,19 @@ class StockService extends BaseService
                 $transactionId = uniqid();
             }
 
-            foreach ($potentialStockEntries as $stockEntry) {
+            foreach ($potentialStockEntries as $potentialStockEntry) {
                 if ($amount == 0) {
                     break;
                 }
 
-                if ($allowSubproductSubstitution && $stockEntry->product_id != $productId) {
+                if ($allowSubproductSubstitution && $potentialStockEntry->product_id != $productId) {
                     // A sub product will be used -> use QU conversions
-                    $subProduct = $this->getDatabase()->products($stockEntry->product_id);
+                    $subProduct = $this->getDatabase()->products($potentialStockEntry->product_id);
                     $conversion = $this->getDatabase()
                         ->cache__quantity_unit_conversions_resolved()
                         ->where(
                             'product_id = :1 AND from_qu_id = :2 AND to_qu_id = :3',
-                            $stockEntry->product_id,
+                            $potentialStockEntry->product_id,
                             $productDetails->product->qu_id_stock,
                             $subProduct->qu_id_stock
                         )->fetch();
@@ -462,32 +462,32 @@ class StockService extends BaseService
                     }
                 }
 
-                if ($amount >= $stockEntry->amount) {
+                if ($amount >= $potentialStockEntry->amount) {
                     // Take the whole stock entry
                     $logRow = $this->getDatabase()->stock_log()->createRow([
-                        'product_id' => $stockEntry->product_id,
-                        'amount' => $stockEntry->amount * -1,
-                        'best_before_date' => $stockEntry->best_before_date,
-                        'purchased_date' => $stockEntry->purchased_date,
+                        'product_id' => $potentialStockEntry->product_id,
+                        'amount' => $potentialStockEntry->amount * -1,
+                        'best_before_date' => $potentialStockEntry->best_before_date,
+                        'purchased_date' => $potentialStockEntry->purchased_date,
                         'used_date' => date('Y-m-d'),
                         'spoiled' => $spoiled,
-                        'stock_id' => $stockEntry->stock_id,
+                        'stock_id' => $potentialStockEntry->stock_id,
                         'transaction_type' => $transactionType,
-                        'price' => $stockEntry->price,
-                        'opened_date' => $stockEntry->opened_date,
+                        'price' => $potentialStockEntry->price,
+                        'opened_date' => $potentialStockEntry->opened_date,
                         'recipe_id' => $recipeId,
                         'transaction_id' => $transactionId,
                         'user_id' => GROCY_USER_ID,
-                        'location_id' => $stockEntry->location_id,
-                        'note' => $stockEntry->note
+                        'location_id' => $potentialStockEntry->location_id,
+                        'note' => $potentialStockEntry->note
                     ]);
                     $logRow->save();
 
-                    $stockEntry->delete();
+                    $potentialStockEntry->delete();
 
-                    $amount -= $stockEntry->amount;
+                    $amount -= $potentialStockEntry->amount;
 
-                    if ($allowSubproductSubstitution && $stockEntry->product_id != $productId && $conversion != null) {
+                    if ($allowSubproductSubstitution && $potentialStockEntry->product_id != $productId && $conversion != null) {
                         // A sub product with QU conversions was used
                         // => Convert the rest amount back to be based on
                         // the original (parent) product for the next round
@@ -495,28 +495,28 @@ class StockService extends BaseService
                     }
                 } else {
                     // Stock entry amount is > than needed amount -> split the stock entry resp. update the amount
-                    $restStockAmount = $stockEntry->amount - $amount;
+                    $restStockAmount = $potentialStockEntry->amount - $amount;
 
                     $logRow = $this->getDatabase()->stock_log()->createRow([
-                        'product_id' => $stockEntry->product_id,
+                        'product_id' => $potentialStockEntry->product_id,
                         'amount' => $amount * -1,
-                        'best_before_date' => $stockEntry->best_before_date,
-                        'purchased_date' => $stockEntry->purchased_date,
+                        'best_before_date' => $potentialStockEntry->best_before_date,
+                        'purchased_date' => $potentialStockEntry->purchased_date,
                         'used_date' => date('Y-m-d'),
                         'spoiled' => $spoiled,
-                        'stock_id' => $stockEntry->stock_id,
+                        'stock_id' => $potentialStockEntry->stock_id,
                         'transaction_type' => $transactionType,
-                        'price' => $stockEntry->price,
-                        'opened_date' => $stockEntry->opened_date,
+                        'price' => $potentialStockEntry->price,
+                        'opened_date' => $potentialStockEntry->opened_date,
                         'recipe_id' => $recipeId,
                         'transaction_id' => $transactionId,
                         'user_id' => GROCY_USER_ID,
-                        'location_id' => $stockEntry->location_id,
-                        'note' => $stockEntry->note
+                        'location_id' => $potentialStockEntry->location_id,
+                        'note' => $potentialStockEntry->note
                     ]);
                     $logRow->save();
 
-                    $stockEntry->update([
+                    $potentialStockEntry->update([
                         'amount' => $restStockAmount
                     ]);
 
@@ -674,7 +674,7 @@ class StockService extends BaseService
                         $imageData = $response->getBody();
                     } elseif (preg_match('/data:image\/(\w+?);base64,([A-Za-z0-9+\/]*={0,2})$/', (string) $pluginOutput['__image_url'], $matches)) {
                         $fileExtension = $matches[1];
-                        if (!($imageData = base64_decode($matches[2]))) {
+                        if (($imageData = base64_decode($matches[2])) === '' || ($imageData = base64_decode($matches[2])) === '0') {
                             unset($imageData);
                         }
                     }
@@ -716,9 +716,9 @@ class StockService extends BaseService
         $currentStockMapped = $this->getDatabaseService()->executeDbQuery($sql)->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_OBJ);
         $relevantProducts = $this->getDatabase()->products()->where('id IN (SELECT product_id FROM (' . $sql . ') x)');
 
-        foreach ($relevantProducts as $product) {
-            $currentStockMapped[$product->id][0]->product_id = $product->id;
-            $currentStockMapped[$product->id][0]->product = $product;
+        foreach ($relevantProducts as $relevantProduct) {
+            $currentStockMapped[$relevantProduct->id][0]->product_id = $relevantProduct->id;
+            $currentStockMapped[$relevantProduct->id][0]->product = $relevantProduct;
         }
 
         return array_column($currentStockMapped, 0);
@@ -760,8 +760,8 @@ class StockService extends BaseService
         $missingProductsResponse = $this->getDatabaseService()->executeDbQuery('SELECT * FROM stock_missing_products')->fetchAll(\PDO::FETCH_OBJ);
 
         $relevantProducts = $this->getDatabase()->products()->where('id IN (SELECT id FROM stock_missing_products)');
-        foreach ($relevantProducts as $product) {
-            findObjectInArrayByPropertyValue($missingProductsResponse, 'id', $product->id)->product = $product;
+        foreach ($relevantProducts as $relevantProduct) {
+            findObjectInArrayByPropertyValue($missingProductsResponse, 'id', $relevantProduct->id)->product = $relevantProduct;
         }
 
         return $missingProductsResponse;
@@ -834,12 +834,12 @@ class StockService extends BaseService
     {
         // first, try to parse this as a product Grocycode
         if (Grocycode::validate($barcode)) {
-            $gc = new Grocycode($barcode);
-            if ($gc->getType() != Grocycode::PRODUCT) {
+            $grocycode = new Grocycode($barcode);
+            if ($grocycode->getType() != Grocycode::PRODUCT) {
                 throw new Exception('Invalid Grocycode');
             }
 
-            return $gc->getId();
+            return $grocycode->getId();
         }
 
         $potentialProduct = $this->getDatabase()->product_barcodes()->where('barcode = :1 COLLATE NOCASE', $barcode)->fetch();
@@ -1019,26 +1019,26 @@ class StockService extends BaseService
             $transactionId = uniqid();
         }
 
-        foreach ($potentialStockEntries as $stockEntry) {
+        foreach ($potentialStockEntries as $potentialStockEntry) {
             if ($amount == 0) {
                 break;
             }
 
-            $newBestBeforeDate = $stockEntry->best_before_date;
+            $newBestBeforeDate = $potentialStockEntry->best_before_date;
             if ($product->default_best_before_days_after_open > 0) {
                 $newBestBeforeDate = date('Y-m-d', strtotime('+' . $product->default_best_before_days_after_open . ' days'));
 
                 // The new due date should be never > the original due date
-                if (strtotime($newBestBeforeDate) > strtotime((string) $stockEntry->best_before_date)) {
-                    $newBestBeforeDate = $stockEntry->best_before_date;
+                if (strtotime($newBestBeforeDate) > strtotime((string) $potentialStockEntry->best_before_date)) {
+                    $newBestBeforeDate = $potentialStockEntry->best_before_date;
                 }
 
-                if (GROCY_FEATURE_FLAG_LABEL_PRINTER && GROCY_LABEL_PRINTER_RUN_SERVER && $productDetails->product->auto_reprint_stock_label == 1 && $newBestBeforeDate != $stockEntry->best_before_date) {
+                if (GROCY_FEATURE_FLAG_LABEL_PRINTER && GROCY_LABEL_PRINTER_RUN_SERVER && $productDetails->product->auto_reprint_stock_label == 1 && $newBestBeforeDate != $potentialStockEntry->best_before_date) {
                     $webhookData = array_merge([
                         'product' => $productDetails->product->name,
-                        'grocycode' => (string)(new Grocycode(Grocycode::PRODUCT, $productId, [$stockEntry->stock_id])),
+                        'grocycode' => (string)(new Grocycode(Grocycode::PRODUCT, $productId, [$potentialStockEntry->stock_id])),
                         'details' => $productDetails,
-                        'stock_entry' => $stockEntry,
+                        'stock_entry' => $potentialStockEntry,
                     ], GROCY_LABEL_PRINTER_PARAMS);
 
                     if (GROCY_FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING) {
@@ -1050,76 +1050,76 @@ class StockService extends BaseService
                 }
             }
 
-            if ($allowSubproductSubstitution && $stockEntry->product_id != $productId) {
+            if ($allowSubproductSubstitution && $potentialStockEntry->product_id != $productId) {
                 // A sub product will be used -> use QU conversions
-                $subProduct = $this->getDatabase()->products($stockEntry->product_id);
-                $conversion = $this->getDatabase()->cache__quantity_unit_conversions_resolved()->where('product_id = :1 AND from_qu_id = :2 AND to_qu_id = :3', $stockEntry->product_id, $product->qu_id_stock, $subProduct->qu_id_stock)->fetch();
+                $subProduct = $this->getDatabase()->products($potentialStockEntry->product_id);
+                $conversion = $this->getDatabase()->cache__quantity_unit_conversions_resolved()->where('product_id = :1 AND from_qu_id = :2 AND to_qu_id = :3', $potentialStockEntry->product_id, $product->qu_id_stock, $subProduct->qu_id_stock)->fetch();
                 if ($conversion != null) {
                     $amount *= $conversion->factor;
                 }
             }
 
-            if ($amount >= $stockEntry->amount) {
+            if ($amount >= $potentialStockEntry->amount) {
                 // Mark the whole stock entry as opened
                 $logRow = $this->getDatabase()->stock_log()->createRow([
-                    'product_id' => $stockEntry->product_id,
-                    'amount' => $stockEntry->amount,
-                    'best_before_date' => $stockEntry->best_before_date,
-                    'purchased_date' => $stockEntry->purchased_date,
-                    'stock_id' => $stockEntry->stock_id,
-                    'location_id' => $stockEntry->location_id,
-                    'shopping_location_id' => $stockEntry->shopping_location_id,
+                    'product_id' => $potentialStockEntry->product_id,
+                    'amount' => $potentialStockEntry->amount,
+                    'best_before_date' => $potentialStockEntry->best_before_date,
+                    'purchased_date' => $potentialStockEntry->purchased_date,
+                    'stock_id' => $potentialStockEntry->stock_id,
+                    'location_id' => $potentialStockEntry->location_id,
+                    'shopping_location_id' => $potentialStockEntry->shopping_location_id,
                     'transaction_type' => self::TRANSACTION_TYPE_PRODUCT_OPENED,
-                    'price' => $stockEntry->price,
+                    'price' => $potentialStockEntry->price,
                     'opened_date' => date('Y-m-d'),
                     'transaction_id' => $transactionId,
                     'user_id' => GROCY_USER_ID,
-                    'note' => $stockEntry->note
+                    'note' => $potentialStockEntry->note
                 ]);
                 $logRow->save();
 
-                $stockEntry->update([
+                $potentialStockEntry->update([
                     'open' => 1,
                     'opened_date' => date('Y-m-d'),
                     'best_before_date' => $newBestBeforeDate
                 ]);
 
-                $amount -= $stockEntry->amount;
+                $amount -= $potentialStockEntry->amount;
             } else {
                 // Stock entry amount is > than needed amount -> split the stock entry
-                $restStockAmount = $stockEntry->amount - $amount;
+                $restStockAmount = $potentialStockEntry->amount - $amount;
 
                 $newStockRow = $this->getDatabase()->stock()->createRow([
-                    'product_id' => $stockEntry->product_id,
+                    'product_id' => $potentialStockEntry->product_id,
                     'amount' => $restStockAmount,
-                    'best_before_date' => $stockEntry->best_before_date,
-                    'purchased_date' => $stockEntry->purchased_date,
-                    'location_id' => $stockEntry->location_id,
-                    'shopping_location_id' => $stockEntry->shopping_location_id,
+                    'best_before_date' => $potentialStockEntry->best_before_date,
+                    'purchased_date' => $potentialStockEntry->purchased_date,
+                    'location_id' => $potentialStockEntry->location_id,
+                    'shopping_location_id' => $potentialStockEntry->shopping_location_id,
                     'stock_id' => uniqid(),
-                    'price' => $stockEntry->price,
-                    'note' => $stockEntry->note
+                    'price' => $potentialStockEntry->price,
+                    'note' => $potentialStockEntry->note
                 ]);
                 $newStockRow->save();
 
                 $logRow = $this->getDatabase()->stock_log()->createRow([
-                    'product_id' => $stockEntry->product_id,
+                    'product_id' => $potentialStockEntry->product_id,
                     'amount' => $amount,
-                    'best_before_date' => $stockEntry->best_before_date,
-                    'purchased_date' => $stockEntry->purchased_date,
-                    'stock_id' => $stockEntry->stock_id,
-                    'location_id' => $stockEntry->location_id,
-                    'shopping_location_id' => $stockEntry->shopping_location_id,
+                    'best_before_date' => $potentialStockEntry->best_before_date,
+                    'purchased_date' => $potentialStockEntry->purchased_date,
+                    'stock_id' => $potentialStockEntry->stock_id,
+                    'location_id' => $potentialStockEntry->location_id,
+                    'shopping_location_id' => $potentialStockEntry->shopping_location_id,
                     'transaction_type' => self::TRANSACTION_TYPE_PRODUCT_OPENED,
-                    'price' => $stockEntry->price,
+                    'price' => $potentialStockEntry->price,
                     'opened_date' => date('Y-m-d'),
                     'transaction_id' => $transactionId,
                     'user_id' => GROCY_USER_ID,
-                    'note' => $stockEntry->note
+                    'note' => $potentialStockEntry->note
                 ]);
                 $logRow->save();
 
-                $stockEntry->update([
+                $potentialStockEntry->update([
                     'amount' => $amount,
                     'open' => 1,
                     'opened_date' => date('Y-m-d'),
@@ -1131,8 +1131,8 @@ class StockService extends BaseService
 
             if ($product->move_on_open == 1) {
                 $locationIdTo = $product->default_consume_location_id;
-                if (!empty($locationIdTo) && $locationIdTo != $stockEntry->location_id) {
-                    $this->transferProduct($stockEntry->product_id, $stockEntry->amount, $stockEntry->location_id, $locationIdTo, $stockEntry->stock_id, $transactionId);
+                if (!empty($locationIdTo) && $locationIdTo != $potentialStockEntry->location_id) {
+                    $this->transferProduct($potentialStockEntry->product_id, $potentialStockEntry->amount, $potentialStockEntry->location_id, $locationIdTo, $potentialStockEntry->stock_id, $transactionId);
                 }
             }
         }
@@ -1174,39 +1174,39 @@ class StockService extends BaseService
         $result_product = [];
         $result_quantity = [];
         $rowsShoppingListProducts = $this->getDatabase()->uihelper_shopping_list()->where('shopping_list_id = :1', $listId)->fetchAll();
-        foreach ($rowsShoppingListProducts as $row) {
-            $isValidProduct = ($row->product_id != null && $row->product_id != '');
+        foreach ($rowsShoppingListProducts as $rowShoppingListProduct) {
+            $isValidProduct = ($rowShoppingListProduct->product_id != null && $rowShoppingListProduct->product_id != '');
             if ($isValidProduct) {
-                $product = $this->getDatabase()->products()->where('id = :1', $row->product_id)->fetch();
-                $conversion = $this->getDatabase()->cache__quantity_unit_conversions_resolved()->where('product_id = :1 AND from_qu_id = :2 AND to_qu_id = :3', $product->id, $product->qu_id_stock, $row->qu_id)->fetch();
+                $product = $this->getDatabase()->products()->where('id = :1', $rowShoppingListProduct->product_id)->fetch();
+                $conversion = $this->getDatabase()->cache__quantity_unit_conversions_resolved()->where('product_id = :1 AND from_qu_id = :2 AND to_qu_id = :3', $product->id, $product->qu_id_stock, $rowShoppingListProduct->qu_id)->fetch();
 
                 $factor = 1.0;
                 if ($conversion != null) {
                     $factor = $conversion->factor;
                 }
 
-                $amount = round($row->amount * $factor);
+                $amount = round($rowShoppingListProduct->amount * $factor);
                 $note = '';
 
-                if (GROCY_TPRINTER_PRINT_NOTES && $row->note != '') {
-                    $note = ' (' . $row->note . ')';
+                if (GROCY_TPRINTER_PRINT_NOTES && $rowShoppingListProduct->note != '') {
+                    $note = ' (' . $rowShoppingListProduct->note . ')';
                 }
             }
 
             if (GROCY_TPRINTER_PRINT_QUANTITY_NAME && $isValidProduct) {
-                $quantityname = $row->qu_name;
+                $quantityname = $rowShoppingListProduct->qu_name;
                 if ($amount > 1) {
-                    $quantityname = $row->qu_name_plural;
+                    $quantityname = $rowShoppingListProduct->qu_name_plural;
                 }
 
                 $result_quantity[] = $amount . ' ' . $quantityname;
-                $result_product[] = $row->product_name . $note;
+                $result_product[] = $rowShoppingListProduct->product_name . $note;
             } elseif ($isValidProduct) {
                 $result_quantity[] = $amount;
-                $result_product[] = $row->product_name . $note;
+                $result_product[] = $rowShoppingListProduct->product_name . $note;
             } else {
-                $result_quantity[] = round($row->amount);
-                $result_product[] = $row->note;
+                $result_quantity[] = round($rowShoppingListProduct->amount);
+                $result_product[] = $rowShoppingListProduct->note;
             }
         }
 
@@ -1267,12 +1267,12 @@ class StockService extends BaseService
             $transactionId = uniqid();
         }
 
-        foreach ($potentialStockEntriesAtFromLocation as $stockEntry) {
+        foreach ($potentialStockEntriesAtFromLocation as $potentialStockEntryAtFromLocation) {
             if ($amount == 0) {
                 break;
             }
 
-            $newBestBeforeDate = $stockEntry->best_before_date;
+            $newBestBeforeDate = $potentialStockEntryAtFromLocation->best_before_date;
             if (GROCY_FEATURE_FLAG_STOCK_PRODUCT_FREEZING) {
                 $locationFrom = $this->getDatabase()->locations()->where('id', $locationIdFrom)->fetch();
                 $locationTo = $this->getDatabase()->locations()->where('id', $locationIdTo)->fetch();
@@ -1291,12 +1291,12 @@ class StockService extends BaseService
                     $newBestBeforeDate = date('Y-m-d', strtotime('+' . $productDetails->product->default_best_before_days_after_thawing . ' days'));
                 }
 
-                if (GROCY_FEATURE_FLAG_LABEL_PRINTER && GROCY_LABEL_PRINTER_RUN_SERVER && $productDetails->product->auto_reprint_stock_label == 1 && $stockEntry->best_before_date != $newBestBeforeDate) {
+                if (GROCY_FEATURE_FLAG_LABEL_PRINTER && GROCY_LABEL_PRINTER_RUN_SERVER && $productDetails->product->auto_reprint_stock_label == 1 && $potentialStockEntryAtFromLocation->best_before_date != $newBestBeforeDate) {
                     $webhookData = array_merge([
                         'product' => $productDetails->product->name,
-                        'grocycode' => (string)(new Grocycode(Grocycode::PRODUCT, $productId, [$stockEntry->stock_id])),
+                        'grocycode' => (string)(new Grocycode(Grocycode::PRODUCT, $productId, [$potentialStockEntryAtFromLocation->stock_id])),
                         'details' => $productDetails,
-                        'stock_entry' => $stockEntry,
+                        'stock_entry' => $potentialStockEntryAtFromLocation,
                     ], GROCY_LABEL_PRINTER_PARAMS);
 
                     if (GROCY_FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING) {
@@ -1309,108 +1309,108 @@ class StockService extends BaseService
             }
 
             $correlationId = uniqid();
-            if ($amount >= $stockEntry->amount) {
+            if ($amount >= $potentialStockEntryAtFromLocation->amount) {
                 // Take the whole stock entry
                 $logRowForLocationFrom = $this->getDatabase()->stock_log()->createRow([
-                    'product_id' => $stockEntry->product_id,
-                    'amount' => $stockEntry->amount * -1,
-                    'best_before_date' => $stockEntry->best_before_date,
-                    'purchased_date' => $stockEntry->purchased_date,
-                    'stock_id' => $stockEntry->stock_id,
+                    'product_id' => $potentialStockEntryAtFromLocation->product_id,
+                    'amount' => $potentialStockEntryAtFromLocation->amount * -1,
+                    'best_before_date' => $potentialStockEntryAtFromLocation->best_before_date,
+                    'purchased_date' => $potentialStockEntryAtFromLocation->purchased_date,
+                    'stock_id' => $potentialStockEntryAtFromLocation->stock_id,
                     'transaction_type' => self::TRANSACTION_TYPE_TRANSFER_FROM,
-                    'price' => $stockEntry->price,
-                    'opened_date' => $stockEntry->opened_date,
-                    'location_id' => $stockEntry->location_id,
-                    'shopping_location_id' => $stockEntry->shopping_location_id,
+                    'price' => $potentialStockEntryAtFromLocation->price,
+                    'opened_date' => $potentialStockEntryAtFromLocation->opened_date,
+                    'location_id' => $potentialStockEntryAtFromLocation->location_id,
+                    'shopping_location_id' => $potentialStockEntryAtFromLocation->shopping_location_id,
                     'correlation_id' => $correlationId,
                     'transaction_Id' => $transactionId,
                     'user_id' => GROCY_USER_ID,
-                    'note' => $stockEntry->note
+                    'note' => $potentialStockEntryAtFromLocation->note
                 ]);
                 $logRowForLocationFrom->save();
 
                 $logRowForLocationTo = $this->getDatabase()->stock_log()->createRow([
-                    'product_id' => $stockEntry->product_id,
-                    'amount' => $stockEntry->amount,
+                    'product_id' => $potentialStockEntryAtFromLocation->product_id,
+                    'amount' => $potentialStockEntryAtFromLocation->amount,
                     'best_before_date' => $newBestBeforeDate,
-                    'purchased_date' => $stockEntry->purchased_date,
-                    'stock_id' => $stockEntry->stock_id,
+                    'purchased_date' => $potentialStockEntryAtFromLocation->purchased_date,
+                    'stock_id' => $potentialStockEntryAtFromLocation->stock_id,
                     'transaction_type' => self::TRANSACTION_TYPE_TRANSFER_TO,
-                    'price' => $stockEntry->price,
-                    'opened_date' => $stockEntry->opened_date,
+                    'price' => $potentialStockEntryAtFromLocation->price,
+                    'opened_date' => $potentialStockEntryAtFromLocation->opened_date,
                     'location_id' => $locationIdTo,
-                    'shopping_location_id' => $stockEntry->shopping_location_id,
+                    'shopping_location_id' => $potentialStockEntryAtFromLocation->shopping_location_id,
                     'correlation_id' => $correlationId,
                     'transaction_Id' => $transactionId,
                     'user_id' => GROCY_USER_ID,
-                    'note' => $stockEntry->note
+                    'note' => $potentialStockEntryAtFromLocation->note
                 ]);
                 $logRowForLocationTo->save();
 
-                $stockEntry->update([
+                $potentialStockEntryAtFromLocation->update([
                     'location_id' => $locationIdTo,
                     'best_before_date' => $newBestBeforeDate
                 ]);
 
-                $amount -= $stockEntry->amount;
+                $amount -= $potentialStockEntryAtFromLocation->amount;
             } else {
                 // Stock entry amount is > than needed amount -> split the stock entry resp. update the amount
-                $restStockAmount = $stockEntry->amount - $amount;
+                $restStockAmount = $potentialStockEntryAtFromLocation->amount - $amount;
 
                 $logRowForLocationFrom = $this->getDatabase()->stock_log()->createRow([
-                    'product_id' => $stockEntry->product_id,
+                    'product_id' => $potentialStockEntryAtFromLocation->product_id,
                     'amount' => $amount * -1,
-                    'best_before_date' => $stockEntry->best_before_date,
-                    'purchased_date' => $stockEntry->purchased_date,
-                    'stock_id' => $stockEntry->stock_id,
+                    'best_before_date' => $potentialStockEntryAtFromLocation->best_before_date,
+                    'purchased_date' => $potentialStockEntryAtFromLocation->purchased_date,
+                    'stock_id' => $potentialStockEntryAtFromLocation->stock_id,
                     'transaction_type' => self::TRANSACTION_TYPE_TRANSFER_FROM,
-                    'price' => $stockEntry->price,
-                    'opened_date' => $stockEntry->opened_date,
-                    'location_id' => $stockEntry->location_id,
-                    'shopping_location_id' => $stockEntry->shopping_location_id,
+                    'price' => $potentialStockEntryAtFromLocation->price,
+                    'opened_date' => $potentialStockEntryAtFromLocation->opened_date,
+                    'location_id' => $potentialStockEntryAtFromLocation->location_id,
+                    'shopping_location_id' => $potentialStockEntryAtFromLocation->shopping_location_id,
                     'correlation_id' => $correlationId,
                     'transaction_Id' => $transactionId,
                     'user_id' => GROCY_USER_ID,
-                    'note' => $stockEntry->note
+                    'note' => $potentialStockEntryAtFromLocation->note
                 ]);
                 $logRowForLocationFrom->save();
 
                 $logRowForLocationTo = $this->getDatabase()->stock_log()->createRow([
-                    'product_id' => $stockEntry->product_id,
+                    'product_id' => $potentialStockEntryAtFromLocation->product_id,
                     'amount' => $amount,
                     'best_before_date' => $newBestBeforeDate,
-                    'purchased_date' => $stockEntry->purchased_date,
-                    'stock_id' => $stockEntry->stock_id,
+                    'purchased_date' => $potentialStockEntryAtFromLocation->purchased_date,
+                    'stock_id' => $potentialStockEntryAtFromLocation->stock_id,
                     'transaction_type' => self::TRANSACTION_TYPE_TRANSFER_TO,
-                    'price' => $stockEntry->price,
-                    'opened_date' => $stockEntry->opened_date,
+                    'price' => $potentialStockEntryAtFromLocation->price,
+                    'opened_date' => $potentialStockEntryAtFromLocation->opened_date,
                     'location_id' => $locationIdTo,
-                    'shopping_location_id' => $stockEntry->shopping_location_id,
+                    'shopping_location_id' => $potentialStockEntryAtFromLocation->shopping_location_id,
                     'correlation_id' => $correlationId,
                     'transaction_Id' => $transactionId,
                     'user_id' => GROCY_USER_ID,
-                    'note' => $stockEntry->note
+                    'note' => $potentialStockEntryAtFromLocation->note
                 ]);
                 $logRowForLocationTo->save();
 
                 // This is the existing stock entry -> remains at the source location with the rest amount
-                $stockEntry->update([
+                $potentialStockEntryAtFromLocation->update([
                     'amount' => $restStockAmount
                 ]);
 
                 // The transferred amount gets into a new stock entry
                 $stockEntryNew = $this->getDatabase()->stock()->createRow([
-                    'product_id' => $stockEntry->product_id,
+                    'product_id' => $potentialStockEntryAtFromLocation->product_id,
                     'amount' => $amount,
                     'best_before_date' => $newBestBeforeDate,
-                    'purchased_date' => $stockEntry->purchased_date,
-                    'stock_id' => $stockEntry->stock_id,
-                    'price' => $stockEntry->price,
+                    'purchased_date' => $potentialStockEntryAtFromLocation->purchased_date,
+                    'stock_id' => $potentialStockEntryAtFromLocation->stock_id,
+                    'price' => $potentialStockEntryAtFromLocation->price,
                     'location_id' => $locationIdTo,
-                    'shopping_location_id' => $stockEntry->shopping_location_id,
-                    'open' => $stockEntry->open,
-                    'opened_date' => $stockEntry->opened_date,
-                    'note' => $stockEntry->note
+                    'shopping_location_id' => $potentialStockEntryAtFromLocation->shopping_location_id,
+                    'open' => $potentialStockEntryAtFromLocation->open,
+                    'opened_date' => $potentialStockEntryAtFromLocation->opened_date,
+                    'note' => $potentialStockEntryAtFromLocation->note
                 ]);
                 $stockEntryNew->save();
 

@@ -8,11 +8,11 @@ use Exception;
 
 class DatabaseService
 {
-    private static ?\LessQL\Database $DbConnection = null;
+    private static ?\LessQL\Database $database = null;
 
-    private static ?\PDO $DbConnectionRaw = null;
+    private static ?\PDO $pdo = null;
 
-    private static ?\Grocy\Services\DatabaseService $instance = null;
+    private static ?\Grocy\Services\DatabaseService $databaseService = null;
 
     public function executeDbQuery(string $sql): \PDOStatement|false
     {
@@ -57,25 +57,25 @@ class DatabaseService
 
     public function getDbConnection(): \LessQL\Database
     {
-        if (self::$DbConnection == null) {
-            self::$DbConnection = new Database($this->getDbConnectionRaw());
+        if (self::$database == null) {
+            self::$database = new Database($this->getDbConnectionRaw());
         }
 
         if (GROCY_MODE === 'dev') {
             $logFilePath = GROCY_DATAPATH . '/sql.log';
             if (file_exists($logFilePath)) {
-                self::$DbConnection->setQueryCallback(function (string $query, $params) use ($logFilePath): void {
+                self::$database->setQueryCallback(function (string $query, $params) use ($logFilePath): void {
                     file_put_contents($logFilePath, $query . ' #### ' . implode(';', $params) . PHP_EOL, FILE_APPEND);
                 });
             }
         }
 
-        return self::$DbConnection;
+        return self::$database;
     }
 
     public function getDbConnectionRaw(): \PDO
     {
-        if (self::$DbConnectionRaw == null) {
+        if (self::$pdo == null) {
             $pdo = new \PDO('sqlite:' . $this->getDbFilePath());
             $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $pdo->setAttribute(\PDO::ATTR_ORACLE_NULLS, \PDO::NULL_EMPTY_STRING);
@@ -95,10 +95,10 @@ class DatabaseService
             // https://www.sqlite.org/lang_mathfunc.html#ceil
             $pdo->sqliteCreateFunction('ceil', fn($value): float => ceil($value));
 
-            self::$DbConnectionRaw = $pdo;
+            self::$pdo = $pdo;
         }
 
-        return self::$DbConnectionRaw;
+        return self::$pdo;
     }
 
     public function setDbChangedTime($dateTime): void
@@ -108,11 +108,11 @@ class DatabaseService
 
     public static function getInstance(): \Grocy\Services\DatabaseService
     {
-        if (self::$instance == null) {
-            self::$instance = new self();
+        if (self::$databaseService == null) {
+            self::$databaseService = new self();
         }
 
-        return self::$instance;
+        return self::$databaseService;
     }
 
     private function getDbFilePath(): string
